@@ -429,7 +429,7 @@ function renderVisaoGeral(){
     {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes + (deltaIec!==null ? ` · ${deltaIec<=0?'▼':'▲'} ${Math.abs(deltaIec).toFixed(2).replace('.',',')} p.p. vs mês anterior` : ''), cls: ultimo.iec <= DATA.saudeFinanceira.metaIec ? 'green' : 'red'},
     {label:'Recuperado no período', value: brl(recupAcumulada), sub: meses.length + ' meses · investimento total de ' + brl(investAcumulado), cls:'navy'},
     {label:'Assessorias na régua desejada', value: DATA.regua.desejada.assessoriasAtivas.length, sub: DATA.regua.desejada.assessoriasAtivas.join(', '), cls:'blue'},
-    {label:'Fornecedores ativos / em implantação', value: ativos + ' / ' + implantacao, sub:'Total de ' + DATA.fornecedores.length + ' fornecedores mapeados', cls:'gold'},
+    {label:'Fornecedores mapeados', value: DATA.fornecedores.length, sub: ativos + ' ativos · ' + implantacao + ' em implantação', cls:'gold'},
   ];
   document.getElementById('visaoKpis').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.cls}">
