@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Governança da Cobrança</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* extras específicos deste dashboard, além do template base */
+  .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+  .status-pill.ativo{background:#ECFDF5;color:#065F46;}
+  .status-pill.em_implantacao{background:#FFFBEB;color:#92400E;}
+  body.dark .status-pill.ativo{background:#0f2d1a;color:#6ee7b7;}
+  body.dark .status-pill.em_implantacao{background:#2d2008;color:#F59E0B;}
+
+  .regua-track{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--gridline);margin-left:8px;}
+  .regua-step{position:relative;padding:10px 0 10px 22px;border-bottom:1px dashed var(--gridline);}
+  .regua-step:last-child{border-bottom:none;}
+  .regua-step::before{content:'';position:absolute;left:-7px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--brand-blue);border:2px solid var(--surface-card);}
+  .regua-step.marco::before{background:var(--brand-gold);}
+  .regua-dias{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-navy);}
+  .regua-acao{font-size:.83rem;color:var(--ink-secondary);margin-top:2px;}
+  .regua-resp{font-size:.7rem;color:var(--ink-muted);margin-top:2px;}
+  body.dark .regua-dias{color:#f1f5f9;}
+
+  .provider-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:18px;}
+  .provider-card{background:var(--surface-card);border:1px solid #E2E8F0;border-radius:8px;padding:16px 18px;}
+  .provider-name{font-size:.95rem;font-weight:700;color:var(--brand-navy);margin-bottom:2px;}
+  .provider-cat{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-blue);margin-bottom:8px;}
+  .provider-papel{font-size:.8rem;color:var(--ink-secondary);line-height:1.5;margin-bottom:10px;}
+  body.dark .provider-card{border-color:#334155;}
+  body.dark .provider-name{color:#f1f5f9;}
+
+  .calc-frame{width:100%;height:640px;border:1px solid #E2E8F0;border-radius:8px;background:#fff;}
+
+  .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px;margin-bottom:16px;}
+  .form-field label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);margin-bottom:5px;}
+  .form-field input{width:100%;padding:8px 10px;border:1px solid #CBD5E1;border-radius:6px;font-size:.85rem;font-family:inherit;background:var(--surface-card);color:var(--ink-primary);}
+  body.dark .form-field input{border-color:#334155;}
+  .btn{padding:9px 18px;border:none;border-radius:6px;background:var(--brand-navy);color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;}
+  .btn:hover{background:var(--brand-navy-mid);}
+  .btn.gold{background:var(--brand-gold);}
+  textarea#jsonOut{width:100%;min-height:220px;font-family:'IBM Plex Mono',monospace,monospace;font-size:.75rem;padding:12px;border:1px solid #CBD5E1;border-radius:6px;background:#0f172a;color:#e2e8f0;}
+</style>
+</head>
+<body>
+<script>try{if(localStorage.getItem('governancaCobrancaDarkMode')==='true')document.body.classList.add('dark')}catch(e){}</script>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo"><span style="font-weight:700;">Governança</span><em> Cobrança</em></div>
+    <div class="header-sep"></div>
+    <div class="header-title">Políticas, régua, assessorias, fornecedores e saúde financeira</div>
+  </div>
+  <div class="header-right">
+    <div class="header-update">Última atualização: <strong id="lastUpdate">—</strong></div>
+    <button id="darkModeBtn" onclick="toggleDark()" style="background:none;border:none;color:#fff;opacity:.8;cursor:pointer;font-size:.75rem;margin-top:4px;">🌓 Modo escuro</button>
+    <button class="print-btn" onclick="window.print()" style="background:none;border:none;color:#fff;opacity:.8;cursor:pointer;font-size:.75rem;margin-top:4px;margin-left:10px;">🖨️ Exportar PDF</button>
+  </div>
+</div>
+
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="visao">Visão Geral</button>
+  <button class="tab-btn" data-tab="desconto">Política de Desconto</button>
+  <button class="tab-btn" data-tab="regua">Régua de Cobrança</button>
+  <button class="tab-btn" data-tab="assessorias">Governança de Assessorias</button>
+  <button class="tab-btn" data-tab="fornecedores">Fornecedores</button>
+  <button class="tab-btn" data-tab="saude">Saúde Financeira</button>
+  <button class="tab-btn" data-tab="atualizar">Atualizar Dados</button>
+</div>
+
+<!-- VISÃO GERAL -->
+<div class="tab-panel active" id="tab-visao">
+  <p class="sec-label">Governança da cobrança</p>
+  <h1 class="sec-title">Visão Geral</h1>
+  <p class="sec-subtitle">Panorama consolidado das políticas e da saúde financeira da operação de cobrança.</p>
+  <div class="kpi-grid" id="visaoKpis"></div>
+  <div class="destaque-block">
+    <div class="destaque-title">Como usar este dashboard</div>
+    <div class="destaque-text">
+      Este site é alimentado por um único arquivo de dados (<code>data.json</code>). Para atualizar qualquer seção, edite esse arquivo direto pelo GitHub e publique — ou use a aba <strong>"Atualizar Dados"</strong> para gerar automaticamente o trecho de JSON do mês corrente da Saúde Financeira.
+    </div>
+  </div>
+</div>
+
+<!-- POLÍTICA DE DESCONTO -->
+<div class="tab-panel" id="tab-desconto">
+  <p class="sec-label">Política de desconto</p>
+  <h1 class="sec-title">Piso, teto e calculadora de aprovação</h1>
+  <p class="sec-subtitle" id="descontoFluxo"></p>
+
+  <div class="chart-card wide" style="margin-bottom:18px;">
+    <div class="chart-title">Calculadora de Aprovação de Negociação</div>
+    <iframe class="calc-frame" id="calcFrame"></iframe>
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header"><strong>Política oficial (piso) — por fase de aging</strong></div>
+    <div class="table-scroll">
+      <table id="tblOficial"></table>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header"><strong>Política agressiva (teto) — máximo negociável</strong></div>
+    <div class="table-scroll">
+      <table id="tblAgressiva"></table>
+    </div>
+  </div>
+</div>
+
+<!-- RÉGUA -->
+<div class="tab-panel" id="tab-regua">
+  <p class="sec-label">Régua de cobrança</p>
+  <h1 class="sec-title">Sequência de ações por dias de atraso</h1>
+  <p class="sec-subtitle">Compare a régua em produção com a régua-alvo (implantação prevista para o futuro próximo).</p>
+  <div class="toggle-group" id="reguaToggle">
+    <button class="toggle-btn active" data-regua="atual">Atual</button>
+    <button class="toggle-btn" data-regua="desejada">Desejada</button>
+  </div>
+  <div class="two-col">
+    <div class="table-card" style="padding:16px 18px;">
+      <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Ferramentas / assessorias ativas</strong></div>
+      <div id="reguaFerramentas"></div>
+    </div>
+    <div class="insight-panel">
+      <div class="insight-title">Fase interna vs. terceirizada</div>
+      <div class="insight-text" id="reguaFaseTexto"></div>
+    </div>
+  </div>
+  <div class="table-card" style="padding:18px;">
+    <div class="regua-track" id="reguaTrack"></div>
+  </div>
+</div>
+
+<!-- ASSESSORIAS -->
+<div class="tab-panel" id="tab-assessorias">
+  <p class="sec-label">Governança de assessorias de cobrança</p>
+  <h1 class="sec-title">Comissionamento, metas e regras de share <span class="status-pill em_implantacao" id="assessoriasStatus"></span></h1>
+  <p class="sec-subtitle" id="assessoriasObjetivo"></p>
+
+  <div class="destaque-block">
+    <div class="destaque-title">Estrutura de metas</div>
+    <div class="destaque-text" id="assessoriasMetas"></div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header"><strong>Comissão base por faixa de aging (100% da meta)</strong></div>
+    <div class="table-scroll"><table id="tblComissaoBase"></table></div>
+  </div>
+
+  <div class="table-card">
+    <div class="table-card-header"><strong>Matriz de alavancagem — multiplicador por atingimento da Meta Geral</strong></div>
+    <div class="table-scroll"><table id="tblMultiplicadores"></table></div>
+  </div>
+  <p class="footnote" id="notaRescisao"></p>
+
+  <div class="two-col">
+    <div class="insight-panel">
+      <div class="insight-title">Comissionamento indireto</div>
+      <div class="insight-text" id="comissaoIndireta"></div>
+    </div>
+    <div class="insight-panel">
+      <div class="insight-title">Estrutura concorrencial (2 players)</div>
+      <div class="insight-text" id="concorrencial"></div>
+    </div>
+  </div>
+
+  <div class="table-card" style="padding:18px;">
+    <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
+    <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
+  </div>
+</div>
+
+<!-- FORNECEDORES -->
+<div class="tab-panel" id="tab-fornecedores">
+  <p class="sec-label">Fornecedores</p>
+  <h1 class="sec-title">Parceiros do processo de cobrança</h1>
+  <p class="sec-subtitle">Assessorias, plataformas, bureaus e ferramentas usados na operação.</p>
+  <div class="provider-grid" id="fornecedoresGrid"></div>
+</div>
+
+<!-- SAÚDE FINANCEIRA -->
+<div class="tab-panel" id="tab-saude">
+  <p class="sec-label">Saúde financeira da cobrança</p>
+  <h1 class="sec-title">IEC — Índice de Eficiência de Custo</h1>
+  <p class="sec-subtitle" id="iecFormula"></p>
+  <div class="kpi-grid" id="saudeKpis"></div>
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">IEC mensal vs. meta</div>
+      <div class="chart-wrap h260"><canvas id="chartIec"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Investimento vs. Recuperação (R$)</div>
+      <div class="chart-wrap h260"><canvas id="chartInvest"></canvas></div>
+    </div>
+  </div>
+  <div class="table-card">
+    <div class="table-card-header"><strong>Investimento por linha, por mês</strong></div>
+    <div class="table-scroll"><table id="tblSaude"></table></div>
+  </div>
+</div>
+
+<!-- ATUALIZAR DADOS -->
+<div class="tab-panel" id="tab-atualizar">
+  <p class="sec-label">Manutenção</p>
+  <h1 class="sec-title">Atualizar dados de Saúde Financeira</h1>
+  <p class="sec-subtitle">Preencha os valores do mês, o IEC é calculado sozinho. Copie o JSON gerado e cole dentro de <code>saudeFinanceira.meses</code> no arquivo <code>data.json</code> (pelo editor do GitHub) e faça o commit — o site publica sozinho.</p>
+
+  <div class="form-field" style="max-width:260px;margin-bottom:16px;">
+    <label>Mês / Ano (ex: Julho/2026)</label>
+    <input type="text" id="inMes" placeholder="Julho/2026">
+  </div>
+
+  <div class="form-grid" id="formLinhas"></div>
+
+  <div class="form-field" style="max-width:320px;margin-bottom:16px;">
+    <label>Recuperação do mês (R$)</label>
+    <input type="number" id="inRecuperacao" step="0.01">
+  </div>
+
+  <div class="kpi-grid" style="margin-bottom:16px;">
+    <div class="kpi-card gold">
+      <div class="kpi-label">Investimento total (calculado)</div>
+      <div class="kpi-value" id="outInvestTotal">R$ 0,00</div>
+    </div>
+    <div class="kpi-card gold">
+      <div class="kpi-label">IEC (calculado)</div>
+      <div class="kpi-value" id="outIec">0,00%</div>
+    </div>
+  </div>
+
+  <button class="btn" onclick="gerarJson()">Gerar JSON do mês</button>
+  <button class="btn gold" style="margin-left:8px;" onclick="copiarJson()">Copiar</button>
+
+  <p class="footnote" style="margin-top:16px;">Cole o resultado abaixo dentro do array <code>"meses": [ ... ]</code>, adicionando uma vírgula antes se não for o último item.</p>
+  <textarea id="jsonOut" readonly style="margin-top:6px;"></textarea>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script>
+let DATA = null;
+
+function toggleDark(){
+  document.body.classList.toggle('dark');
+  try{localStorage.setItem('governancaCobrancaDarkMode', document.body.classList.contains('dark'))}catch(e){}
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+function brl(v){ return (v||0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
+function pct(v, casas){ return (v===null||v===undefined) ? '—' : v.toFixed(casas!==undefined?casas:2).replace('.', ',') + '%'; }
+
+fetch('data.json?v=' + Date.now())
+  .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(json=>{ DATA = json; renderAll(); })
+  .catch(err=>{
+    document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#B91C1C;">Não foi possível carregar <code>data.json</code>. Se você abriu este arquivo direto do disco (duplo clique), sirva a pasta com um servidor local (ex: <code>python -m http.server</code>) — navegadores bloqueiam leitura de arquivo local por segurança. Detalhe: ' + err.message + '</div>';
+  });
+
+function renderAll(){
+  document.getElementById('lastUpdate').textContent = DATA.ultimaAtualizacao || '—';
+  renderVisaoGeral();
+  renderDesconto();
+  renderRegua('atual');
+  renderAssessorias();
+  renderFornecedores();
+  renderSaude();
+  buildFormLinhas();
+}
+
+/* ---------- VISÃO GERAL ---------- */
+function renderVisaoGeral(){
+  const meses = DATA.saudeFinanceira.meses;
+  const ultimo = meses[meses.length-1];
+  const ativos = DATA.fornecedores.filter(f=>f.status==='ativo').length;
+  const implantacao = DATA.fornecedores.filter(f=>f.status==='em_implantacao').length;
+  const kpis = [
+    {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes, cls: ultimo.iec <= DATA.saudeFinanceira.metaIec ? 'green' : 'red'},
+    {label:'Meta de IEC', value: pct(DATA.saudeFinanceira.metaIec), sub:'Abaixo disso é considerado eficiente', cls:'blue'},
+    {label:'Assessorias na régua desejada', value: DATA.regua.desejada.assessoriasAtivas.length, sub: DATA.regua.desejada.assessoriasAtivas.join(', '), cls:'navy'},
+    {label:'Fornecedores ativos / em implantação', value: ativos + ' / ' + implantacao, sub:'Total de ' + DATA.fornecedores.length + ' fornecedores mapeados', cls:'gold'},
+  ];
+  document.getElementById('visaoKpis').innerHTML = kpis.map(k=>`
+    <div class="kpi-card ${k.cls}">
+      <div class="kpi-label">${k.label}</div>
+      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-sub">${k.sub}</div>
+    </div>`).join('');
+}
+
+/* ---------- POLÍTICA DE DESCONTO ---------- */
+function renderDesconto(){
+  document.getElementById('descontoFluxo').textContent = DATA.desconto.descricaoFluxo;
+
+  const oficial = DATA.desconto.oficial;
+  document.getElementById('tblOficial').innerHTML = `
+    <thead><tr><th style="text-align:left">Fase</th><th>Dias</th><th>À vista (autorizar)</th><th>Até 12x (padrão)</th><th>Mora</th><th>Multa</th></tr></thead>
+    <tbody>${oficial.map(r=>`
+      <tr><td>${r.fase}</td><td>${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}</td>
+      <td class="td-blue">${pct(r.vista,2)}</td><td class="td-blue">${pct(r.parcelado12x,2)}</td>
+      <td class="td-muted">${pct(r.mora,2)}</td><td class="td-muted">${pct(r.multa,2)}</td></tr>`).join('')}</tbody>`;
+
+  const ag = DATA.desconto.agressiva;
+  document.getElementById('tblAgressiva').innerHTML = `
+    <thead><tr><th style="text-align:left">Dias</th><th>Principal (teto)</th><th>Mora</th><th>Multa</th></tr></thead>
+    <tbody>${ag.map(r=>`
+      <tr><td>${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}</td>
+      <td class="td-gold">${pct(r.principal,2)}</td><td class="td-muted">${pct(r.mora,2)}</td><td class="td-muted">${pct(r.multa,2)}</td></tr>`).join('')}</tbody>`;
+
+  document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag);
+}
+
+function buildCalcHtml(oficial, agressiva){
+  const OFICIAL = oficial.map(r=>({min:r.diasDe, max:r.diasAte, pAV:r.vista, pPar:r.parcelado12x, mora:r.mora, multa:r.multa}));
+  // garante faixa 0-4 (sem desconto) no início, como no arquivo original
+  if(OFICIAL[0].min > 0){ OFICIAL.unshift({min:0,max:OFICIAL[0].min-1,pAV:0,pPar:0,mora:0,multa:0}); }
+  const AGRESSIVA = agressiva.map(r=>({min:r.diasDe, max:r.diasAte, principal:r.principal, mora:r.mora, multa:r.multa}));
+  return `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">
+<style>
+:root{--ink:#12212B;--ink-2:#1C3340;--paper:#FFFFFF;--paper-2:#F4F6F7;--line:#DEE4E7;--slate:#5B6B73;--slate-2:#8B979C;--gold:#B8860B;--gold-soft:#F3E7C9;--teal:#166F5C;--teal-soft:#DCEEE8;--crimson:#A6323F;--crimson-soft:#F5DEE0;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--paper-2);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14px;}
+.wrap{max-width:960px;margin:0 auto;padding:20px 20px 40px;display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start;}
+@media (max-width:760px){.wrap{grid-template-columns:1fr;}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:4px;}
+.inputs{padding:18px;}
+.inputs h2{font-size:14px;font-weight:700;margin:0 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line);}
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--slate);margin-bottom:6px;font-weight:600;}
+.field input[type=number]{width:100%;font-size:16px;padding:8px 9px;border:1px solid var(--line);border-radius:3px;background:var(--paper-2);color:var(--ink);}
+.toggle{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden;}
+.toggle button{flex:1;padding:8px 6px;border:none;background:var(--paper-2);color:var(--slate);font-size:12px;font-weight:500;cursor:pointer;border-right:1px solid var(--line);}
+.toggle button:last-child{border-right:none;}
+.toggle button.active{background:var(--ink);color:#fff;}
+.hint{font-size:11px;color:var(--slate-2);line-height:1.5;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);}
+.result{padding:20px;}
+.band-label{font-size:11px;color:var(--slate);letter-spacing:.02em;margin-bottom:14px;}
+.band-label b{color:var(--ink);}
+.verdict{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:4px;margin-bottom:22px;}
+.verdict.ok{background:var(--teal-soft);} .verdict.warn{background:var(--gold-soft);} .verdict.bad{background:var(--crimson-soft);}
+.verdict .dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;}
+.verdict.ok .dot{background:var(--teal);} .verdict.warn .dot{background:var(--gold);} .verdict.bad .dot{background:var(--crimson);}
+.verdict .txt strong{display:block;font-size:15px;font-weight:700;margin-bottom:2px;}
+.verdict.ok .txt strong{color:var(--teal);} .verdict.warn .txt strong{color:var(--gold);} .verdict.bad .txt strong{color:var(--crimson);}
+.verdict .txt span{font-size:12px;color:var(--slate);line-height:1.5;}
+.rulers{display:flex;flex-direction:column;gap:20px;}
+.ruler-block .rlabel{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:8px;color:var(--ink-2);}
+.ruler-block .rlabel .sub{font-weight:400;color:var(--slate-2);font-size:11px;}
+.track{position:relative;height:10px;background:repeating-linear-gradient(90deg,var(--paper-2) 0 9%, var(--line) 9% 10%);border-radius:2px;border:1px solid var(--line);}
+.zone{position:absolute;top:0;bottom:0;border-radius:2px;}
+.zone.ok{background:var(--teal);opacity:.35;} .zone.caution{background:var(--gold);opacity:.45;} .zone.excess{background:var(--crimson);opacity:.30;}
+.tick{position:absolute;top:-4px;width:2px;height:18px;background:var(--ink-2);}
+.tick.floor{background:var(--slate);} .tick.ceil{background:var(--ink);}
+.ticklabel{position:absolute;top:16px;transform:translateX(-50%);font-size:10px;color:var(--slate);white-space:nowrap;}
+.marker{position:absolute;top:-9px;width:16px;height:16px;transform:translateX(-50%) rotate(45deg);border:2px solid var(--paper);z-index:3;}
+.marker.ok{background:var(--teal);} .marker.warn{background:var(--gold);} .marker.bad{background:var(--crimson);}
+.markerlabel{position:absolute;top:-28px;transform:translateX(-50%);font-size:11px;font-weight:600;white-space:nowrap;}
+footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;color:var(--slate-2);line-height:1.6;}
+</style></head><body>
+<div class="wrap">
+  <div class="card inputs">
+    <h2>Dados da proposta</h2>
+    <div class="field"><label for="dias">Dias em atraso</label><input type="number" id="dias" min="0" value="95"></div>
+    <div class="field"><label>Forma de pagamento (Principal)</label>
+      <div class="toggle"><button id="btnVista" class="active">À vista</button><button id="btnParc">Até 12x</button></div>
+    </div>
+    <div class="field" id="fieldMargem" style="display:none;"><label for="margem">Margem do teto p/ parcelado (%)</label><input type="number" id="margem" min="1" max="100" step="1" value="90"></div>
+    <div class="field"><label for="desc">Desconto proposto (%)</label><input type="number" id="desc" min="0" max="100" step="0.5" value="20"></div>
+    <div class="hint"><b>Piso</b> = política oficial (mínimo já autorizado).<br><b>Teto</b> = política agressiva (máximo negociável sem exceção).<br>Em propostas parceladas, o teto efetivo é reduzido pela margem acima.</div>
+  </div>
+  <div class="card result">
+    <div class="band-label" id="bandLabel"></div>
+    <div class="verdict" id="verdict"><div class="dot"></div><div class="txt"><strong id="vTitle"></strong><span id="vDesc"></span></div></div>
+    <div class="rulers">
+      <div class="ruler-block"><div class="rlabel"><span>Principal <span class="sub">(referência da decisão)</span></span><span class="sub" id="pRange"></span></div><div class="track" id="trackPrincipal" style="margin-bottom:30px;"></div></div>
+      <div class="ruler-block"><div class="rlabel"><span>Mora <span class="sub">(contexto)</span></span><span class="sub" id="mRange"></span></div><div class="track" id="trackMora" style="margin-bottom:30px;"></div></div>
+      <div class="ruler-block"><div class="rlabel"><span>Multa <span class="sub">(contexto)</span></span><span class="sub" id="mulRange"></span></div><div class="track" id="trackMulta" style="margin-bottom:8px;"></div></div>
+    </div>
+  </div>
+</div>
+<footer class="note">As réguas de Mora e Multa aplicam o mesmo percentual proposto apenas como referência visual — a decisão de aprovação é baseada exclusivamente na faixa de desconto de Principal.</footer>
+<script>
+const OFICIAL = ${JSON.stringify(OFICIAL)};
+const AGRESSIVA = ${JSON.stringify(AGRESSIVA)};
+function findBand(table, dias){ return table.find(r => dias >= r.min && dias <= r.max) || table[table.length-1]; }
+function renderTrack(el, floor, ceiling, proposed, status, cautionStart){
+  el.innerHTML = '';
+  const lo = Math.min(floor, ceiling), hi = Math.max(floor, ceiling);
+  const zone = document.createElement('div'); zone.className='zone ok'; zone.style.left=lo+'%'; zone.style.width=Math.max(hi-lo,0.6)+'%'; el.appendChild(zone);
+  if(typeof cautionStart === 'number' && cautionStart < hi){
+    const caution = document.createElement('div'); caution.className='zone caution'; caution.style.left=Math.max(cautionStart,lo)+'%'; caution.style.width=Math.max(hi-Math.max(cautionStart,lo),0.6)+'%'; el.appendChild(caution);
+  }
+  if(proposed > hi){
+    const excess = document.createElement('div'); excess.className='zone excess'; excess.style.left=hi+'%'; excess.style.width=Math.max(Math.min(proposed,100)-hi,0.6)+'%'; el.appendChild(excess);
+  }
+  [{v:floor,cls:'floor',label:'piso '+floor.toFixed(1)+'%'},{v:ceiling,cls:'ceil',label:'teto '+ceiling.toFixed(1)+'%'}].forEach(t=>{
+    const tick=document.createElement('div'); tick.className='tick '+t.cls; tick.style.left=t.v+'%'; el.appendChild(tick);
+    const tl=document.createElement('div'); tl.className='ticklabel'; tl.style.left=t.v+'%'; tl.textContent=t.label; el.appendChild(tl);
+  });
+  const clamped = Math.max(0, Math.min(proposed, 100));
+  const marker=document.createElement('div'); marker.className='marker '+status; marker.style.left=clamped+'%'; el.appendChild(marker);
+  const ml=document.createElement('div'); ml.className='markerlabel'; ml.style.left=clamped+'%';
+  ml.style.color = status==='ok' ? 'var(--teal)' : status==='warn' ? 'var(--gold)' : 'var(--crimson)';
+  ml.textContent = 'proposta '+proposed.toFixed(1)+'%'; el.appendChild(ml);
+}
+let paymentMode = 'vista';
+function update(){
+  const dias = Math.max(0, parseFloat(document.getElementById('dias').value) || 0);
+  const proposed = Math.max(0, parseFloat(document.getElementById('desc').value) || 0);
+  const oBand = findBand(OFICIAL, dias), aBand = findBand(AGRESSIVA, dias);
+  const floorP = paymentMode === 'vista' ? oBand.pAV : oBand.pPar;
+  const margem = paymentMode === 'parc' ? Math.max(1, Math.min(100, parseFloat(document.getElementById('margem').value) || 90)) : 100;
+  const ceilP = aBand.principal * (margem / 100);
+  document.getElementById('bandLabel').innerHTML = 'Faixa aplicada &middot; política oficial <b>'+oBand.min+'&ndash;'+oBand.max+' dias</b> &nbsp;|&nbsp; política agressiva <b>'+aBand.min+'&ndash;'+aBand.max+' dias</b>';
+  let status, title, desc, verdictClass, cautionStartPrincipal = null;
+  if(ceilP === 0 && floorP === 0){
+    if(proposed <= 0){ status='ok'; verdictClass='ok'; title='Sem desconto necessário'; desc='Nesta faixa de atraso ('+dias+' dias) a política não prevê desconto de Principal.'; }
+    else { status='bad'; verdictClass='bad'; title='Fora de política — requer aprovação especial'; desc='Nenhum desconto de Principal é autorizado nesta faixa de atraso.'; }
+  } else if(proposed <= floorP){
+    status='ok'; verdictClass='ok'; title='Aprovação automática — abaixo do piso'; desc='O desconto pedido ('+proposed.toFixed(1)+'%) é menor ou igual ao piso da política oficial ('+floorP.toFixed(1)+'%).';
+  } else if(proposed <= (ceilP - 3)){
+    status='ok'; verdictClass='ok'; cautionStartPrincipal = ceilP - 3; title='Faixa de aprovação segura'; desc='O desconto pedido ('+proposed.toFixed(1)+'%) está dentro da faixa segura, ao menos 3 p.p. abaixo do teto ('+ceilP.toFixed(1)+'%).';
+  } else if(proposed <= ceilP){
+    status='warn'; verdictClass='warn'; cautionStartPrincipal = ceilP - 3; title='Faixa limite — avaliar'; desc='O desconto pedido ('+proposed.toFixed(1)+'%) está a menos de 3 p.p. do teto ('+ceilP.toFixed(1)+'%). Requer avaliação antes de aprovar.';
+  } else {
+    status='bad'; verdictClass='bad'; title='Fora de política — requer aprovação especial'; desc='O desconto pedido ('+proposed.toFixed(1)+'%) ultrapassa o teto ('+ceilP.toFixed(1)+'%) em '+(proposed-ceilP).toFixed(1)+' p.p.';
+  }
+  const vEl = document.getElementById('verdict'); vEl.className = 'verdict ' + verdictClass;
+  document.getElementById('vTitle').textContent = title;
+  document.getElementById('vDesc').textContent = desc;
+  document.getElementById('pRange').textContent = floorP.toFixed(1)+'% – '+ceilP.toFixed(1)+'%';
+  document.getElementById('mRange').textContent = Math.min(oBand.mora,aBand.mora).toFixed(1)+'% – '+Math.max(oBand.mora,aBand.mora).toFixed(1)+'%';
+  document.getElementById('mulRange').textContent = Math.min(oBand.multa,aBand.multa).toFixed(1)+'% – '+Math.max(oBand.multa,aBand.multa).toFixed(1)+'%';
+  renderTrack(document.getElementById('trackPrincipal'), floorP, ceilP, proposed, status, cautionStartPrincipal);
+  renderTrack(document.getElementById('trackMora'), oBand.mora, aBand.mora, proposed, proposed<=Math.max(oBand.mora,aBand.mora) ? 'ok':'warn');
+  renderTrack(document.getElementById('trackMulta'), oBand.multa, aBand.multa, proposed, proposed<=Math.max(oBand.multa,aBand.multa) ? 'ok':'warn');
+}
+document.getElementById('btnVista').addEventListener('click', ()=>{ paymentMode='vista'; document.getElementById('btnVista').classList.add('active'); document.getElementById('btnParc').classList.remove('active'); document.getElementById('fieldMargem').style.display='none'; update(); });
+document.getElementById('btnParc').addEventListener('click', ()=>{ paymentMode='parc'; document.getElementById('btnParc').classList.add('active'); document.getElementById('btnVista').classList.remove('active'); document.getElementById('fieldMargem').style.display='block'; update(); });
+document.getElementById('dias').addEventListener('input', update);
+document.getElementById('desc').addEventListener('input', update);
+document.getElementById('margem').addEventListener('input', update);
+update();
+<\/script>
+</body></html>`;
+}
+
+/* ---------- RÉGUA ---------- */
+document.getElementById('reguaToggle').addEventListener('click', e=>{
+  const btn = e.target.closest('.toggle-btn'); if(!btn) return;
+  document.querySelectorAll('#reguaToggle .toggle-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderRegua(btn.dataset.regua);
+});
+
+function renderRegua(qual){
+  const r = DATA.regua[qual];
+  document.getElementById('reguaFerramentas').innerHTML = `
+    <p style="font-size:.78rem;color:var(--ink-secondary);margin-bottom:8px;"><strong>Assessorias:</strong> ${r.assessoriasAtivas.join(', ')}</p>
+    ${r.ferramentasInternas.length ? '<p style="font-size:.78rem;color:var(--ink-secondary);"><strong>Ferramentas digitais:</strong></p><ul style="margin:6px 0 0 18px;font-size:.78rem;color:var(--ink-secondary);">' + r.ferramentasInternas.map(f=>`<li>${f}</li>`).join('') + '</ul>' : '<p style="font-size:.78rem;color:var(--ink-muted);font-style:italic;">Sem ferramentas digitais de autonegociação nesta régua.</p>'}
+  `;
+  document.getElementById('reguaFaseTexto').textContent = `A fase interna cobre até ${r.internaAte} dia(s) de atraso; a partir daí a cobrança passa a ser conduzida pela(s) assessoria(s) terceirizada(s).`;
+  document.getElementById('reguaTrack').innerHTML = r.etapas.map(e=>`
+    <div class="regua-step ${e.marco?'marco':''}">
+      <div class="regua-dias">${e.dias}</div>
+      <div class="regua-acao">${e.acao}</div>
+      <div class="regua-resp">Responsável: ${e.responsavel}</div>
+    </div>`).join('');
+}
+
+/* ---------- ASSESSORIAS ---------- */
+function renderAssessorias(){
+  const a = DATA.assessorias;
+  document.getElementById('assessoriasStatus').textContent = a.status;
+  document.getElementById('assessoriasObjetivo').textContent = a.objetivo;
+  document.getElementById('assessoriasMetas').textContent = a.metas;
+
+  document.getElementById('tblComissaoBase').innerHTML = `
+    <thead><tr><th style="text-align:left">Faixa</th><th style="text-align:left">Intervalo</th><th>Comissão base</th></tr></thead>
+    <tbody>${a.comissaoBase.map(r=>`<tr><td>${r.faixa}</td><td>${r.intervalo}</td><td class="${r.comissao===null?'td-dim':'td-blue'}">${r.comissao===null? (r.obs||'—') : pct(r.comissao,2)}</td></tr>`).join('')}</tbody>`;
+
+  const cols = a.multiplicadores.colunas;
+  document.getElementById('tblMultiplicadores').innerHTML = `
+    <thead><tr><th style="text-align:left">Faixa</th>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
+    <tbody>${a.multiplicadores.linhas.map(l=>`<tr><td>${l.faixa} — ${l.intervalo}</td>${cols.map(c=>`<td class="${c.chave==='meta'?'td-blue':''}">${pct(l[c.chave],2)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+  document.getElementById('notaRescisao').textContent = a.multiplicadores.notaRescisao;
+
+  document.getElementById('comissaoIndireta').innerHTML = `
+    <p><strong>${a.comissaoIndireta.percentual}% pagável:</strong> ${a.comissaoIndireta.descricaoPagavel}</p>
+    <p style="margin-top:8px;"><strong>0% (zerada):</strong> ${a.comissaoIndireta.descricaoZerada}</p>
+    <p style="margin-top:8px;"><strong>Acionamento válido:</strong> ${a.comissaoIndireta.acionamentoValido}</p>`;
+
+  document.getElementById('concorrencial').innerHTML = `
+    <p><strong>${a.concorrencial.numeroPlayers} assessorias</strong> operando em paralelo.</p>
+    <p style="margin-top:8px;">${a.concorrencial.periodoEstabilidade}</p>
+    <p style="margin-top:8px;">${a.concorrencial.redistribuicao}</p>`;
+
+  document.getElementById('rituaisGrid').innerHTML = `
+    <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Diário</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.diario}</p></div>
+    <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Semanal</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.semanal}</p></div>
+    <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Mensal</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.mensal}</p></div>`;
+}
+
+/* ---------- FORNECEDORES ---------- */
+function renderFornecedores(){
+  document.getElementById('fornecedoresGrid').innerHTML = DATA.fornecedores.map(f=>`
+    <div class="provider-card">
+      <div class="provider-name">${f.nome}</div>
+      <div class="provider-cat">${f.categoria}</div>
+      <div class="provider-papel">${f.papel}</div>
+      <span class="status-pill ${f.status}">${f.status==='ativo'?'Ativo':'Em implantação'}</span>
+    </div>`).join('');
+}
+
+/* ---------- SAÚDE FINANCEIRA ---------- */
+function renderSaude(){
+  const sf = DATA.saudeFinanceira;
+  document.getElementById('iecFormula').textContent = sf.iecFormula + ' Meta: ' + sf.metaDescricao;
+  const ultimo = sf.meses[sf.meses.length-1];
+  const anterior = sf.meses.length>1 ? sf.meses[sf.meses.length-2] : null;
+  const delta = anterior ? (ultimo.iec - anterior.iec) : null;
+
+  document.getElementById('saudeKpis').innerHTML = `
+    <div class="kpi-card ${ultimo.iec<=sf.metaIec?'green':'red'}">
+      <div class="kpi-label">IEC — ${ultimo.mes}</div>
+      <div class="kpi-value">${pct(ultimo.iec)}</div>
+      ${delta!==null ? `<div class="kpi-delta ${delta<=0?'pos':'neg'}">${delta<=0?'▼':'▲'} ${Math.abs(delta).toFixed(2).replace('.',',')} p.p. vs mês anterior</div>` : ''}
+    </div>
+    <div class="kpi-card blue"><div class="kpi-label">Meta de IEC</div><div class="kpi-value">${pct(sf.metaIec)}</div><div class="kpi-sub">${sf.metaDescricao}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Investimento — ${ultimo.mes}</div><div class="kpi-value" style="font-size:1.3rem;">${brl(ultimo.investimentoTotal)}</div></div>
+    <div class="kpi-card"><div class="kpi-label">Recuperação — ${ultimo.mes}</div><div class="kpi-value" style="font-size:1.3rem;">${brl(ultimo.recuperacao)}</div></div>
+  `;
+
+  const labels = sf.meses.map(m=>m.mes.replace('/2026','/26'));
+  new Chart(document.getElementById('chartIec'), {
+    type:'line',
+    data:{ labels, datasets:[
+      { label:'IEC', data: sf.meses.map(m=>m.iec), borderColor:'#2563EB', backgroundColor:'rgba(37,99,235,.1)', tension:.3, fill:true },
+      { label:'Meta', data: sf.meses.map(()=>sf.metaIec), borderColor:'#D97706', borderDash:[6,4], pointRadius:0 }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}}, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
+  });
+
+  new Chart(document.getElementById('chartInvest'), {
+    type:'bar',
+    data:{ labels, datasets:[
+      { label:'Investimento', data: sf.meses.map(m=>m.investimentoTotal), backgroundColor:'#0F2461' },
+      { label:'Recuperação', data: sf.meses.map(m=>m.recuperacao), backgroundColor:'#2563EB', yAxisID:'y1' }
+    ]},
+    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}},
+      scales:{ y:{ position:'left', ticks:{ callback:v=>(v/1000)+'k' } }, y1:{ position:'right', grid:{drawOnChartArea:false}, ticks:{ callback:v=>(v/1000)+'k' } } } }
+  });
+
+  document.getElementById('tblSaude').innerHTML = `
+    <thead><tr><th style="text-align:left">Linha</th>${sf.meses.map(m=>`<th>${m.mes}</th>`).join('')}</tr></thead>
+    <tbody>
+      ${sf.linhasInvestimento.map(linha=>`<tr><td>${linha}</td>${sf.meses.map(m=>`<td>${brl(m.investimentoPorLinha[linha]||0)}</td>`).join('')}</tr>`).join('')}
+      <tr style="font-weight:700;background:#F0F6FF;"><td>Investimento total</td>${sf.meses.map(m=>`<td>${brl(m.investimentoTotal)}</td>`).join('')}</tr>
+      <tr style="font-weight:700;"><td>Recuperação</td>${sf.meses.map(m=>`<td>${brl(m.recuperacao)}</td>`).join('')}</tr>
+      <tr style="font-weight:700;color:#2563EB;"><td>IEC</td>${sf.meses.map(m=>`<td>${pct(m.iec)}</td>`).join('')}</tr>
+    </tbody>`;
+}
+
+/* ---------- ATUALIZAR DADOS ---------- */
+function buildFormLinhas(){
+  const wrap = document.getElementById('formLinhas');
+  wrap.innerHTML = DATA.saudeFinanceira.linhasInvestimento.map(l=>`
+    <div class="form-field">
+      <label>${l}</label>
+      <input type="number" step="0.01" class="linhaInput" data-linha="${l}" value="0" oninput="recalcular()">
+    </div>`).join('');
+  document.getElementById('inRecuperacao').addEventListener('input', recalcular);
+}
+
+function recalcular(){
+  const total = Array.from(document.querySelectorAll('.linhaInput')).reduce((s,el)=>s + (parseFloat(el.value)||0), 0);
+  const recuperacao = parseFloat(document.getElementById('inRecuperacao').value) || 0;
+  const iec = recuperacao > 0 ? (total/recuperacao*100) : 0;
+  document.getElementById('outInvestTotal').textContent = brl(total);
+  document.getElementById('outIec').textContent = pct(iec);
+  return {total, recuperacao, iec};
+}
+
+function gerarJson(){
+  const {total, recuperacao, iec} = recalcular();
+  const mes = document.getElementById('inMes').value.trim() || 'Mês/Ano';
+  const porLinha = {};
+  document.querySelectorAll('.linhaInput').forEach(el=>{ porLinha[el.dataset.linha] = parseFloat(el.value)||0; });
+  const obj = { mes, investimentoPorLinha: porLinha, investimentoTotal: Math.round(total*100)/100, recuperacao: Math.round(recuperacao*100)/100, iec: Math.round(iec*100)/100 };
+  document.getElementById('jsonOut').value = JSON.stringify(obj, null, 2) + ',';
+}
+
+function copiarJson(){
+  const ta = document.getElementById('jsonOut');
+  ta.select();
+  navigator.clipboard.writeText(ta.value).catch(()=>document.execCommand('copy'));
+}
+</script>
+</body>
+</html>
