@@ -47,8 +47,8 @@
 
   .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px;margin-bottom:16px;}
   .form-field label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);margin-bottom:5px;}
-  .form-field input{width:100%;padding:8px 10px;border:1px solid #CBD5E1;border-radius:6px;font-size:.85rem;font-family:inherit;background:var(--surface-card);color:var(--ink-primary);}
-  body.dark .form-field input{border-color:#334155;}
+  .form-field input, .form-field select{width:100%;padding:8px 10px;border:1px solid #CBD5E1;border-radius:6px;font-size:.85rem;font-family:inherit;background:var(--surface-card);color:var(--ink-primary);}
+  body.dark .form-field input, body.dark .form-field select{border-color:#334155;}
   .btn{padding:9px 18px;border:none;border-radius:6px;background:var(--brand-navy);color:#fff;font-size:.8rem;font-weight:600;cursor:pointer;}
   .btn:hover{background:var(--brand-navy-mid);}
   .btn.gold{background:var(--brand-gold);}
@@ -265,9 +265,15 @@
   <p class="sec-subtitle">Preencha os valores do mês, o IEC é calculado sozinho. O botão abaixo gera o <code>data.json</code> <strong>completo</strong> já com esse mês incluído — é só substituir todo o conteúdo do arquivo no GitHub por esse e commitar. Nada de colar em um ponto específico.</p>
 
   <div id="atualizarContent">
-    <div class="form-field" style="max-width:260px;margin-bottom:16px;">
-      <label>Mês / Ano (ex: Julho/2026)</label>
-      <input type="text" id="inMes" placeholder="Julho/2026">
+    <div style="display:flex;gap:14px;max-width:360px;margin-bottom:16px;">
+      <div class="form-field" style="flex:1;">
+        <label>Mês</label>
+        <select id="inMesNome"></select>
+      </div>
+      <div class="form-field" style="flex:1;">
+        <label>Ano</label>
+        <select id="inAno"></select>
+      </div>
     </div>
 
     <div class="form-grid" id="formLinhas"></div>
@@ -923,8 +929,25 @@ function renderSaude(){
 }
 
 /* ---------- ATUALIZAR DADOS ---------- */
+const MESES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function popularMesAno(){
+  const selMes = document.getElementById('inMesNome');
+  const selAno = document.getElementById('inAno');
+  if(selMes.options.length) return; // já populado — não reseta a escolha do usuário ao trocar de produto/re-renderizar
+  const agora = new Date();
+  selMes.innerHTML = MESES_PT.map(m=>`<option value="${m}">${m}</option>`).join('');
+  selMes.value = MESES_PT[agora.getMonth()];
+  const anoAtual = agora.getFullYear();
+  const anos = [];
+  for(let a=anoAtual-1; a<=anoAtual+2; a++) anos.push(a);
+  selAno.innerHTML = anos.map(a=>`<option value="${a}">${a}</option>`).join('');
+  selAno.value = anoAtual;
+}
+
 function buildFormLinhas(){
   const p = produto();
+  popularMesAno();
   document.getElementById('atualizarProdutoLabel').textContent = '— ' + p.nome;
   const content = document.getElementById('atualizarContent');
   const empty = document.getElementById('atualizarEmpty');
@@ -978,11 +1001,7 @@ function recalcular(){
 function gerarJson(){
   const aviso = document.getElementById('gerarJsonAviso');
   aviso.textContent = '';
-  const mes = document.getElementById('inMes').value.trim();
-  if(!mes){
-    aviso.textContent = 'Preencha o campo "Mês / Ano" antes de gerar.';
-    return;
-  }
+  const mes = document.getElementById('inMesNome').value + '/' + document.getElementById('inAno').value;
   const {total, recuperacao, iec} = recalcular();
   const porLinha = {};
   document.querySelectorAll('.linhaInput').forEach(el=>{ porLinha[el.dataset.linha] = Math.round(parseMoeda(el.value)*100)/100; });
