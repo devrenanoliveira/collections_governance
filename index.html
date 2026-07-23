@@ -7,6 +7,18 @@
 <link rel="stylesheet" href="style.css">
 <style>
   /* extras específicos deste dashboard, além do template base */
+  .table-card-header{font-size:.92rem;font-weight:700;color:var(--brand-navy);letter-spacing:-.01em;}
+  body.dark .table-card-header{color:#f1f5f9;}
+
+  .product-nav{background:var(--brand-navy-mid);display:flex;align-items:center;gap:10px;padding:8px 28px;flex-wrap:wrap;}
+  .product-nav-label{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);}
+  .product-btn{padding:5px 14px;border:1px solid rgba(255,255,255,.25);border-radius:20px;background:transparent;color:rgba(255,255,255,.75);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .15s;}
+  .product-btn:hover{border-color:rgba(255,255,255,.5);color:#fff;}
+  .product-btn.active{background:var(--brand-gold);border-color:var(--brand-gold);color:#1a1300;}
+  .product-empty{padding:40px 20px;text-align:center;color:var(--ink-muted);font-size:.85rem;}
+  .product-empty strong{display:block;color:var(--ink-secondary);font-size:1rem;margin-bottom:6px;}
+  @media (max-width:480px){ .product-nav{padding:8px 16px;} }
+
   .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
   .status-pill.ativo{background:#ECFDF5;color:#065F46;}
   .status-pill.em_implantacao{background:#FFFBEB;color:#92400E;}
@@ -50,7 +62,7 @@
   <div class="header-left">
     <div class="logo"><span style="font-weight:700;">Governança</span><em> Cobrança</em></div>
     <div class="header-sep"></div>
-    <div class="header-title">Políticas, régua, assessorias, fornecedores e saúde financeira</div>
+    <div class="header-title" id="headerTitle">Políticas, régua, assessorias, fornecedores e saúde financeira</div>
   </div>
   <div class="header-right">
     <div class="header-update">Última atualização: <strong id="lastUpdate">—</strong></div>
@@ -58,6 +70,8 @@
     <button class="print-btn" onclick="window.print()" style="background:none;border:none;color:#fff;opacity:.8;cursor:pointer;font-size:.75rem;margin-top:4px;margin-left:10px;">🖨️ Exportar PDF</button>
   </div>
 </div>
+
+<div class="product-nav" id="productNav"></div>
 
 <div class="tab-nav">
   <button class="tab-btn active" data-tab="visao">Visão Geral</button>
@@ -104,48 +118,68 @@
   <h1 class="sec-title">Piso, teto e calculadora de aprovação</h1>
   <p class="sec-subtitle" id="descontoFluxo"></p>
 
-  <div class="chart-card wide" style="margin-bottom:18px;">
-    <div class="chart-title">Calculadora de Aprovação de Negociação</div>
-    <iframe class="calc-frame" id="calcFrame"></iframe>
-  </div>
+  <div id="descontoContent">
+    <div class="chart-card wide" style="margin-bottom:18px;">
+      <div class="chart-title">Calculadora de Aprovação de Negociação</div>
+      <iframe class="calc-frame" id="calcFrame"></iframe>
+    </div>
 
-  <div class="table-card">
-    <div class="table-card-header"><strong>Política oficial (piso) — por fase de aging</strong></div>
-    <div class="table-scroll">
-      <table id="tblOficial"></table>
+    <div class="table-card">
+      <div class="table-card-header"><strong>Política oficial (piso) — por fase de aging</strong></div>
+      <div class="table-scroll">
+        <table id="tblOficial"></table>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header"><strong>Política agressiva (teto) — máximo negociável</strong></div>
+      <div class="table-scroll">
+        <table id="tblAgressiva"></table>
+      </div>
     </div>
   </div>
-
-  <div class="table-card">
-    <div class="table-card-header"><strong>Política agressiva (teto) — máximo negociável</strong></div>
-    <div class="table-scroll">
-      <table id="tblAgressiva"></table>
-    </div>
-  </div>
+  <div id="descontoEmpty" style="display:none;"></div>
 </div>
 
 <!-- RÉGUA -->
 <div class="tab-panel" id="tab-regua">
   <p class="sec-label">Régua de cobrança</p>
   <h1 class="sec-title">Sequência de ações por dias de atraso</h1>
-  <p class="sec-subtitle">Compare a régua em produção com a régua-alvo (implantação prevista para o futuro próximo).</p>
-  <div class="toggle-group" id="reguaToggle">
-    <button class="toggle-btn active" data-regua="atual">Atual</button>
-    <button class="toggle-btn" data-regua="desejada">Desejada</button>
-  </div>
-  <div class="two-col">
-    <div class="table-card" style="padding:16px 18px;">
-      <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Ferramentas / assessorias ativas</strong></div>
-      <div id="reguaFerramentas"></div>
+  <p class="sec-subtitle">Atual (em produção) e Desejada (futuro próximo) lado a lado — linhas em âmbar marcam um marco (bloqueio, negativação, cancelamento, prejuízo).</p>
+
+  <div id="reguaContent">
+    <div class="seg-tables-grid" id="reguaComparativo"></div>
+
+    <div class="seg-tables-grid">
+      <div class="table-card" style="padding:16px 18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Atual — ferramentas e assessorias</strong></div>
+        <div id="reguaFerramentasAtual"></div>
+      </div>
+      <div class="table-card" style="padding:16px 18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Desejada — ferramentas e assessorias</strong></div>
+        <div id="reguaFerramentasDesejada"></div>
+      </div>
     </div>
-    <div class="insight-panel">
-      <div class="insight-title">Fase interna vs. terceirizada</div>
-      <div class="insight-text" id="reguaFaseTexto"></div>
+
+    <div class="filter-row">
+      <span class="filter-label">Mostrar:</span>
+      <button class="filter-btn active" data-filtro="todos">Todos</button>
+      <button class="filter-btn" data-filtro="marcos">Somente marcos de cobrança</button>
+      <button class="filter-btn" data-filtro="acoes">Somente ações de cobrança</button>
+    </div>
+
+    <div class="seg-tables-grid">
+      <div class="table-card">
+        <div class="table-card-header"><strong>Régua Atual</strong></div>
+        <div class="table-scroll"><table id="tblReguaAtual"></table></div>
+      </div>
+      <div class="table-card">
+        <div class="table-card-header"><strong>Régua Desejada</strong></div>
+        <div class="table-scroll"><table id="tblReguaDesejada"></table></div>
+      </div>
     </div>
   </div>
-  <div class="table-card" style="padding:18px;">
-    <div class="regua-track" id="reguaTrack"></div>
-  </div>
+  <div id="reguaEmpty" style="display:none;"></div>
 </div>
 
 <!-- ASSESSORIAS -->
@@ -154,37 +188,40 @@
   <h1 class="sec-title">Comissionamento, metas e regras de share <span class="status-pill em_implantacao" id="assessoriasStatus"></span></h1>
   <p class="sec-subtitle" id="assessoriasObjetivo"></p>
 
-  <div class="destaque-block">
-    <div class="destaque-title">Estrutura de metas</div>
-    <div class="destaque-text" id="assessoriasMetas"></div>
-  </div>
-
-  <div class="table-card">
-    <div class="table-card-header"><strong>Comissão base por faixa de aging (100% da meta)</strong></div>
-    <div class="table-scroll"><table id="tblComissaoBase"></table></div>
-  </div>
-
-  <div class="table-card">
-    <div class="table-card-header"><strong>Matriz de alavancagem — multiplicador por atingimento da Meta Geral</strong></div>
-    <div class="table-scroll"><table id="tblMultiplicadores"></table></div>
-  </div>
-  <p class="footnote" id="notaRescisao"></p>
-
-  <div class="two-col">
-    <div class="insight-panel">
-      <div class="insight-title">Comissionamento indireto</div>
-      <div class="insight-text" id="comissaoIndireta"></div>
+  <div id="assessoriasContent">
+    <div class="destaque-block">
+      <div class="destaque-title">Estrutura de metas</div>
+      <div class="destaque-text" id="assessoriasMetas"></div>
     </div>
-    <div class="insight-panel">
-      <div class="insight-title">Estrutura concorrencial (2 players)</div>
-      <div class="insight-text" id="concorrencial"></div>
+
+    <div class="table-card">
+      <div class="table-card-header"><strong>Comissão base por faixa de aging (100% da meta)</strong></div>
+      <div class="table-scroll"><table id="tblComissaoBase"></table></div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-card-header"><strong>Matriz de alavancagem — multiplicador por atingimento da Meta Geral</strong></div>
+      <div class="table-scroll"><table id="tblMultiplicadores"></table></div>
+    </div>
+    <p class="footnote" id="notaRescisao"></p>
+
+    <div class="two-col">
+      <div class="insight-panel">
+        <div class="insight-title">Comissionamento indireto</div>
+        <div class="insight-text" id="comissaoIndireta"></div>
+      </div>
+      <div class="insight-panel">
+        <div class="insight-title">Estrutura concorrencial (2 players)</div>
+        <div class="insight-text" id="concorrencial"></div>
+      </div>
+    </div>
+
+    <div class="table-card" style="padding:18px;">
+      <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
+      <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
     </div>
   </div>
-
-  <div class="table-card" style="padding:18px;">
-    <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
-    <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
-  </div>
+  <div id="assessoriasEmpty" style="display:none;"></div>
 </div>
 
 <!-- FORNECEDORES -->
@@ -193,6 +230,7 @@
   <h1 class="sec-title">Parceiros do processo de cobrança</h1>
   <p class="sec-subtitle">Assessorias, plataformas, bureaus e ferramentas usados na operação.</p>
   <div class="provider-grid" id="fornecedoresGrid"></div>
+  <div id="fornecedoresEmpty" style="display:none;"></div>
 </div>
 
 <!-- SAÚDE FINANCEIRA -->
@@ -200,57 +238,63 @@
   <p class="sec-label">Saúde financeira da cobrança</p>
   <h1 class="sec-title">IEC — Índice de Eficiência de Custo</h1>
   <p class="sec-subtitle" id="iecFormula"></p>
-  <div class="kpi-grid" id="saudeKpis"></div>
-  <div class="chart-grid">
-    <div class="chart-card">
-      <div class="chart-title">IEC mensal vs. meta</div>
-      <div class="chart-wrap h260" id="chartIec"></div>
+  <div id="saudeContent">
+    <div class="kpi-grid" id="saudeKpis"></div>
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">IEC mensal vs. meta</div>
+        <div class="chart-wrap h260" id="chartIec"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Investimento vs. Recuperação (R$)</div>
+        <div class="chart-wrap h260" id="chartInvest"></div>
+      </div>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Investimento vs. Recuperação (R$)</div>
-      <div class="chart-wrap h260" id="chartInvest"></div>
+    <div class="table-card">
+      <div class="table-card-header"><strong>Investimento por linha, por mês</strong></div>
+      <div class="table-scroll"><table id="tblSaude"></table></div>
     </div>
   </div>
-  <div class="table-card">
-    <div class="table-card-header"><strong>Investimento por linha, por mês</strong></div>
-    <div class="table-scroll"><table id="tblSaude"></table></div>
-  </div>
+  <div id="saudeEmpty" style="display:none;"></div>
 </div>
 
 <!-- ATUALIZAR DADOS -->
 <div class="tab-panel" id="tab-atualizar">
   <p class="sec-label">Manutenção</p>
-  <h1 class="sec-title">Atualizar dados de Saúde Financeira</h1>
-  <p class="sec-subtitle">Preencha os valores do mês, o IEC é calculado sozinho. Copie o JSON gerado e cole dentro de <code>saudeFinanceira.meses</code> no arquivo <code>data.json</code> (pelo editor do GitHub) e faça o commit — o site publica sozinho.</p>
+  <h1 class="sec-title">Atualizar dados de Saúde Financeira <span id="atualizarProdutoLabel"></span></h1>
+  <p class="sec-subtitle">Preencha os valores do mês, o IEC é calculado sozinho. Copie o JSON gerado e cole dentro de <code>saudeFinanceira.meses</code> do produto correspondente no arquivo <code>data.json</code> (pelo editor do GitHub) e faça o commit — o site publica sozinho.</p>
 
-  <div class="form-field" style="max-width:260px;margin-bottom:16px;">
-    <label>Mês / Ano (ex: Julho/2026)</label>
-    <input type="text" id="inMes" placeholder="Julho/2026">
-  </div>
-
-  <div class="form-grid" id="formLinhas"></div>
-
-  <div class="form-field" style="max-width:320px;margin-bottom:16px;">
-    <label>Recuperação do mês (R$)</label>
-    <input type="number" id="inRecuperacao" step="0.01">
-  </div>
-
-  <div class="kpi-grid" style="margin-bottom:16px;">
-    <div class="kpi-card gold">
-      <div class="kpi-label">Investimento total (calculado)</div>
-      <div class="kpi-value" id="outInvestTotal">R$ 0,00</div>
+  <div id="atualizarContent">
+    <div class="form-field" style="max-width:260px;margin-bottom:16px;">
+      <label>Mês / Ano (ex: Julho/2026)</label>
+      <input type="text" id="inMes" placeholder="Julho/2026">
     </div>
-    <div class="kpi-card gold">
-      <div class="kpi-label">IEC (calculado)</div>
-      <div class="kpi-value" id="outIec">0,00%</div>
+
+    <div class="form-grid" id="formLinhas"></div>
+
+    <div class="form-field" style="max-width:320px;margin-bottom:16px;">
+      <label>Recuperação do mês (R$)</label>
+      <input type="number" id="inRecuperacao" step="0.01">
     </div>
+
+    <div class="kpi-grid" style="margin-bottom:16px;">
+      <div class="kpi-card gold">
+        <div class="kpi-label">Investimento total (calculado)</div>
+        <div class="kpi-value" id="outInvestTotal">R$ 0,00</div>
+      </div>
+      <div class="kpi-card gold">
+        <div class="kpi-label">IEC (calculado)</div>
+        <div class="kpi-value" id="outIec">0,00%</div>
+      </div>
+    </div>
+
+    <button class="btn" onclick="gerarJson()">Gerar JSON do mês</button>
+    <button class="btn gold" style="margin-left:8px;" onclick="copiarJson()">Copiar</button>
+
+    <p class="footnote" style="margin-top:16px;">Cole o resultado abaixo dentro do array <code>"meses": [ ... ]</code>, adicionando uma vírgula antes se não for o último item.</p>
+    <textarea id="jsonOut" readonly style="margin-top:6px;"></textarea>
   </div>
-
-  <button class="btn" onclick="gerarJson()">Gerar JSON do mês</button>
-  <button class="btn gold" style="margin-left:8px;" onclick="copiarJson()">Copiar</button>
-
-  <p class="footnote" style="margin-top:16px;">Cole o resultado abaixo dentro do array <code>"meses": [ ... ]</code>, adicionando uma vírgula antes se não for o último item.</p>
-  <textarea id="jsonOut" readonly style="margin-top:6px;"></textarea>
+  <div id="atualizarEmpty" style="display:none;"></div>
 </div>
 
 <script>
@@ -391,9 +435,22 @@ function drawDualBarChart(containerId, labels, series, valFmt){
   container.appendChild(legend);
 }
 
+let produtoAtual = null;
+
+function produto(){ return DATA.produtos[produtoAtual]; }
+
+function emptyState(msg){
+  return `<div class="product-empty"><strong>Ainda não configurado</strong>${msg}</div>`;
+}
+
 fetch('data.json?v=' + Date.now())
   .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
-  .then(json=>{ DATA = json; renderAll(); })
+  .then(json=>{
+    DATA = json;
+    produtoAtual = DATA.produtoPadrao || Object.keys(DATA.produtos)[0];
+    renderProductNav();
+    renderAll();
+  })
   .catch(err=>{
     document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#B91C1C;">Não foi possível carregar <code>data.json</code>. Se você abriu este arquivo direto do disco (duplo clique), sirva a pasta com um servidor local (ex: <code>python -m http.server</code>) — navegadores bloqueiam leitura de arquivo local por segurança. Detalhe: ' + err.message + '</div>';
   });
@@ -403,11 +460,28 @@ function safe(fn, nome){
   catch(e){ console.error('Falha ao renderizar ' + nome + ':', e); }
 }
 
+function renderProductNav(){
+  const ids = Object.keys(DATA.produtos);
+  document.getElementById('productNav').innerHTML = `
+    <span class="product-nav-label">Produto:</span>
+    ${ids.map(id=>`<button class="product-btn ${id===produtoAtual?'active':''}" data-produto="${id}">${DATA.produtos[id].nome}</button>`).join('')}`;
+  document.querySelectorAll('.product-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      produtoAtual = btn.dataset.produto;
+      document.querySelectorAll('.product-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      renderAll();
+    });
+  });
+}
+
 function renderAll(){
-  document.getElementById('lastUpdate').textContent = DATA.ultimaAtualizacao || '—';
+  const p = produto();
+  document.getElementById('headerTitle').textContent = p.nome + ' — Políticas, régua, assessorias, fornecedores e saúde financeira';
+  document.getElementById('lastUpdate').textContent = p.ultimaAtualizacao || '—';
   safe(renderVisaoGeral, 'Visão Geral');
   safe(renderDesconto, 'Política de Desconto');
-  safe(()=>renderRegua('atual'), 'Régua de Cobrança');
+  safe(renderRegua, 'Régua de Cobrança');
   safe(renderAssessorias, 'Governança de Assessorias');
   safe(renderFornecedores, 'Fornecedores');
   safe(renderSaude, 'Saúde Financeira');
@@ -416,20 +490,26 @@ function renderAll(){
 
 /* ---------- VISÃO GERAL ---------- */
 function renderVisaoGeral(){
-  const meses = DATA.saudeFinanceira.meses;
-  const ultimo = meses[meses.length-1];
-  const anterior = meses.length>1 ? meses[meses.length-2] : null;
+  const p = produto();
+  const fornecedores = p.fornecedores || [];
+  const temSaude = !!(p.saudeFinanceira && p.saudeFinanceira.meses && p.saudeFinanceira.meses.length);
+  const meses = temSaude ? p.saudeFinanceira.meses : [];
+  const ultimo = temSaude ? meses[meses.length-1] : null;
+  const anterior = temSaude && meses.length>1 ? meses[meses.length-2] : null;
   const deltaIec = anterior ? (ultimo.iec - anterior.iec) : null;
-  const ativos = DATA.fornecedores.filter(f=>f.status==='ativo').length;
-  const implantacao = DATA.fornecedores.filter(f=>f.status==='em_implantacao').length;
+  const ativos = fornecedores.filter(f=>f.status==='ativo').length;
+  const implantacao = fornecedores.filter(f=>f.status==='em_implantacao').length;
   const recupAcumulada = meses.reduce((s,m)=>s+m.recuperacao, 0);
   const investAcumulado = meses.reduce((s,m)=>s+m.investimentoTotal, 0);
+  const assessoriasDesejada = (p.regua && p.regua.desejada && p.regua.desejada.assessoriasAtivas) || [];
 
   const kpis = [
-    {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes + (deltaIec!==null ? ` · ${deltaIec<=0?'▼':'▲'} ${Math.abs(deltaIec).toFixed(2).replace('.',',')} p.p. vs mês anterior` : ''), cls: ultimo.iec <= DATA.saudeFinanceira.metaIec ? 'green' : 'red'},
-    {label:'Recuperado no período', value: brl(recupAcumulada), sub: meses.length + ' meses · investimento total de ' + brl(investAcumulado), cls:'navy'},
-    {label:'Assessorias na régua desejada', value: DATA.regua.desejada.assessoriasAtivas.length, sub: DATA.regua.desejada.assessoriasAtivas.join(', '), cls:'blue'},
-    {label:'Fornecedores mapeados', value: DATA.fornecedores.length, sub: ativos + ' ativos · ' + implantacao + ' em implantação', cls:'gold'},
+    temSaude
+      ? {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes + (deltaIec!==null ? ` · ${deltaIec<=0?'▼':'▲'} ${Math.abs(deltaIec).toFixed(2).replace('.',',')} p.p. vs mês anterior` : ''), cls: ultimo.iec <= p.saudeFinanceira.metaIec ? 'green' : 'red'}
+      : {label:'IEC último mês', value:'—', sub:'Saúde financeira ainda não configurada', cls:'red'},
+    {label:'Recuperado no período', value: temSaude ? brl(recupAcumulada) : '—', sub: temSaude ? (meses.length + ' meses · investimento total de ' + brl(investAcumulado)) : '—', cls:'navy'},
+    {label:'Assessorias na régua desejada', value: assessoriasDesejada.length || '—', sub: assessoriasDesejada.join(', ') || 'Régua ainda não configurada', cls:'blue'},
+    {label:'Fornecedores mapeados', value: fornecedores.length, sub: fornecedores.length ? (ativos + ' ativos · ' + implantacao + ' em implantação') : 'Nenhum fornecedor cadastrado ainda', cls:'gold'},
   ];
   document.getElementById('visaoKpis').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.cls}">
@@ -438,24 +518,30 @@ function renderVisaoGeral(){
       <div class="kpi-sub">${k.sub}</div>
     </div>`).join('');
 
-  const labels = meses.map(m=>m.mes.replace('/2026','/26'));
-  drawLineChart('visaoIecMini', labels, [
-    { data: meses.map(m=>m.iec), color:'#2563EB', label:'IEC', fill:true },
-    { data: meses.map(()=>DATA.saudeFinanceira.metaIec), color:'#D97706', label:'Meta', dash:true }
-  ], v=>v.toFixed(1)+'%');
+  if(temSaude){
+    const labels = meses.map(m=>m.mes.replace('/2026','/26'));
+    drawLineChart('visaoIecMini', labels, [
+      { data: meses.map(m=>m.iec), color:'#2563EB', label:'IEC', fill:true },
+      { data: meses.map(()=>p.saudeFinanceira.metaIec), color:'#D97706', label:'Meta', dash:true }
+    ], v=>v.toFixed(1)+'%');
+  } else {
+    document.getElementById('visaoIecMini').innerHTML = emptyState('Cadastre a Saúde Financeira deste produto no data.json para ver a tendência aqui.');
+  }
 
   const pendencias = [];
-  DATA.fornecedores.filter(f=>f.status==='em_implantacao').forEach(f=>{
+  fornecedores.filter(f=>f.status==='em_implantacao').forEach(f=>{
     pendencias.push(`<strong>${f.nome}</strong> (${f.categoria}) — ${f.papel}`);
   });
-  if(DATA.assessorias.status && /proposta|implanta/i.test(DATA.assessorias.status)){
-    pendencias.push(`<strong>Governança de Assessorias</strong> — ${DATA.assessorias.status}, ainda não é a regra vigente.`);
+  if(p.assessorias && p.assessorias.status && /proposta|implanta/i.test(p.assessorias.status)){
+    pendencias.push(`<strong>Governança de Assessorias</strong> — ${p.assessorias.status}, ainda não é a regra vigente.`);
   }
-  pendencias.push(`<strong>Régua desejada</strong> — ainda não é a régua em produção; veja o comparativo na aba "Régua de Cobrança".`);
-  document.getElementById('visaoImplantacao').innerHTML = `
+  if(p.regua){
+    pendencias.push(`<strong>Régua desejada</strong> — ainda não é a régua em produção; veja o comparativo na aba "Régua de Cobrança".`);
+  }
+  document.getElementById('visaoImplantacao').innerHTML = pendencias.length ? `
     <ul style="margin:0 0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px;">
-      ${pendencias.map(p=>`<li class="dot-y" style="font-weight:400;font-size:.8rem;line-height:1.5;color:var(--ink-secondary);">${p}</li>`).join('')}
-    </ul>`;
+      ${pendencias.map(pd=>`<li class="dot-y" style="font-weight:400;font-size:.8rem;line-height:1.5;color:var(--ink-secondary);">${pd}</li>`).join('')}
+    </ul>` : '<p style="font-size:.8rem;color:var(--ink-muted);">Nada em implantação registrado para este produto.</p>';
 
   const atalhos = [
     {tab:'desconto', titulo:'Política de Desconto', desc:'Piso, teto e calculadora de aprovação de propostas.'},
@@ -473,9 +559,22 @@ function renderVisaoGeral(){
 
 /* ---------- POLÍTICA DE DESCONTO ---------- */
 function renderDesconto(){
-  document.getElementById('descontoFluxo').textContent = DATA.desconto.descricaoFluxo;
+  const p = produto();
+  const content = document.getElementById('descontoContent');
+  const empty = document.getElementById('descontoEmpty');
+  if(!p.desconto){
+    content.style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = emptyState('Cadastre a política de desconto deste produto no data.json (chave "desconto") para habilitar esta aba.');
+    document.getElementById('descontoFluxo').textContent = '';
+    return;
+  }
+  content.style.display = '';
+  empty.style.display = 'none';
 
-  const oficial = DATA.desconto.oficial;
+  document.getElementById('descontoFluxo').textContent = p.desconto.descricaoFluxo;
+
+  const oficial = p.desconto.oficial;
   document.getElementById('tblOficial').innerHTML = `
     <thead><tr><th style="text-align:left">Fase</th><th>Dias</th><th>À vista (autorizar)</th><th>Até 12x (padrão)</th><th>Mora</th><th>Multa</th></tr></thead>
     <tbody>${oficial.map(r=>`
@@ -483,7 +582,7 @@ function renderDesconto(){
       <td class="td-blue">${pct(r.vista,2)}</td><td class="td-blue">${pct(r.parcelado12x,2)}</td>
       <td class="td-muted">${pct(r.mora,2)}</td><td class="td-muted">${pct(r.multa,2)}</td></tr>`).join('')}</tbody>`;
 
-  const ag = DATA.desconto.agressiva;
+  const ag = p.desconto.agressiva;
   document.getElementById('tblAgressiva').innerHTML = `
     <thead><tr><th style="text-align:left">Dias</th><th>Principal (teto)</th><th>Mora</th><th>Multa</th></tr></thead>
     <tbody>${ag.map(r=>`
@@ -576,13 +675,16 @@ function renderTrack(el, floor, ceiling, proposed, status, cautionStart){
   if(proposed > hi){
     const excess = document.createElement('div'); excess.className='zone excess'; excess.style.left=hi+'%'; excess.style.width=Math.max(Math.min(proposed,100)-hi,0.6)+'%'; el.appendChild(excess);
   }
-  [{v:floor,cls:'floor',label:'piso '+floor.toFixed(1)+'%'},{v:ceiling,cls:'ceil',label:'teto '+ceiling.toFixed(1)+'%'}].forEach(t=>{
+  const ticks = Math.abs(floor - ceiling) < 0.05
+    ? [{v:floor, cls:'floor', label:'piso/teto '+floor.toFixed(1)+'%'}]
+    : [{v:floor,cls:'floor',label:'piso '+floor.toFixed(1)+'%'},{v:ceiling,cls:'ceil',label:'teto '+ceiling.toFixed(1)+'%'}];
+  ticks.forEach(t=>{
     const tick=document.createElement('div'); tick.className='tick '+t.cls; tick.style.left=t.v+'%'; el.appendChild(tick);
-    const tl=document.createElement('div'); tl.className='ticklabel'; tl.style.left=t.v+'%'; tl.textContent=t.label; el.appendChild(tl);
+    const tl=document.createElement('div'); tl.className='ticklabel'; tl.style.left=Math.min(Math.max(t.v,6),94)+'%'; tl.textContent=t.label; el.appendChild(tl);
   });
   const clamped = Math.max(0, Math.min(proposed, 100));
   const marker=document.createElement('div'); marker.className='marker '+status; marker.style.left=clamped+'%'; el.appendChild(marker);
-  const ml=document.createElement('div'); ml.className='markerlabel'; ml.style.left=clamped+'%';
+  const ml=document.createElement('div'); ml.className='markerlabel'; ml.style.left=Math.min(Math.max(clamped,6),94)+'%';
   ml.style.color = status==='ok' ? 'var(--teal)' : status==='warn' ? 'var(--gold)' : 'var(--crimson)';
   ml.textContent = 'proposta '+proposed.toFixed(1)+'%'; el.appendChild(ml);
 }
@@ -629,31 +731,98 @@ update();
 }
 
 /* ---------- RÉGUA ---------- */
-document.getElementById('reguaToggle').addEventListener('click', e=>{
-  const btn = e.target.closest('.toggle-btn'); if(!btn) return;
-  document.querySelectorAll('#reguaToggle .toggle-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderRegua(btn.dataset.regua);
-});
+let reguaFiltro = 'todos';
 
-function renderRegua(qual){
-  const r = DATA.regua[qual];
-  document.getElementById('reguaFerramentas').innerHTML = `
+function reguaTable(r){
+  const etapas = r.etapas.filter(e=>{
+    if(reguaFiltro==='marcos') return e.marco;
+    if(reguaFiltro==='acoes') return !e.marco;
+    return true;
+  });
+  if(!etapas.length){
+    return `<thead><tr><th style="text-align:left">Dias</th><th style="text-align:left">Ação</th><th style="text-align:left">Responsável</th></tr></thead>
+      <tbody><tr><td colspan="3" class="td-dim" style="text-align:left;">Nenhuma etapa nesse filtro.</td></tr></tbody>`;
+  }
+  return `<thead><tr><th style="text-align:left">Dias</th><th style="text-align:left">Ação</th><th style="text-align:left">Responsável</th></tr></thead>
+    <tbody>${etapas.map(e=>`
+      <tr class="${e.marco?'seg-highlight':''}">
+        <td class="${e.marco?'td-gold':''}" style="text-align:left;white-space:nowrap;">${e.dias}</td>
+        <td class="${e.marco?'td-gold':''}" style="text-align:left;">${e.acao}</td>
+        <td style="text-align:left;">
+          <span style="display:block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;color:${e.marco ? 'var(--brand-gold)' : 'var(--ink-muted)'};">${e.marco ? 'Marco de cobrança' : 'Ação de cobrança'}</span>
+          <span style="color:var(--ink-secondary);">${e.responsavel}</span>
+        </td>
+      </tr>`).join('')}</tbody>`;
+}
+
+function reguaFerramentasHtml(r){
+  return `
+    <p style="font-size:.78rem;color:var(--ink-secondary);margin-bottom:8px;"><strong>Fase interna até:</strong> ${r.internaAte} dia(s)</p>
     <p style="font-size:.78rem;color:var(--ink-secondary);margin-bottom:8px;"><strong>Assessorias:</strong> ${r.assessoriasAtivas.join(', ')}</p>
     ${r.ferramentasInternas.length ? '<p style="font-size:.78rem;color:var(--ink-secondary);"><strong>Ferramentas digitais:</strong></p><ul style="margin:6px 0 0 18px;font-size:.78rem;color:var(--ink-secondary);">' + r.ferramentasInternas.map(f=>`<li>${f}</li>`).join('') + '</ul>' : '<p style="font-size:.78rem;color:var(--ink-muted);font-style:italic;">Sem ferramentas digitais de autonegociação nesta régua.</p>'}
   `;
-  document.getElementById('reguaFaseTexto').textContent = `A fase interna cobre até ${r.internaAte} dia(s) de atraso; a partir daí a cobrança passa a ser conduzida pela(s) assessoria(s) terceirizada(s).`;
-  document.getElementById('reguaTrack').innerHTML = r.etapas.map(e=>`
-    <div class="regua-step ${e.marco?'marco':''}">
-      <div class="regua-dias">${e.dias}</div>
-      <div class="regua-acao">${e.acao}</div>
-      <div class="regua-resp">Responsável: ${e.responsavel}</div>
-    </div>`).join('');
 }
+
+function renderRegua(){
+  const p = produto();
+  const content = document.getElementById('reguaContent');
+  const empty = document.getElementById('reguaEmpty');
+  if(!p.regua){
+    content.style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = emptyState('Cadastre a régua (chave "regua", com "atual" e "desejada") deste produto no data.json para habilitar esta aba.');
+    return;
+  }
+  content.style.display = '';
+  empty.style.display = 'none';
+
+  const atual = p.regua.atual, desejada = p.regua.desejada;
+
+  document.getElementById('reguaComparativo').innerHTML = `
+    <div class="destaque-block" style="margin-bottom:0;">
+      <div class="destaque-title">Atual</div>
+      <div class="destaque-text">Fase interna cobre até <strong>${atual.internaAte} dia(s)</strong>; a partir daí a cobrança é conduzida por <strong>${atual.assessoriasAtivas.join(', ')}</strong>.</div>
+    </div>
+    <div class="padrao-block" style="margin-bottom:0;">
+      <div class="padrao-title">Desejada</div>
+      <div class="padrao-text">Fase interna se estende até <strong>${desejada.internaAte} dia(s)</strong>, com ${desejada.ferramentasInternas.length} ferramenta(s) digital(is); a partir daí, <strong>${desejada.assessoriasAtivas.join(', ')}</strong>.</div>
+    </div>`;
+
+  document.getElementById('reguaFerramentasAtual').innerHTML = reguaFerramentasHtml(atual);
+  document.getElementById('reguaFerramentasDesejada').innerHTML = reguaFerramentasHtml(desejada);
+  document.getElementById('tblReguaAtual').innerHTML = reguaTable(atual);
+  document.getElementById('tblReguaDesejada').innerHTML = reguaTable(desejada);
+}
+
+document.querySelectorAll('#tab-regua .filter-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const p = produto();
+    if(!p.regua) return;
+    document.querySelectorAll('#tab-regua .filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    reguaFiltro = btn.dataset.filtro;
+    document.getElementById('tblReguaAtual').innerHTML = reguaTable(p.regua.atual);
+    document.getElementById('tblReguaDesejada').innerHTML = reguaTable(p.regua.desejada);
+  });
+});
 
 /* ---------- ASSESSORIAS ---------- */
 function renderAssessorias(){
-  const a = DATA.assessorias;
+  const p = produto();
+  const content = document.getElementById('assessoriasContent');
+  const empty = document.getElementById('assessoriasEmpty');
+  if(!p.assessorias){
+    content.style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = emptyState('Cadastre a governança de assessorias (chave "assessorias") deste produto no data.json para habilitar esta aba.');
+    document.getElementById('assessoriasStatus').textContent = '';
+    document.getElementById('assessoriasObjetivo').textContent = '';
+    return;
+  }
+  content.style.display = '';
+  empty.style.display = 'none';
+
+  const a = p.assessorias;
   document.getElementById('assessoriasStatus').textContent = a.status;
   document.getElementById('assessoriasObjetivo').textContent = a.objetivo;
   document.getElementById('assessoriasMetas').textContent = a.metas;
@@ -686,18 +855,32 @@ function renderAssessorias(){
 
 /* ---------- FORNECEDORES ---------- */
 function renderFornecedores(){
-  document.getElementById('fornecedoresGrid').innerHTML = DATA.fornecedores.map(f=>`
+  const fornecedores = produto().fornecedores || [];
+  document.getElementById('fornecedoresGrid').innerHTML = fornecedores.length ? fornecedores.map(f=>`
     <div class="provider-card">
       <div class="provider-name">${f.nome}</div>
       <div class="provider-cat">${f.categoria}</div>
       <div class="provider-papel">${f.papel}</div>
       <span class="status-pill ${f.status}">${f.status==='ativo'?'Ativo':'Em implantação'}</span>
-    </div>`).join('');
+    </div>`).join('') : emptyState('Cadastre os fornecedores deste produto no data.json (chave "fornecedores") para preencher esta aba.');
 }
 
 /* ---------- SAÚDE FINANCEIRA ---------- */
 function renderSaude(){
-  const sf = DATA.saudeFinanceira;
+  const p = produto();
+  const content = document.getElementById('saudeContent');
+  const empty = document.getElementById('saudeEmpty');
+  if(!p.saudeFinanceira || !p.saudeFinanceira.meses || !p.saudeFinanceira.meses.length){
+    content.style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = emptyState('Cadastre a saúde financeira (chave "saudeFinanceira", com ao menos um item em "meses") deste produto no data.json para habilitar esta aba.');
+    document.getElementById('iecFormula').textContent = '';
+    return;
+  }
+  content.style.display = '';
+  empty.style.display = 'none';
+
+  const sf = p.saudeFinanceira;
   document.getElementById('iecFormula').textContent = sf.iecFormula + ' Meta: ' + sf.metaDescricao;
   const ultimo = sf.meses[sf.meses.length-1];
   const anterior = sf.meses.length>1 ? sf.meses[sf.meses.length-2] : null;
@@ -738,12 +921,27 @@ function renderSaude(){
 
 /* ---------- ATUALIZAR DADOS ---------- */
 function buildFormLinhas(){
+  const p = produto();
+  document.getElementById('atualizarProdutoLabel').textContent = '— ' + p.nome;
+  const content = document.getElementById('atualizarContent');
+  const empty = document.getElementById('atualizarEmpty');
+  const linhas = p.saudeFinanceira && p.saudeFinanceira.linhasInvestimento;
+  if(!linhas || !linhas.length){
+    content.style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = emptyState('Cadastre ao menos a lista de linhas de investimento (chave "saudeFinanceira.linhasInvestimento") deste produto no data.json para habilitar o formulário.');
+    return;
+  }
+  content.style.display = '';
+  empty.style.display = 'none';
+
   const wrap = document.getElementById('formLinhas');
-  wrap.innerHTML = DATA.saudeFinanceira.linhasInvestimento.map(l=>`
+  wrap.innerHTML = linhas.map(l=>`
     <div class="form-field">
       <label>${l}</label>
       <input type="number" step="0.01" class="linhaInput" data-linha="${l}" value="0" oninput="recalcular()">
     </div>`).join('');
+  document.getElementById('inRecuperacao').removeEventListener('input', recalcular);
   document.getElementById('inRecuperacao').addEventListener('input', recalcular);
 }
 

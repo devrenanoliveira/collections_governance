@@ -31,12 +31,27 @@ python -m http.server 8000
 
 e acesse `http://localhost:8000` no navegador. Depois de publicado no GitHub Pages isso não é mais necessário (funciona normalmente por `https://`).
 
+## Múltiplos produtos
+
+O site suporta mais de um produto (ex: Z-ON, Produto A, Produto B...), cada um com as mesmas 7 abas e sua própria governança. Um seletor "Produto:" aparece automaticamente logo abaixo do cabeçalho, com um botão por produto cadastrado no `data.json` — não precisa mexer em nenhum código para isso, ele lê a lista sozinho.
+
+### Como adicionar um produto novo
+
+1. Abra o `data.json` e encontre a chave `"produtos"`. Hoje ela tem `"zon"` (com todos os dados reais) e `"produtoA"` (um exemplo vazio, só para mostrar como fica o seletor com mais de uma opção).
+2. Copie o bloco inteiro de `"zon"` (ou de `"produtoA"` se preferir começar vazio), cole como um novo item dentro de `"produtos"`, com um novo id (ex: `"produtob"`) e troque o campo `"nome"` para o nome real do produto (ex: `"Produto B"`).
+3. Preencha as seções (`desconto`, `regua`, `assessorias`, `fornecedores`, `saudeFinanceira`) com os dados desse produto. Se alguma seção ainda não estiver pronta, deixe o valor como `null` (ou `[]` no caso de `fornecedores`) — a aba correspondente mostra uma mensagem de "ainda não configurado" em vez de quebrar.
+4. Pode apagar o `"produtoA"` de exemplo quando não precisar mais dele, ou mantê-lo como rascunho para o próximo produto.
+5. Se quiser que um produto específico seja o que abre por padrão ao carregar o site, mude o valor de `"produtoPadrao"` (no topo do arquivo) para o id desse produto.
+
 ## Estrutura do `data.json` (resumo)
 
+Cada produto dentro de `"produtos.<id>"` tem a mesma estrutura:
+
+- `nome`: nome exibido no seletor e no cabeçalho.
 - `desconto`: fluxo do processo + tabelas `oficial` (piso) e `agressiva` (teto) por faixa de dias — alimenta também a calculadora embutida na aba de Política de Desconto.
 - `regua.atual` e `regua.desejada`: cada uma com lista de `etapas` (dias, ação, responsável) e as ferramentas/assessorias ativas naquela régua.
 - `assessorias`: objetivo, estrutura de metas, tabela de comissão base, matriz de multiplicadores, comissionamento indireto, estrutura concorrencial e rituais de gestão.
 - `fornecedores`: lista de objetos com `nome`, `categoria`, `papel` e `status` (`ativo` ou `em_implantacao`).
 - `saudeFinanceira`: `metaIec`, lista de `linhasInvestimento` e array `meses` (cada mês com investimento por linha, total, recuperação e IEC).
 
-Qualquer campo novo dentro desses padrões (nova linha de fornecedor, novo mês, nova faixa) você consegue adicionar sozinha só copiando a estrutura de um item existente. Se precisar de uma seção nova ou mudança de layout, aí sim volte a pedir ajuda.
+Qualquer campo novo dentro desses padrões (nova linha de fornecedor, novo mês, nova faixa, novo produto) você consegue adicionar sozinha só copiando a estrutura de um item existente. Se precisar de uma seção nova ou mudança de layout, aí sim volte a pedir ajuda.

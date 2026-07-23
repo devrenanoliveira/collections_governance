@@ -1,258 +1,982 @@
 {
-  "_leiaMe": "Este arquivo é a fonte única de dados do site. Edite os valores abaixo direto pelo GitHub (ícone de lápis no arquivo) e faça o commit — o site publica sozinho em ~1 minuto. Não precisa mexer em nenhum outro arquivo para atualizar conteúdo.",
-  "ultimaAtualizacao": "2026-07-23",
-
-  "desconto": {
-    "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso da política oficial e o teto da política agressiva, para o número de dias em atraso informado.",
-    "legendas": {
-      "piso": "Política oficial — desconto mínimo já autorizado (aprovação automática).",
-      "teto": "Política agressiva — máximo negociável sem virar exceção."
-    },
-    "oficial": [
-      { "prioridade": 1, "fase": "Faturamento (Bloqueado)", "diasDe": 5, "diasAte": 30, "vista": 0, "parcelado12x": 0, "mora": 0, "multa": 0 },
-      { "prioridade": 2, "fase": "Faturamento (Pré-Cancelado)", "diasDe": 31, "diasAte": 60, "vista": 0, "parcelado12x": 0, "mora": 0, "multa": 0 },
-      { "prioridade": 3, "fase": "Faturamento (Pré-Cancelado)", "diasDe": 61, "diasAte": 64, "vista": 0, "parcelado12x": 0, "mora": 0, "multa": 0 },
-      { "prioridade": 4, "fase": "Creli - Início (Ativo)", "diasDe": 65, "diasAte": 90, "vista": 5, "parcelado12x": 5, "mora": 60, "multa": 90 },
-      { "prioridade": 5, "fase": "Creli (Ativo Circular)", "diasDe": 91, "diasAte": 120, "vista": 15, "parcelado12x": 11, "mora": 80, "multa": 100 },
-      { "prioridade": 6, "fase": "Creli (Ativo Circular)", "diasDe": 121, "diasAte": 150, "vista": 20, "parcelado12x": 14, "mora": 100, "multa": 100 },
-      { "prioridade": 7, "fase": "Creli - Última Janela Ativo", "diasDe": 151, "diasAte": 180, "vista": 25, "parcelado12x": 18, "mora": 100, "multa": 100 },
-      { "prioridade": 8, "fase": "Creli - Entrada Prejuízo", "diasDe": 181, "diasAte": 240, "vista": 40, "parcelado12x": 25, "mora": 100, "multa": 100 },
-      { "prioridade": 9, "fase": "Creli (Prejuízo / WO)", "diasDe": 241, "diasAte": 300, "vista": 45, "parcelado12x": 30, "mora": 100, "multa": 100 },
-      { "prioridade": 10, "fase": "Creli (Prejuízo / WO)", "diasDe": 301, "diasAte": 360, "vista": 50, "parcelado12x": 35, "mora": 100, "multa": 100 },
-      { "prioridade": 11, "fase": "Creli (Recovery Intensivo)", "diasDe": 361, "diasAte": 540, "vista": 60, "parcelado12x": 45, "mora": 100, "multa": 100 },
-      { "prioridade": 12, "fase": "Creli (Recovery)", "diasDe": 541, "diasAte": 720, "vista": 65, "parcelado12x": 50, "mora": 100, "multa": 100 },
-      { "prioridade": 13, "fase": "Creli (Atraso Severo)", "diasDe": 721, "diasAte": 1080, "vista": 70, "parcelado12x": 55, "mora": 100, "multa": 100 },
-      { "prioridade": 14, "fase": "Creli (Atraso Severo)", "diasDe": 1081, "diasAte": 1440, "vista": 75, "parcelado12x": 60, "mora": 100, "multa": 100 },
-      { "prioridade": 14, "fase": "Creli (Atraso Severo)", "diasDe": 1441, "diasAte": 1800, "vista": 80, "parcelado12x": 70, "mora": 100, "multa": 100 },
-      { "prioridade": 14, "fase": "Creli (Teto Histórico)", "diasDe": 1801, "diasAte": 99999999, "vista": 90, "parcelado12x": 85, "mora": 100, "multa": 100 }
-    ],
-    "agressiva": [
-      { "diasDe": 0, "diasAte": 4, "principal": 0, "mora": 0, "multa": 0 },
-      { "diasDe": 5, "diasAte": 30, "principal": 0, "mora": 30, "multa": 50 },
-      { "diasDe": 31, "diasAte": 60, "principal": 0, "mora": 50, "multa": 80 },
-      { "diasDe": 61, "diasAte": 90, "principal": 15, "mora": 60, "multa": 90 },
-      { "diasDe": 91, "diasAte": 120, "principal": 30, "mora": 80, "multa": 100 },
-      { "diasDe": 121, "diasAte": 150, "principal": 45, "mora": 100, "multa": 100 },
-      { "diasDe": 151, "diasAte": 180, "principal": 50, "mora": 100, "multa": 100 },
-      { "diasDe": 181, "diasAte": 210, "principal": 60, "mora": 100, "multa": 100 },
-      { "diasDe": 211, "diasAte": 300, "principal": 75, "mora": 100, "multa": 100 },
-      { "diasDe": 301, "diasAte": 360, "principal": 85, "mora": 100, "multa": 100 },
-      { "diasDe": 361, "diasAte": 99999999, "principal": 90, "mora": 100, "multa": 100 }
-    ]
-  },
-
-  "regua": {
-    "atual": {
-      "titulo": "Régua Estrutural — Atual",
-      "internaAte": 4,
-      "ferramentasInternas": [],
-      "assessoriasAtivas": ["Fácil"],
-      "etapas": [
-        { "dias": "Em dia", "acao": "Push durante 10 dias antes do vencimento", "responsavel": "Interno" },
-        { "dias": "01 a 04", "acao": "Push incentivando pagamento no app do cartão", "responsavel": "Interno" },
-        { "dias": "05 dias", "acao": "Bloqueio do cartão", "responsavel": "Interno", "marco": true },
-        { "dias": "05 a 15", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "16 a 30", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "31 dias", "acao": "Negativação (SPC + Boa Vista/Equifax)", "responsavel": "SPC / Boa Vista", "marco": true },
-        { "dias": "31 a 64", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "65 dias", "acao": "Cancelamento do cartão", "responsavel": "Interno", "marco": true },
-        { "dias": "65 a 90", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "91 a 120", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "121 a 150", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "151 a 180", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "181 a 360", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": "361 a 720", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" },
-        { "dias": ">721", "acao": "Acionamento via assessoria de cobrança", "responsavel": "Fácil" }
-      ]
-    },
-    "desejada": {
-      "titulo": "Régua Estrutural — Desejada (futuro próximo)",
-      "internaAte": 64,
-      "ferramentasInternas": ["Portal de autonegociação — Acordo Online", "Bot de texto via WhatsApp — SmartNX", "Régua de cobrança digital — SmartNX"],
-      "assessoriasAtivas": ["Decisão", "Fácil"],
-      "etapas": [
-        { "dias": "Em dia", "acao": "Push durante 10 dias antes do vencimento", "responsavel": "Interno" },
-        { "dias": "01 a 04", "acao": "Push incentivando pagamento no app do cartão", "responsavel": "Interno" },
-        { "dias": "05 dias", "acao": "Bloqueio do cartão", "responsavel": "Interno", "marco": true },
-        { "dias": "05 a 15", "acao": "Push para portal + comunicação sobre possível negativação", "responsavel": "Interno" },
-        { "dias": "16 dias", "acao": "Notificação de pré-negativação (SPC)", "responsavel": "SPC", "marco": true },
-        { "dias": "16 a 30", "acao": "Push para portal + comunicação sobre possível negativação", "responsavel": "Interno" },
-        { "dias": "31 dias", "acao": "Negativação (SPC) — 10 dias para negativa, já disparado pelo Fácil", "responsavel": "SPC", "marco": true },
-        { "dias": "41 dias", "acao": "Negativação (Boa Vista/Quod)", "responsavel": "Boa Vista", "marco": true },
-        { "dias": "31 a 45", "acao": "Push para portal + comunicação de nome negativado", "responsavel": "Interno" },
-        { "dias": "46 a 64", "acao": "Push para portal + comunicação da iminência de cancelamento", "responsavel": "Interno" },
-        { "dias": "65 dias", "acao": "Cancelamento do cartão", "responsavel": "Interno", "marco": true },
-        { "dias": "65 a 90", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" },
-        { "dias": "91 a 120", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" },
-        { "dias": "121 a 150", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" },
-        { "dias": "151 a 180", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" },
-        { "dias": "181 dias", "acao": "Considerado prejuízo", "responsavel": "—", "marco": true },
-        { "dias": "181 a 360", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" },
-        { "dias": "361 a 720", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" },
-        { "dias": ">721", "acao": "Comunicação via assessoria de cobrança", "responsavel": "Decisão / Fácil" }
-      ]
-    }
-  },
-
-  "assessorias": {
-    "status": "Versão 7.0 — Proposta de Implantação",
-    "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 2 players, os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
-    "metas": "14 Índices de Eficiência individuais (um por faixa de aging) geram, de forma ponderada, uma Meta Geral de Eficiência. Os índices percentuais são convertidos em valores nominais de recuperação esperados (R$) por faixa, cujo somatório define o 'Valor X de Recuperação Total' — a obrigação final de entrega da assessoria no trimestre.",
-    "comissaoBase": [
-      { "faixa": "A", "intervalo": "01 a 04 dias", "comissao": null, "obs": "Assessoria não atua nesta faixa" },
-      { "faixa": "B", "intervalo": "1 a 30 dias", "comissao": 2.50 },
-      { "faixa": "C", "intervalo": "31 a 65 dias", "comissao": 6.50 },
-      { "faixa": "D", "intervalo": "66 a 90 dias", "comissao": 9.50 },
-      { "faixa": "E", "intervalo": "91 a 120 dias", "comissao": 12.00 },
-      { "faixa": "F", "intervalo": "121 a 150 dias", "comissao": 13.50 },
-      { "faixa": "G", "intervalo": "151 a 180 dias", "comissao": 16.00 },
-      { "faixa": "H", "intervalo": "181 a 360 dias", "comissao": 18.00 },
-      { "faixa": "I", "intervalo": "361 a 720 dias", "comissao": 22.50 },
-      { "faixa": "J", "intervalo": "721 a 1080 dias", "comissao": 25.00 },
-      { "faixa": "K", "intervalo": "1081 a 1440 dias", "comissao": 28.00 },
-      { "faixa": "L", "intervalo": "1441 a 1800 dias", "comissao": 32.00 },
-      { "faixa": "M", "intervalo": "Acima de 1801 dias", "comissao": 40.00 }
-    ],
-    "multiplicadores": {
-      "colunas": [
-        { "chave": "r1", "label": "Redutor 1 (< 75%)", "mult": 0.80 },
-        { "chave": "r2", "label": "Redutor 2 (75% a 84,9%)", "mult": 0.90 },
-        { "chave": "r3", "label": "Redutor 3 (85% a 89,9%)", "mult": 0.95 },
-        { "chave": "meta", "label": "Meta Padrão (90% a 104,9%)", "mult": 1.00 },
-        { "chave": "g1", "label": "Gatilho 1 (105% a 110%)", "mult": 1.05 },
-        { "chave": "g2", "label": "Gatilho 2 (110% a 120%)", "mult": 1.10 },
-        { "chave": "gmax", "label": "Gatilho Max (> 120%)", "mult": 1.20 }
+  "_leiaMe": "Este arquivo é a fonte única de dados do site. Edite os valores abaixo direto pelo GitHub (ícone de lápis no arquivo) e faça o commit — o site publica sozinho em ~1 minuto. Não precisa mexer em nenhum outro arquivo para atualizar conteúdo. Este site agora suporta múltiplos produtos: cada um vive dentro de 'produtos.<id>', com a mesma estrutura de seções. Para adicionar um produto novo, copie o bloco de um produto existente (ex: 'zon') dentro de 'produtos', dê um novo id (ex: 'produtoB') e preencha os campos — o seletor de produto no site aparece sozinho, sem precisar mexer no código.",
+  "produtoPadrao": "zon",
+  "produtos": {
+    "zon": {
+      "nome": "Z-ON",
+      "ultimaAtualizacao": "2026-07-23",
+      "desconto": {
+        "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso da política oficial e o teto da política agressiva, para o número de dias em atraso informado.",
+        "legendas": {
+          "piso": "Política oficial — desconto mínimo já autorizado (aprovação automática).",
+          "teto": "Política agressiva — máximo negociável sem virar exceção."
+        },
+        "oficial": [
+          {
+            "prioridade": 1,
+            "fase": "Faturamento (Bloqueado)",
+            "diasDe": 5,
+            "diasAte": 30,
+            "vista": 0,
+            "parcelado12x": 0,
+            "mora": 0,
+            "multa": 0
+          },
+          {
+            "prioridade": 2,
+            "fase": "Faturamento (Pré-Cancelado)",
+            "diasDe": 31,
+            "diasAte": 60,
+            "vista": 0,
+            "parcelado12x": 0,
+            "mora": 0,
+            "multa": 0
+          },
+          {
+            "prioridade": 3,
+            "fase": "Faturamento (Pré-Cancelado)",
+            "diasDe": 61,
+            "diasAte": 64,
+            "vista": 0,
+            "parcelado12x": 0,
+            "mora": 0,
+            "multa": 0
+          },
+          {
+            "prioridade": 4,
+            "fase": "Creli - Início (Ativo)",
+            "diasDe": 65,
+            "diasAte": 90,
+            "vista": 5,
+            "parcelado12x": 5,
+            "mora": 60,
+            "multa": 90
+          },
+          {
+            "prioridade": 5,
+            "fase": "Creli (Ativo Circular)",
+            "diasDe": 91,
+            "diasAte": 120,
+            "vista": 15,
+            "parcelado12x": 11,
+            "mora": 80,
+            "multa": 100
+          },
+          {
+            "prioridade": 6,
+            "fase": "Creli (Ativo Circular)",
+            "diasDe": 121,
+            "diasAte": 150,
+            "vista": 20,
+            "parcelado12x": 14,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 7,
+            "fase": "Creli - Última Janela Ativo",
+            "diasDe": 151,
+            "diasAte": 180,
+            "vista": 25,
+            "parcelado12x": 18,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 8,
+            "fase": "Creli - Entrada Prejuízo",
+            "diasDe": 181,
+            "diasAte": 240,
+            "vista": 40,
+            "parcelado12x": 25,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 9,
+            "fase": "Creli (Prejuízo / WO)",
+            "diasDe": 241,
+            "diasAte": 300,
+            "vista": 45,
+            "parcelado12x": 30,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 10,
+            "fase": "Creli (Prejuízo / WO)",
+            "diasDe": 301,
+            "diasAte": 360,
+            "vista": 50,
+            "parcelado12x": 35,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 11,
+            "fase": "Creli (Recovery Intensivo)",
+            "diasDe": 361,
+            "diasAte": 540,
+            "vista": 60,
+            "parcelado12x": 45,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 12,
+            "fase": "Creli (Recovery)",
+            "diasDe": 541,
+            "diasAte": 720,
+            "vista": 65,
+            "parcelado12x": 50,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 13,
+            "fase": "Creli (Atraso Severo)",
+            "diasDe": 721,
+            "diasAte": 1080,
+            "vista": 70,
+            "parcelado12x": 55,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 14,
+            "fase": "Creli (Atraso Severo)",
+            "diasDe": 1081,
+            "diasAte": 1440,
+            "vista": 75,
+            "parcelado12x": 60,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 14,
+            "fase": "Creli (Atraso Severo)",
+            "diasDe": 1441,
+            "diasAte": 1800,
+            "vista": 80,
+            "parcelado12x": 70,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "prioridade": 14,
+            "fase": "Creli (Teto Histórico)",
+            "diasDe": 1801,
+            "diasAte": 99999999,
+            "vista": 90,
+            "parcelado12x": 85,
+            "mora": 100,
+            "multa": 100
+          }
+        ],
+        "agressiva": [
+          {
+            "diasDe": 0,
+            "diasAte": 4,
+            "principal": 0,
+            "mora": 0,
+            "multa": 0
+          },
+          {
+            "diasDe": 5,
+            "diasAte": 30,
+            "principal": 0,
+            "mora": 30,
+            "multa": 50
+          },
+          {
+            "diasDe": 31,
+            "diasAte": 60,
+            "principal": 0,
+            "mora": 50,
+            "multa": 80
+          },
+          {
+            "diasDe": 61,
+            "diasAte": 90,
+            "principal": 15,
+            "mora": 60,
+            "multa": 90
+          },
+          {
+            "diasDe": 91,
+            "diasAte": 120,
+            "principal": 30,
+            "mora": 80,
+            "multa": 100
+          },
+          {
+            "diasDe": 121,
+            "diasAte": 150,
+            "principal": 45,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "diasDe": 151,
+            "diasAte": 180,
+            "principal": 50,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "diasDe": 181,
+            "diasAte": 210,
+            "principal": 60,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "diasDe": 211,
+            "diasAte": 300,
+            "principal": 75,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "diasDe": 301,
+            "diasAte": 360,
+            "principal": 85,
+            "mora": 100,
+            "multa": 100
+          },
+          {
+            "diasDe": 361,
+            "diasAte": 99999999,
+            "principal": 90,
+            "mora": 100,
+            "multa": 100
+          }
+        ]
+      },
+      "regua": {
+        "atual": {
+          "titulo": "Régua Estrutural — Atual",
+          "internaAte": 4,
+          "ferramentasInternas": [],
+          "assessoriasAtivas": [
+            "Fácil"
+          ],
+          "etapas": [
+            {
+              "dias": "Em dia",
+              "acao": "Push durante 10 dias antes do vencimento",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "01 a 04",
+              "acao": "Push incentivando pagamento no app do cartão",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "05 dias",
+              "acao": "Bloqueio do cartão",
+              "responsavel": "Interno",
+              "marco": true
+            },
+            {
+              "dias": "05 a 15",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "16 a 30",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "31 dias",
+              "acao": "Negativação (SPC + Boa Vista/Equifax)",
+              "responsavel": "SPC / Boa Vista",
+              "marco": true
+            },
+            {
+              "dias": "31 a 64",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "65 dias",
+              "acao": "Cancelamento do cartão",
+              "responsavel": "Interno",
+              "marco": true
+            },
+            {
+              "dias": "65 a 90",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "91 a 120",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "121 a 150",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "151 a 180",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "181 a 360",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": "361 a 720",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            },
+            {
+              "dias": ">721",
+              "acao": "Acionamento via assessoria de cobrança",
+              "responsavel": "Fácil"
+            }
+          ]
+        },
+        "desejada": {
+          "titulo": "Régua Estrutural — Desejada (futuro próximo)",
+          "internaAte": 64,
+          "ferramentasInternas": [
+            "Portal de autonegociação — Acordo Online",
+            "Bot de texto via WhatsApp — SmartNX",
+            "Régua de cobrança digital — SmartNX",
+            "Portal de autonegociação — Serasa Limpa Nome (previsto para atuar nas faixas acima de 65 dias)"
+          ],
+          "assessoriasAtivas": [
+            "Decisão",
+            "Fácil"
+          ],
+          "etapas": [
+            {
+              "dias": "Em dia",
+              "acao": "Push durante 10 dias antes do vencimento",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "01 a 04",
+              "acao": "Push incentivando pagamento no app do cartão",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "05 dias",
+              "acao": "Bloqueio do cartão",
+              "responsavel": "Interno",
+              "marco": true
+            },
+            {
+              "dias": "05 a 15",
+              "acao": "Push para portal + comunicação sobre possível negativação",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "16 dias",
+              "acao": "Notificação de pré-negativação (SPC)",
+              "responsavel": "SPC",
+              "marco": true
+            },
+            {
+              "dias": "16 a 30",
+              "acao": "Push para portal + comunicação sobre possível negativação",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "31 dias",
+              "acao": "Negativação (SPC) — 10 dias para negativa, já disparado pelo Fácil",
+              "responsavel": "SPC",
+              "marco": true
+            },
+            {
+              "dias": "41 dias",
+              "acao": "Negativação (Boa Vista/Quod)",
+              "responsavel": "Boa Vista",
+              "marco": true
+            },
+            {
+              "dias": "31 a 45",
+              "acao": "Push para portal + comunicação de nome negativado",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "46 a 64",
+              "acao": "Push para portal + comunicação da iminência de cancelamento",
+              "responsavel": "Interno"
+            },
+            {
+              "dias": "65 dias",
+              "acao": "Cancelamento do cartão",
+              "responsavel": "Interno",
+              "marco": true
+            },
+            {
+              "dias": "65 a 90",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            },
+            {
+              "dias": "91 a 120",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            },
+            {
+              "dias": "121 a 150",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            },
+            {
+              "dias": "151 a 180",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            },
+            {
+              "dias": "181 dias",
+              "acao": "Considerado prejuízo",
+              "responsavel": "—",
+              "marco": true
+            },
+            {
+              "dias": "181 a 360",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            },
+            {
+              "dias": "361 a 720",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            },
+            {
+              "dias": ">721",
+              "acao": "Comunicação via assessoria de cobrança",
+              "responsavel": "Decisão / Fácil"
+            }
+          ]
+        }
+      },
+      "assessorias": {
+        "status": "Versão 7.0 — Proposta de Implantação",
+        "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 2 players, os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
+        "metas": "14 Índices de Eficiência individuais (um por faixa de aging) geram, de forma ponderada, uma Meta Geral de Eficiência. Os índices percentuais são convertidos em valores nominais de recuperação esperados (R$) por faixa, cujo somatório define o 'Valor X de Recuperação Total' — a obrigação final de entrega da assessoria no trimestre.",
+        "comissaoBase": [
+          {
+            "faixa": "A",
+            "intervalo": "01 a 04 dias",
+            "comissao": null,
+            "obs": "Assessoria não atua nesta faixa"
+          },
+          {
+            "faixa": "B",
+            "intervalo": "1 a 30 dias",
+            "comissao": 2.5
+          },
+          {
+            "faixa": "C",
+            "intervalo": "31 a 65 dias",
+            "comissao": 6.5
+          },
+          {
+            "faixa": "D",
+            "intervalo": "66 a 90 dias",
+            "comissao": 9.5
+          },
+          {
+            "faixa": "E",
+            "intervalo": "91 a 120 dias",
+            "comissao": 12.0
+          },
+          {
+            "faixa": "F",
+            "intervalo": "121 a 150 dias",
+            "comissao": 13.5
+          },
+          {
+            "faixa": "G",
+            "intervalo": "151 a 180 dias",
+            "comissao": 16.0
+          },
+          {
+            "faixa": "H",
+            "intervalo": "181 a 360 dias",
+            "comissao": 18.0
+          },
+          {
+            "faixa": "I",
+            "intervalo": "361 a 720 dias",
+            "comissao": 22.5
+          },
+          {
+            "faixa": "J",
+            "intervalo": "721 a 1080 dias",
+            "comissao": 25.0
+          },
+          {
+            "faixa": "K",
+            "intervalo": "1081 a 1440 dias",
+            "comissao": 28.0
+          },
+          {
+            "faixa": "L",
+            "intervalo": "1441 a 1800 dias",
+            "comissao": 32.0
+          },
+          {
+            "faixa": "M",
+            "intervalo": "Acima de 1801 dias",
+            "comissao": 40.0
+          }
+        ],
+        "multiplicadores": {
+          "colunas": [
+            {
+              "chave": "r1",
+              "label": "Redutor 1 (< 75%)",
+              "mult": 0.8
+            },
+            {
+              "chave": "r2",
+              "label": "Redutor 2 (75% a 84,9%)",
+              "mult": 0.9
+            },
+            {
+              "chave": "r3",
+              "label": "Redutor 3 (85% a 89,9%)",
+              "mult": 0.95
+            },
+            {
+              "chave": "meta",
+              "label": "Meta Padrão (90% a 104,9%)",
+              "mult": 1.0
+            },
+            {
+              "chave": "g1",
+              "label": "Gatilho 1 (105% a 110%)",
+              "mult": 1.05
+            },
+            {
+              "chave": "g2",
+              "label": "Gatilho 2 (110% a 120%)",
+              "mult": 1.1
+            },
+            {
+              "chave": "gmax",
+              "label": "Gatilho Max (> 120%)",
+              "mult": 1.2
+            }
+          ],
+          "linhas": [
+            {
+              "faixa": "B",
+              "intervalo": "1 a 30 dias",
+              "r1": 2.0,
+              "r2": 2.25,
+              "r3": 2.38,
+              "meta": 2.5,
+              "g1": 2.63,
+              "g2": 2.75,
+              "gmax": 3.0
+            },
+            {
+              "faixa": "C",
+              "intervalo": "31 a 65 dias",
+              "r1": 5.2,
+              "r2": 5.85,
+              "r3": 6.18,
+              "meta": 6.5,
+              "g1": 6.83,
+              "g2": 7.15,
+              "gmax": 7.8
+            },
+            {
+              "faixa": "D",
+              "intervalo": "66 a 90 dias",
+              "r1": 7.6,
+              "r2": 8.55,
+              "r3": 9.03,
+              "meta": 9.5,
+              "g1": 9.98,
+              "g2": 10.45,
+              "gmax": 11.4
+            },
+            {
+              "faixa": "E",
+              "intervalo": "91 a 120 dias",
+              "r1": 9.6,
+              "r2": 10.8,
+              "r3": 11.4,
+              "meta": 12.0,
+              "g1": 12.6,
+              "g2": 13.2,
+              "gmax": 14.4
+            },
+            {
+              "faixa": "F",
+              "intervalo": "121 a 150 dias",
+              "r1": 10.8,
+              "r2": 12.15,
+              "r3": 12.83,
+              "meta": 13.5,
+              "g1": 14.18,
+              "g2": 14.85,
+              "gmax": 16.2
+            },
+            {
+              "faixa": "G",
+              "intervalo": "151 a 180 dias",
+              "r1": 12.8,
+              "r2": 14.4,
+              "r3": 15.2,
+              "meta": 16.0,
+              "g1": 16.8,
+              "g2": 17.6,
+              "gmax": 19.2
+            },
+            {
+              "faixa": "H",
+              "intervalo": "181 a 360 dias",
+              "r1": 14.4,
+              "r2": 16.2,
+              "r3": 17.1,
+              "meta": 18.0,
+              "g1": 19.26,
+              "g2": 19.8,
+              "gmax": 21.6
+            },
+            {
+              "faixa": "I",
+              "intervalo": "361 a 720 dias",
+              "r1": 18.0,
+              "r2": 20.25,
+              "r3": 21.38,
+              "meta": 22.5,
+              "g1": 24.08,
+              "g2": 24.75,
+              "gmax": 27.0
+            },
+            {
+              "faixa": "J",
+              "intervalo": "721 a 1080 dias",
+              "r1": 20.0,
+              "r2": 22.5,
+              "r3": 23.75,
+              "meta": 25.0,
+              "g1": 26.75,
+              "g2": 27.5,
+              "gmax": 30.0
+            },
+            {
+              "faixa": "K",
+              "intervalo": "1081 a 1440 dias",
+              "r1": 22.4,
+              "r2": 25.2,
+              "r3": 26.6,
+              "meta": 28.0,
+              "g1": 29.96,
+              "g2": 30.8,
+              "gmax": 33.6
+            },
+            {
+              "faixa": "L",
+              "intervalo": "1441 a 1800 dias",
+              "r1": 25.6,
+              "r2": 28.8,
+              "r3": 30.4,
+              "meta": 32.0,
+              "g1": 34.24,
+              "g2": 35.2,
+              "gmax": 38.4
+            },
+            {
+              "faixa": "M",
+              "intervalo": "Acima de 1801 dias",
+              "r1": 32.0,
+              "r2": 36.0,
+              "r3": 38.0,
+              "meta": 40.0,
+              "g1": 42.8,
+              "g2": 44.0,
+              "gmax": 48.0
+            }
+          ],
+          "notaRescisao": "Um atingimento inferior a 75% da Meta Geral (Ônus Máximo) por dois trimestres consecutivos gera gatilho automático de rescisão contratual motivada por baixa eficiência."
+        },
+        "comissaoIndireta": {
+          "percentual": 30,
+          "descricaoPagavel": "30% da comissão da faixa correspondente, se a assessoria comprovar (via integração de logs de sistema) contato efetivo ou envio de acionamento válido nos últimos 5 dias corridos anteriores à data do pagamento interno do cliente.",
+          "descricaoZerada": "Caso não haja histórico de acionamento válido dentro da janela de retroatividade de 5 dias, a comissão é zerada e o valor recuperado reverte integralmente para o Credor.",
+          "acionamentoValido": "Contato com a Pessoa Certa (CPC), SMS entregue com relatório de recepção, e-mails entregues e interações de WhatsApp. Tentativas frustradas (caixa postal, ocupado, etc.) não geram direito de atribuição."
+        },
+        "concorrencial": {
+          "numeroPlayers": 2,
+          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses.",
+          "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance."
+        },
+        "rituais": {
+          "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",
+          "semanal": "Comitê tático às segundas-feiras: visão acumulada do mês (real vs. projeção e GAPs), performance por canal digital (agente virtual, autonegociação, cartas, SMS, WhatsApp), monitoramento da curva de quartis do time interno.",
+          "mensal": "Alinhamento estratégico até o 5º dia útil do mês seguinte: visão holística de indicadores e auditoria de repasses de comissão, performance dos negociadores e dos robôs de autosserviço, macrovisão da saúde da carteira, planejamento prospectivo do mês seguinte."
+        }
+      },
+      "fornecedores": [
+        {
+          "nome": "Decisão",
+          "categoria": "Assessoria de cobrança",
+          "papel": "Assessoria de cobrança terceirizada.",
+          "status": "em_implantacao"
+        },
+        {
+          "nome": "Fácil",
+          "categoria": "Assessoria de cobrança",
+          "papel": "Assessoria de cobrança terceirizada.",
+          "status": "ativo"
+        },
+        {
+          "nome": "SmartNX",
+          "categoria": "Plataforma digital",
+          "papel": "Futura plataforma de gerenciamento da régua digital de acionamento de cobrança.",
+          "status": "em_implantacao"
+        },
+        {
+          "nome": "Acordo Online",
+          "categoria": "Portal de autonegociação",
+          "papel": "Futuro portal de autonegociação para o cliente.",
+          "status": "em_implantacao"
+        },
+        {
+          "nome": "SPC",
+          "categoria": "Bureau de negativação",
+          "papel": "Negativação de CPF.",
+          "status": "ativo"
+        },
+        {
+          "nome": "Boa Vista",
+          "categoria": "Bureau de negativação",
+          "papel": "Negativação de CPF (também referida como ACP).",
+          "status": "ativo"
+        },
+        {
+          "nome": "Serasa Limpa Nome",
+          "categoria": "Portal de autonegociação",
+          "papel": "Futuro portal de autonegociação via Serasa, funciona por fee de sucesso.",
+          "status": "em_implantacao"
+        },
+        {
+          "nome": "CobranSaaS",
+          "categoria": "CRM de cobrança",
+          "papel": "CRM de cobrança utilizado para realizar a cobrança pós-Creli (acima de 65 dias de atraso). Operado pela Celcoin.",
+          "status": "ativo"
+        },
+        {
+          "nome": "RPE",
+          "categoria": "Processadora de cartão",
+          "papel": "Processadora do cartão usada para gerar/parcelar faturas até 65 dias de atraso. Plataforma CARDS funciona como CRM dessa fase.",
+          "status": "ativo"
+        },
+        {
+          "nome": "A2M",
+          "categoria": "Business Intelligence",
+          "papel": "Licença de Power BI usada para dashboards de cobrança e de outras áreas.",
+          "status": "ativo"
+        }
       ],
-      "linhas": [
-        { "faixa": "B", "intervalo": "1 a 30 dias", "r1": 2.00, "r2": 2.25, "r3": 2.38, "meta": 2.50, "g1": 2.63, "g2": 2.75, "gmax": 3.00 },
-        { "faixa": "C", "intervalo": "31 a 65 dias", "r1": 5.20, "r2": 5.85, "r3": 6.18, "meta": 6.50, "g1": 6.83, "g2": 7.15, "gmax": 7.80 },
-        { "faixa": "D", "intervalo": "66 a 90 dias", "r1": 7.60, "r2": 8.55, "r3": 9.03, "meta": 9.50, "g1": 9.98, "g2": 10.45, "gmax": 11.40 },
-        { "faixa": "E", "intervalo": "91 a 120 dias", "r1": 9.60, "r2": 10.80, "r3": 11.40, "meta": 12.00, "g1": 12.60, "g2": 13.20, "gmax": 14.40 },
-        { "faixa": "F", "intervalo": "121 a 150 dias", "r1": 10.80, "r2": 12.15, "r3": 12.83, "meta": 13.50, "g1": 14.18, "g2": 14.85, "gmax": 16.20 },
-        { "faixa": "G", "intervalo": "151 a 180 dias", "r1": 12.80, "r2": 14.40, "r3": 15.20, "meta": 16.00, "g1": 16.80, "g2": 17.60, "gmax": 19.20 },
-        { "faixa": "H", "intervalo": "181 a 360 dias", "r1": 14.40, "r2": 16.20, "r3": 17.10, "meta": 18.00, "g1": 19.26, "g2": 19.80, "gmax": 21.60 },
-        { "faixa": "I", "intervalo": "361 a 720 dias", "r1": 18.00, "r2": 20.25, "r3": 21.38, "meta": 22.50, "g1": 24.08, "g2": 24.75, "gmax": 27.00 },
-        { "faixa": "J", "intervalo": "721 a 1080 dias", "r1": 20.00, "r2": 22.50, "r3": 23.75, "meta": 25.00, "g1": 26.75, "g2": 27.50, "gmax": 30.00 },
-        { "faixa": "K", "intervalo": "1081 a 1440 dias", "r1": 22.40, "r2": 25.20, "r3": 26.60, "meta": 28.00, "g1": 29.96, "g2": 30.80, "gmax": 33.60 },
-        { "faixa": "L", "intervalo": "1441 a 1800 dias", "r1": 25.60, "r2": 28.80, "r3": 30.40, "meta": 32.00, "g1": 34.24, "g2": 35.20, "gmax": 38.40 },
-        { "faixa": "M", "intervalo": "Acima de 1801 dias", "r1": 32.00, "r2": 36.00, "r3": 38.00, "meta": 40.00, "g1": 42.80, "g2": 44.00, "gmax": 48.00 }
-      ],
-      "notaRescisao": "Um atingimento inferior a 75% da Meta Geral (Ônus Máximo) por dois trimestres consecutivos gera gatilho automático de rescisão contratual motivada por baixa eficiência."
-    },
-    "comissaoIndireta": {
-      "percentual": 30,
-      "descricaoPagavel": "30% da comissão da faixa correspondente, se a assessoria comprovar (via integração de logs de sistema) contato efetivo ou envio de acionamento válido nos últimos 5 dias corridos anteriores à data do pagamento interno do cliente.",
-      "descricaoZerada": "Caso não haja histórico de acionamento válido dentro da janela de retroatividade de 5 dias, a comissão é zerada e o valor recuperado reverte integralmente para o Credor.",
-      "acionamentoValido": "Contato com a Pessoa Certa (CPC), SMS entregue com relatório de recepção, e-mails entregues e interações de WhatsApp. Tentativas frustradas (caixa postal, ocupado, etc.) não geram direito de atribuição."
-    },
-    "concorrencial": {
-      "numeroPlayers": 2,
-      "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses.",
-      "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance."
-    },
-    "rituais": {
-      "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",
-      "semanal": "Comitê tático às segundas-feiras: visão acumulada do mês (real vs. projeção e GAPs), performance por canal digital (agente virtual, autonegociação, cartas, SMS, WhatsApp), monitoramento da curva de quartis do time interno.",
-      "mensal": "Alinhamento estratégico até o 5º dia útil do mês seguinte: visão holística de indicadores e auditoria de repasses de comissão, performance dos negociadores e dos robôs de autosserviço, macrovisão da saúde da carteira, planejamento prospectivo do mês seguinte."
-    }
-  },
-
-  "fornecedores": [
-    { "nome": "Decisão", "categoria": "Assessoria de cobrança", "papel": "Assessoria de cobrança terceirizada.", "status": "em_implantacao" },
-    { "nome": "Fácil", "categoria": "Assessoria de cobrança", "papel": "Assessoria de cobrança terceirizada.", "status": "ativo" },
-    { "nome": "SmartNX", "categoria": "Plataforma digital", "papel": "Futura plataforma de gerenciamento da régua digital de acionamento de cobrança.", "status": "em_implantacao" },
-    { "nome": "Acordo Online", "categoria": "Portal de autonegociação", "papel": "Futuro portal de autonegociação para o cliente.", "status": "em_implantacao" },
-    { "nome": "SPC", "categoria": "Bureau de negativação", "papel": "Negativação de CPF.", "status": "ativo" },
-    { "nome": "Boa Vista", "categoria": "Bureau de negativação", "papel": "Negativação de CPF (também referida como ACP).", "status": "ativo" },
-    { "nome": "Serasa Limpa Nome", "categoria": "Portal de autonegociação", "papel": "Futuro portal de autonegociação via Serasa, funciona por fee de sucesso.", "status": "em_implantacao" },
-    { "nome": "CobranSaaS", "categoria": "CRM de cobrança", "papel": "CRM de cobrança utilizado para realizar a cobrança pós-Creli (acima de 65 dias de atraso). Operado pela Celcoin.", "status": "ativo" },
-    { "nome": "RPE", "categoria": "Processadora de cartão", "papel": "Processadora do cartão usada para gerar/parcelar faturas até 65 dias de atraso. Plataforma CARDS funciona como CRM dessa fase.", "status": "ativo" },
-    { "nome": "A2M", "categoria": "Business Intelligence", "papel": "Licença de Power BI usada para dashboards de cobrança e de outras áreas.", "status": "ativo" }
-  ],
-
-  "saudeFinanceira": {
-    "iecFormula": "IEC (Índice de Eficiência de Custo) = Investimento Total ÷ Recuperação do mês. Quanto menor, mais eficiente.",
-    "metaIec": 5.9,
-    "metaDescricao": "Manter abaixo da média atual de 5,9%.",
-    "linhasInvestimento": [
-      "Fácil Assessoria", "Assessoria Decisão", "PG+ Assessoria", "Serasa Limpa Nome",
-      "Negativação SPC", "Negativação ACP", "A2M (Power BI)", "Celcoin - CobranSaaS",
-      "QL (time)", "Portal", "Setup SmartNX", "Mensalidade SmartNX", "Mensageria SMS",
-      "Mensageria RCS", "Mensageria E-mail", "Mensageria WhatsApp", "Discador", "Telecom"
-    ],
-    "meses": [
-      {
-        "mes": "Janeiro/2026",
-        "investimentoPorLinha": {
-          "Fácil Assessoria": 243869.68, "Assessoria Decisão": 0, "PG+ Assessoria": 0, "Serasa Limpa Nome": 0,
-          "Negativação SPC": 8467.39, "Negativação ACP": 10662.64, "A2M (Power BI)": 520.00, "Celcoin - CobranSaaS": 18000.00,
-          "QL (time)": 31200.00, "Portal": 0, "Setup SmartNX": 0, "Mensalidade SmartNX": 0, "Mensageria SMS": 0,
-          "Mensageria RCS": 0, "Mensageria E-mail": 0, "Mensageria WhatsApp": 0, "Discador": 0, "Telecom": 0
-        },
-        "investimentoTotal": 312719.71,
-        "recuperacao": 5321565.40,
-        "iec": 5.88
-      },
-      {
-        "mes": "Fevereiro/2026",
-        "investimentoPorLinha": {
-          "Fácil Assessoria": 295847.58, "Assessoria Decisão": 0, "PG+ Assessoria": 0, "Serasa Limpa Nome": 0,
-          "Negativação SPC": 9399.15, "Negativação ACP": 2960.13, "A2M (Power BI)": 520.00, "Celcoin - CobranSaaS": 18000.00,
-          "QL (time)": 31200.00, "Portal": 0, "Setup SmartNX": 0, "Mensalidade SmartNX": 0, "Mensageria SMS": 0,
-          "Mensageria RCS": 0, "Mensageria E-mail": 0, "Mensageria WhatsApp": 0, "Discador": 0, "Telecom": 0
-        },
-        "investimentoTotal": 357926.86,
-        "recuperacao": 5362390.94,
-        "iec": 6.67
-      },
-      {
-        "mes": "Março/2026",
-        "investimentoPorLinha": {
-          "Fácil Assessoria": 328452.70, "Assessoria Decisão": 0, "PG+ Assessoria": 33281.83, "Serasa Limpa Nome": 0,
-          "Negativação SPC": 7065.00, "Negativação ACP": 10271.81, "A2M (Power BI)": 520.00, "Celcoin - CobranSaaS": 18000.00,
-          "QL (time)": 31200.00, "Portal": 0, "Setup SmartNX": 0, "Mensalidade SmartNX": 0, "Mensageria SMS": 0,
-          "Mensageria RCS": 0, "Mensageria E-mail": 0, "Mensageria WhatsApp": 0, "Discador": 0, "Telecom": 0
-        },
-        "investimentoTotal": 428791.34,
-        "recuperacao": 7041602.49,
-        "iec": 6.09
-      },
-      {
-        "mes": "Abril/2026",
-        "investimentoPorLinha": {
-          "Fácil Assessoria": 270373.97, "Assessoria Decisão": 0, "PG+ Assessoria": 8260.46, "Serasa Limpa Nome": 0,
-          "Negativação SPC": 11904.13, "Negativação ACP": 7845.53, "A2M (Power BI)": 520.00, "Celcoin - CobranSaaS": 18000.00,
-          "QL (time)": 31200.00, "Portal": 0, "Setup SmartNX": 0, "Mensalidade SmartNX": 0, "Mensageria SMS": 0,
-          "Mensageria RCS": 0, "Mensageria E-mail": 0, "Mensageria WhatsApp": 0, "Discador": 0, "Telecom": 0
-        },
-        "investimentoTotal": 348104.09,
-        "recuperacao": 6473973.09,
-        "iec": 5.38
-      },
-      {
-        "mes": "Maio/2026",
-        "investimentoPorLinha": {
-          "Fácil Assessoria": 323808.60, "Assessoria Decisão": 0, "PG+ Assessoria": 7349.51, "Serasa Limpa Nome": 0,
-          "Negativação SPC": 10144.90, "Negativação ACP": 13928.96, "A2M (Power BI)": 520.00, "Celcoin - CobranSaaS": 18000.00,
-          "QL (time)": 31200.00, "Portal": 0, "Setup SmartNX": 0, "Mensalidade SmartNX": 0, "Mensageria SMS": 0,
-          "Mensageria RCS": 0, "Mensageria E-mail": 0, "Mensageria WhatsApp": 0, "Discador": 0, "Telecom": 0
-        },
-        "investimentoTotal": 404951.97,
-        "recuperacao": 7115435.61,
-        "iec": 5.69
-      },
-      {
-        "mes": "Junho/2026",
-        "investimentoPorLinha": {
-          "Fácil Assessoria": 314200.51, "Assessoria Decisão": 0, "PG+ Assessoria": 0, "Serasa Limpa Nome": 0,
-          "Negativação SPC": 3977.44, "Negativação ACP": 13757.51, "A2M (Power BI)": 520.00, "Celcoin - CobranSaaS": 18571.99,
-          "QL (time)": 31200.00, "Portal": 0, "Setup SmartNX": 0, "Mensalidade SmartNX": 0, "Mensageria SMS": 0,
-          "Mensageria RCS": 0, "Mensageria E-mail": 0, "Mensageria WhatsApp": 0, "Discador": 0, "Telecom": 0
-        },
-        "investimentoTotal": 382227.45,
-        "recuperacao": 6413597.08,
-        "iec": 5.96
+      "saudeFinanceira": {
+        "iecFormula": "IEC (Índice de Eficiência de Custo) = Investimento Total ÷ Recuperação do mês. Quanto menor, mais eficiente.",
+        "metaIec": 5.9,
+        "metaDescricao": "Manter abaixo da média atual de 5,9%.",
+        "linhasInvestimento": [
+          "Fácil Assessoria",
+          "Assessoria Decisão",
+          "PG+ Assessoria",
+          "Serasa Limpa Nome",
+          "Negativação SPC",
+          "Negativação ACP",
+          "A2M (Power BI)",
+          "Celcoin - CobranSaaS",
+          "QL (time)",
+          "Portal",
+          "Setup SmartNX",
+          "Mensalidade SmartNX",
+          "Mensageria SMS",
+          "Mensageria RCS",
+          "Mensageria E-mail",
+          "Mensageria WhatsApp",
+          "Discador",
+          "Telecom"
+        ],
+        "meses": [
+          {
+            "mes": "Janeiro/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 243869.68,
+              "Assessoria Decisão": 0,
+              "PG+ Assessoria": 0,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 8467.39,
+              "Negativação ACP": 10662.64,
+              "A2M (Power BI)": 520.0,
+              "Celcoin - CobranSaaS": 18000.0,
+              "QL (time)": 31200.0,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 312719.71,
+            "recuperacao": 5321565.4,
+            "iec": 5.88
+          },
+          {
+            "mes": "Fevereiro/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 295847.58,
+              "Assessoria Decisão": 0,
+              "PG+ Assessoria": 0,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 9399.15,
+              "Negativação ACP": 2960.13,
+              "A2M (Power BI)": 520.0,
+              "Celcoin - CobranSaaS": 18000.0,
+              "QL (time)": 31200.0,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 357926.86,
+            "recuperacao": 5362390.94,
+            "iec": 6.67
+          },
+          {
+            "mes": "Março/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 328452.7,
+              "Assessoria Decisão": 0,
+              "PG+ Assessoria": 33281.83,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 7065.0,
+              "Negativação ACP": 10271.81,
+              "A2M (Power BI)": 520.0,
+              "Celcoin - CobranSaaS": 18000.0,
+              "QL (time)": 31200.0,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 428791.34,
+            "recuperacao": 7041602.49,
+            "iec": 6.09
+          },
+          {
+            "mes": "Abril/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 270373.97,
+              "Assessoria Decisão": 0,
+              "PG+ Assessoria": 8260.46,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 11904.13,
+              "Negativação ACP": 7845.53,
+              "A2M (Power BI)": 520.0,
+              "Celcoin - CobranSaaS": 18000.0,
+              "QL (time)": 31200.0,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 348104.09,
+            "recuperacao": 6473973.09,
+            "iec": 5.38
+          },
+          {
+            "mes": "Maio/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 323808.6,
+              "Assessoria Decisão": 0,
+              "PG+ Assessoria": 7349.51,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 10144.9,
+              "Negativação ACP": 13928.96,
+              "A2M (Power BI)": 520.0,
+              "Celcoin - CobranSaaS": 18000.0,
+              "QL (time)": 31200.0,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 404951.97,
+            "recuperacao": 7115435.61,
+            "iec": 5.69
+          },
+          {
+            "mes": "Junho/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 314200.51,
+              "Assessoria Decisão": 0,
+              "PG+ Assessoria": 0,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 3977.44,
+              "Negativação ACP": 13757.51,
+              "A2M (Power BI)": 520.0,
+              "Celcoin - CobranSaaS": 18571.99,
+              "QL (time)": 31200.0,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 382227.45,
+            "recuperacao": 6413597.08,
+            "iec": 5.96
+          }
+        ]
       }
-    ]
+    },
+    "produtoA": {
+      "nome": "Produto A (exemplo)",
+      "ultimaAtualizacao": null,
+      "desconto": null,
+      "regua": null,
+      "assessorias": null,
+      "fornecedores": [],
+      "saudeFinanceira": null
+    }
   }
 }
