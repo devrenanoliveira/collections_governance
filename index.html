@@ -262,7 +262,7 @@
 <div class="tab-panel" id="tab-atualizar">
   <p class="sec-label">Manutenção</p>
   <h1 class="sec-title">Atualizar dados de Saúde Financeira <span id="atualizarProdutoLabel"></span></h1>
-  <p class="sec-subtitle">Preencha os valores do mês, o IEC é calculado sozinho. Copie o JSON gerado e cole dentro de <code>saudeFinanceira.meses</code> do produto correspondente no arquivo <code>data.json</code> (pelo editor do GitHub) e faça o commit — o site publica sozinho.</p>
+  <p class="sec-subtitle">Preencha os valores do mês, o IEC é calculado sozinho. O botão abaixo gera o <code>data.json</code> <strong>completo</strong> já com esse mês incluído — é só substituir todo o conteúdo do arquivo no GitHub por esse e commitar. Nada de colar em um ponto específico.</p>
 
   <div id="atualizarContent">
     <div class="form-field" style="max-width:260px;margin-bottom:16px;">
@@ -274,7 +274,7 @@
 
     <div class="form-field" style="max-width:320px;margin-bottom:16px;">
       <label>Recuperação do mês (R$)</label>
-      <input type="number" id="inRecuperacao" step="0.01">
+      <input type="text" inputmode="decimal" id="inRecuperacao" placeholder="0,00">
     </div>
 
     <div class="kpi-grid" style="margin-bottom:16px;">
@@ -288,10 +288,11 @@
       </div>
     </div>
 
-    <button class="btn" onclick="gerarJson()">Gerar JSON do mês</button>
+    <button class="btn" onclick="gerarJson()">Gerar data.json atualizado</button>
     <button class="btn gold" style="margin-left:8px;" onclick="copiarJson()">Copiar</button>
+    <span id="gerarJsonAviso" style="margin-left:12px;font-size:.78rem;color:var(--brand-gold);font-weight:600;"></span>
 
-    <p class="footnote" style="margin-top:16px;">Cole o resultado abaixo dentro do array <code>"meses": [ ... ]</code>, adicionando uma vírgula antes se não for o último item.</p>
+    <p class="footnote" style="margin-top:16px;">Isso é o arquivo <code>data.json</code> inteiro (todos os produtos, todas as seções) com o mês acima já incluído em <code>saudeFinanceira.meses</code> do produto selecionado no seletor no topo do site. No GitHub, abra o <code>data.json</code>, selecione tudo (Ctrl/Cmd+A), cole por cima e faça o commit.</p>
     <textarea id="jsonOut" readonly style="margin-top:6px;"></textarea>
   </div>
   <div id="atualizarEmpty" style="display:none;"></div>
@@ -299,6 +300,7 @@
 
 <script>
 let DATA = null;
+let dataEditavel = null; // cópia de trabalho de DATA, acumula as edições feitas na aba "Atualizar Dados" nesta sessão do navegador
 
 function toggleDark(){
   document.body.classList.toggle('dark');
@@ -447,6 +449,7 @@ fetch('data.json?v=' + Date.now())
   .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(json=>{
     DATA = json;
+    dataEditavel = JSON.parse(JSON.stringify(json));
     produtoAtual = DATA.produtoPadrao || Object.keys(DATA.produtos)[0];
     renderProductNav();
     renderAll();
@@ -939,15 +942,33 @@ function buildFormLinhas(){
   wrap.innerHTML = linhas.map(l=>`
     <div class="form-field">
       <label>${l}</label>
-      <input type="number" step="0.01" class="linhaInput" data-linha="${l}" value="0" oninput="recalcular()">
+      <input type="text" inputmode="decimal" class="linhaInput" data-linha="${l}" placeholder="0,00">
     </div>`).join('');
-  document.getElementById('inRecuperacao').removeEventListener('input', recalcular);
-  document.getElementById('inRecuperacao').addEventListener('input', recalcular);
+  document.querySelectorAll('.linhaInput, #inRecuperacao').forEach(el=>{
+    el.removeEventListener('input', recalcular);
+    el.removeEventListener('blur', onMoedaBlur);
+    el.addEventListener('input', recalcular);
+    el.addEventListener('blur', onMoedaBlur);
+  });
+}
+
+/* Máscara de moeda: aceita "300000", "300.000" ou "300000,50" ao digitar,
+   e formata com separador de milhar (pt-BR) quando o campo perde o foco. */
+function parseMoeda(str){
+  if(!str) return 0;
+  const limpo = str.toString().trim().replace(/\./g,'').replace(',', '.');
+  const n = parseFloat(limpo);
+  return isNaN(n) ? 0 : n;
+}
+function onMoedaBlur(e){
+  if(!e.target.value.trim()) return; // deixa vazio (mostrando só o placeholder) em vez de forçar "0,00"
+  const n = parseMoeda(e.target.value);
+  e.target.value = n.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
 function recalcular(){
-  const total = Array.from(document.querySelectorAll('.linhaInput')).reduce((s,el)=>s + (parseFloat(el.value)||0), 0);
-  const recuperacao = parseFloat(document.getElementById('inRecuperacao').value) || 0;
+  const total = Array.from(document.querySelectorAll('.linhaInput')).reduce((s,el)=>s + parseMoeda(el.value), 0);
+  const recuperacao = parseMoeda(document.getElementById('inRecuperacao').value);
   const iec = recuperacao > 0 ? (total/recuperacao*100) : 0;
   document.getElementById('outInvestTotal').textContent = brl(total);
   document.getElementById('outIec').textContent = pct(iec);
@@ -955,12 +976,35 @@ function recalcular(){
 }
 
 function gerarJson(){
+  const aviso = document.getElementById('gerarJsonAviso');
+  aviso.textContent = '';
+  const mes = document.getElementById('inMes').value.trim();
+  if(!mes){
+    aviso.textContent = 'Preencha o campo "Mês / Ano" antes de gerar.';
+    return;
+  }
   const {total, recuperacao, iec} = recalcular();
-  const mes = document.getElementById('inMes').value.trim() || 'Mês/Ano';
   const porLinha = {};
-  document.querySelectorAll('.linhaInput').forEach(el=>{ porLinha[el.dataset.linha] = parseFloat(el.value)||0; });
-  const obj = { mes, investimentoPorLinha: porLinha, investimentoTotal: Math.round(total*100)/100, recuperacao: Math.round(recuperacao*100)/100, iec: Math.round(iec*100)/100 };
-  document.getElementById('jsonOut').value = JSON.stringify(obj, null, 2) + ',';
+  document.querySelectorAll('.linhaInput').forEach(el=>{ porLinha[el.dataset.linha] = Math.round(parseMoeda(el.value)*100)/100; });
+  const novoMes = { mes, investimentoPorLinha: porLinha, investimentoTotal: Math.round(total*100)/100, recuperacao: Math.round(recuperacao*100)/100, iec: Math.round(iec*100)/100 };
+
+  // dataEditavel acumula as edições feitas nesta sessão (dá pra gerar vários meses
+  // em sequência, um de cada vez, sem perder o anterior) — só reinicia se a página recarregar.
+  const prod = dataEditavel.produtos[produtoAtual];
+  if(!prod.saudeFinanceira){
+    prod.saudeFinanceira = { iecFormula: 'IEC (Índice de Eficiência de Custo) = Investimento Total ÷ Recuperação do mês. Quanto menor, mais eficiente.', metaIec: iec, metaDescricao: '', linhasInvestimento: Object.keys(porLinha), meses: [] };
+  }
+  const meses = prod.saudeFinanceira.meses;
+  const idxExistente = meses.findIndex(m=>m.mes === mes);
+  if(idxExistente >= 0){
+    meses[idxExistente] = novoMes;
+    aviso.textContent = `Já existia um mês "${mes}" nesta sessão — ele foi substituído pelos novos valores.`;
+  } else {
+    meses.push(novoMes);
+  }
+  prod.ultimaAtualizacao = new Date().toISOString().slice(0,10);
+
+  document.getElementById('jsonOut').value = JSON.stringify(dataEditavel, null, 2);
 }
 
 function copiarJson(){
