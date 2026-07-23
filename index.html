@@ -75,6 +75,21 @@
   <h1 class="sec-title">Visão Geral</h1>
   <p class="sec-subtitle">Panorama consolidado das políticas e da saúde financeira da operação de cobrança.</p>
   <div class="kpi-grid" id="visaoKpis"></div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">Tendência do IEC (últimos meses vs. meta)</div>
+      <div class="chart-wrap h220" id="visaoIecMini"></div>
+    </div>
+    <div class="insight-panel">
+      <div class="insight-title">Em implantação — acompanhar</div>
+      <div id="visaoImplantacao"></div>
+    </div>
+  </div>
+
+  <p class="sec-label" style="margin-top:6px;">Ir para</p>
+  <div class="chart-grid" id="visaoAtalhos"></div>
+
   <div class="destaque-block">
     <div class="destaque-title">Como usar este dashboard</div>
     <div class="destaque-text">
@@ -403,19 +418,56 @@ function renderAll(){
 function renderVisaoGeral(){
   const meses = DATA.saudeFinanceira.meses;
   const ultimo = meses[meses.length-1];
+  const anterior = meses.length>1 ? meses[meses.length-2] : null;
+  const deltaIec = anterior ? (ultimo.iec - anterior.iec) : null;
   const ativos = DATA.fornecedores.filter(f=>f.status==='ativo').length;
   const implantacao = DATA.fornecedores.filter(f=>f.status==='em_implantacao').length;
+  const recupAcumulada = meses.reduce((s,m)=>s+m.recuperacao, 0);
+  const investAcumulado = meses.reduce((s,m)=>s+m.investimentoTotal, 0);
+
   const kpis = [
-    {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes, cls: ultimo.iec <= DATA.saudeFinanceira.metaIec ? 'green' : 'red'},
-    {label:'Meta de IEC', value: pct(DATA.saudeFinanceira.metaIec), sub:'Abaixo disso é considerado eficiente', cls:'blue'},
-    {label:'Assessorias na régua desejada', value: DATA.regua.desejada.assessoriasAtivas.length, sub: DATA.regua.desejada.assessoriasAtivas.join(', '), cls:'navy'},
+    {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes + (deltaIec!==null ? ` · ${deltaIec<=0?'▼':'▲'} ${Math.abs(deltaIec).toFixed(2).replace('.',',')} p.p. vs mês anterior` : ''), cls: ultimo.iec <= DATA.saudeFinanceira.metaIec ? 'green' : 'red'},
+    {label:'Recuperado no período', value: brl(recupAcumulada), sub: meses.length + ' meses · investimento total de ' + brl(investAcumulado), cls:'navy'},
+    {label:'Assessorias na régua desejada', value: DATA.regua.desejada.assessoriasAtivas.length, sub: DATA.regua.desejada.assessoriasAtivas.join(', '), cls:'blue'},
     {label:'Fornecedores ativos / em implantação', value: ativos + ' / ' + implantacao, sub:'Total de ' + DATA.fornecedores.length + ' fornecedores mapeados', cls:'gold'},
   ];
   document.getElementById('visaoKpis').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.cls}">
       <div class="kpi-label">${k.label}</div>
-      <div class="kpi-value">${k.value}</div>
+      <div class="kpi-value" style="${k.cls==='navy'||k.cls==='blue' ? 'font-size:1.4rem;' : ''}">${k.value}</div>
       <div class="kpi-sub">${k.sub}</div>
+    </div>`).join('');
+
+  const labels = meses.map(m=>m.mes.replace('/2026','/26'));
+  drawLineChart('visaoIecMini', labels, [
+    { data: meses.map(m=>m.iec), color:'#2563EB', label:'IEC', fill:true },
+    { data: meses.map(()=>DATA.saudeFinanceira.metaIec), color:'#D97706', label:'Meta', dash:true }
+  ], v=>v.toFixed(1)+'%');
+
+  const pendencias = [];
+  DATA.fornecedores.filter(f=>f.status==='em_implantacao').forEach(f=>{
+    pendencias.push(`<strong>${f.nome}</strong> (${f.categoria}) — ${f.papel}`);
+  });
+  if(DATA.assessorias.status && /proposta|implanta/i.test(DATA.assessorias.status)){
+    pendencias.push(`<strong>Governança de Assessorias</strong> — ${DATA.assessorias.status}, ainda não é a regra vigente.`);
+  }
+  pendencias.push(`<strong>Régua desejada</strong> — ainda não é a régua em produção; veja o comparativo na aba "Régua de Cobrança".`);
+  document.getElementById('visaoImplantacao').innerHTML = `
+    <ul style="margin:0 0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px;">
+      ${pendencias.map(p=>`<li class="dot-y" style="font-weight:400;font-size:.8rem;line-height:1.5;color:var(--ink-secondary);">${p}</li>`).join('')}
+    </ul>`;
+
+  const atalhos = [
+    {tab:'desconto', titulo:'Política de Desconto', desc:'Piso, teto e calculadora de aprovação de propostas.'},
+    {tab:'regua', titulo:'Régua de Cobrança', desc:'Sequência de ações por dias de atraso — atual e desejada.'},
+    {tab:'assessorias', titulo:'Governança de Assessorias', desc:'Comissionamento, metas e regras de share entre assessorias.'},
+    {tab:'fornecedores', titulo:'Fornecedores', desc:'Assessorias, bureaus, CRM e plataformas usados na operação.'},
+    {tab:'saude', titulo:'Saúde Financeira', desc:'IEC mensal, investimento e recuperação.'},
+  ];
+  document.getElementById('visaoAtalhos').innerHTML = atalhos.map(a=>`
+    <div class="chart-card" style="cursor:pointer;" onclick="document.querySelector('.tab-btn[data-tab=\\'${a.tab}\\']').click()">
+      <div class="chart-title" style="margin-bottom:6px;">${a.titulo}</div>
+      <p style="font-size:.8rem;color:var(--ink-secondary);line-height:1.5;margin:0;">${a.desc}</p>
     </div>`).join('');
 }
 
@@ -475,7 +527,7 @@ body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--pa
 .verdict.ok .txt strong{color:var(--teal);} .verdict.warn .txt strong{color:var(--gold);} .verdict.bad .txt strong{color:var(--crimson);}
 .verdict .txt span{font-size:12px;color:var(--slate);line-height:1.5;}
 .rulers{display:flex;flex-direction:column;gap:20px;}
-.ruler-block .rlabel{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:8px;color:var(--ink-2);}
+.ruler-block .rlabel{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:34px;color:var(--ink-2);}
 .ruler-block .rlabel .sub{font-weight:400;color:var(--slate-2);font-size:11px;}
 .track{position:relative;height:10px;background:repeating-linear-gradient(90deg,var(--paper-2) 0 9%, var(--line) 9% 10%);border-radius:2px;border:1px solid var(--line);}
 .zone{position:absolute;top:0;bottom:0;border-radius:2px;}
@@ -485,7 +537,7 @@ body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--pa
 .ticklabel{position:absolute;top:16px;transform:translateX(-50%);font-size:10px;color:var(--slate);white-space:nowrap;}
 .marker{position:absolute;top:-9px;width:16px;height:16px;transform:translateX(-50%) rotate(45deg);border:2px solid var(--paper);z-index:3;}
 .marker.ok{background:var(--teal);} .marker.warn{background:var(--gold);} .marker.bad{background:var(--crimson);}
-.markerlabel{position:absolute;top:-28px;transform:translateX(-50%);font-size:11px;font-weight:600;white-space:nowrap;}
+.markerlabel{position:absolute;top:-24px;transform:translateX(-50%);font-size:11px;font-weight:600;white-space:nowrap;}
 footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;color:var(--slate-2);line-height:1.6;}
 </style></head><body>
 <div class="wrap">
