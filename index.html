@@ -189,11 +189,11 @@
   <div class="chart-grid">
     <div class="chart-card">
       <div class="chart-title">IEC mensal vs. meta</div>
-      <div class="chart-wrap h260"><canvas id="chartIec"></canvas></div>
+      <div class="chart-wrap h260" id="chartIec"></div>
     </div>
     <div class="chart-card">
       <div class="chart-title">Investimento vs. Recuperação (R$)</div>
-      <div class="chart-wrap h260"><canvas id="chartInvest"></canvas></div>
+      <div class="chart-wrap h260" id="chartInvest"></div>
     </div>
   </div>
   <div class="table-card">
@@ -238,7 +238,6 @@
   <textarea id="jsonOut" readonly style="margin-top:6px;"></textarea>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script>
 let DATA = null;
 
@@ -259,6 +258,124 @@ document.querySelectorAll('.tab-btn').forEach(btn=>{
 function brl(v){ return (v||0).toLocaleString('pt-BR', {style:'currency', currency:'BRL'}); }
 function pct(v, casas){ return (v===null||v===undefined) ? '—' : v.toFixed(casas!==undefined?casas:2).replace('.', ',') + '%'; }
 
+/* ---------- GRÁFICOS SVG (sem dependência externa — mais confiável em redes corporativas restritas) ---------- */
+function svgEl(tag, attrs){
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for(const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+function drawLineChart(containerId, labels, series, yFmt){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = '';
+  const w = Math.max(container.clientWidth || 380, 260), h = container.clientHeight || 220;
+  const padL = 38, padR = 10, padT = 14, padB = 22;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const isDark = document.body.classList.contains('dark');
+  const gridColor = isDark ? '#334155' : '#e1e0d9';
+  const textColor = isDark ? '#94a3b8' : '#898781';
+
+  let allVals = [];
+  series.forEach(s=>allVals = allVals.concat(s.data));
+  let vMin = Math.min(...allVals), vMax = Math.max(...allVals);
+  if(vMin === vMax){ vMin -= 1; vMax += 1; }
+  const margin = (vMax - vMin) * 0.15 || 1;
+  vMin -= margin; vMax += margin;
+
+  const svg = svgEl('svg', {viewBox:`0 0 ${w} ${h}`, width:'100%', height:'100%'});
+
+  const n = labels.length;
+  const x = i => padL + (n<=1 ? plotW/2 : (i/(n-1)) * plotW);
+  const y = v => padT + plotH - ((v - vMin)/(vMax - vMin)) * plotH;
+
+  // gridlines (4 faixas horizontais)
+  for(let g=0; g<=3; g++){
+    const gv = vMin + (vMax-vMin)*(g/3);
+    const gy = y(gv);
+    svg.appendChild(svgEl('line', {x1:padL, x2:w-padR, y1:gy, y2:gy, stroke:gridColor, 'stroke-width':1}));
+    const lbl = svgEl('text', {x:padL-6, y:gy+3, 'text-anchor':'end', 'font-size':9, fill:textColor});
+    lbl.textContent = yFmt ? yFmt(gv) : gv.toFixed(1);
+    svg.appendChild(lbl);
+  }
+
+  // eixo X labels
+  labels.forEach((l,i)=>{
+    const lbl = svgEl('text', {x:x(i), y:h-6, 'text-anchor':'middle', 'font-size':9, fill:textColor});
+    lbl.textContent = l;
+    svg.appendChild(lbl);
+  });
+
+  series.forEach(s=>{
+    const pts = s.data.map((v,i)=>[x(i), y(v)]);
+    if(s.fill){
+      const areaPts = [[x(0), y(vMin)], ...pts, [x(pts.length-1), y(vMin)]];
+      svg.appendChild(svgEl('polygon', {points: areaPts.map(p=>p.join(',')).join(' '), fill:s.color, opacity:0.12}));
+    }
+    const line = svgEl('polyline', {points: pts.map(p=>p.join(',')).join(' '), fill:'none', stroke:s.color, 'stroke-width':2});
+    if(s.dash) line.setAttribute('stroke-dasharray', '5,4');
+    svg.appendChild(line);
+    if(!s.dash){
+      pts.forEach((p,i)=>{
+        const c = svgEl('circle', {cx:p[0], cy:p[1], r:3, fill:s.color});
+        const title = svgEl('title', {});
+        title.textContent = labels[i] + ': ' + (s.fmt ? s.fmt(s.data[i]) : s.data[i]);
+        c.appendChild(title);
+        svg.appendChild(c);
+      });
+    }
+  });
+
+  container.appendChild(svg);
+
+  // legenda
+  const legend = document.createElement('div');
+  legend.className = 'chart-legend';
+  legend.innerHTML = series.map(s=>`<span class="legend-item"><span class="legend-dot" style="background:${s.color}"></span>${s.label}</span>`).join('');
+  container.appendChild(legend);
+}
+
+function drawDualBarChart(containerId, labels, series, valFmt){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = '';
+  const w = Math.max(container.clientWidth || 380, 260), h = (container.clientHeight || 220) - 22; // reserva espaço p/ legenda
+  const padL = 8, padR = 8, padT = 10, padB = 22;
+  const plotW = w - padL - padR, plotH = h - padT - padB;
+  const isDark = document.body.classList.contains('dark');
+  const textColor = isDark ? '#94a3b8' : '#898781';
+
+  const svg = svgEl('svg', {viewBox:`0 0 ${w} ${h}`, width:'100%', height:'100%'});
+  const n = labels.length;
+  const groupW = plotW / n;
+  const barW = Math.min(18, groupW/4);
+  const maxes = series.map(s=>Math.max(...s.data, 1));
+
+  labels.forEach((l,gi)=>{
+    const gx = padL + gi*groupW + groupW/2;
+    series.forEach((s,si)=>{
+      const v = s.data[gi];
+      const bh = (v / maxes[si]) * plotH;
+      const bx = gx - (series.length*barW)/2 + si*barW;
+      const by = padT + plotH - bh;
+      const rect = svgEl('rect', {x:bx, y:by, width:barW-2, height:Math.max(bh,1), fill:s.color, rx:2});
+      const title = svgEl('title', {});
+      title.textContent = s.label + ' — ' + l + ': ' + (valFmt ? valFmt(v) : v);
+      rect.appendChild(title);
+      svg.appendChild(rect);
+    });
+    const lbl = svgEl('text', {x:gx, y:h-6, 'text-anchor':'middle', 'font-size':9, fill:textColor});
+    lbl.textContent = l;
+    svg.appendChild(lbl);
+  });
+
+  container.appendChild(svg);
+  const legend = document.createElement('div');
+  legend.className = 'chart-legend';
+  legend.innerHTML = series.map(s=>`<span class="legend-item"><span class="legend-dot" style="background:${s.color}"></span>${s.label} (escala própria)</span>`).join('');
+  container.appendChild(legend);
+}
+
 fetch('data.json?v=' + Date.now())
   .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
   .then(json=>{ DATA = json; renderAll(); })
@@ -266,15 +383,20 @@ fetch('data.json?v=' + Date.now())
     document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#B91C1C;">Não foi possível carregar <code>data.json</code>. Se você abriu este arquivo direto do disco (duplo clique), sirva a pasta com um servidor local (ex: <code>python -m http.server</code>) — navegadores bloqueiam leitura de arquivo local por segurança. Detalhe: ' + err.message + '</div>';
   });
 
+function safe(fn, nome){
+  try{ fn(); }
+  catch(e){ console.error('Falha ao renderizar ' + nome + ':', e); }
+}
+
 function renderAll(){
   document.getElementById('lastUpdate').textContent = DATA.ultimaAtualizacao || '—';
-  renderVisaoGeral();
-  renderDesconto();
-  renderRegua('atual');
-  renderAssessorias();
-  renderFornecedores();
-  renderSaude();
-  buildFormLinhas();
+  safe(renderVisaoGeral, 'Visão Geral');
+  safe(renderDesconto, 'Política de Desconto');
+  safe(()=>renderRegua('atual'), 'Régua de Cobrança');
+  safe(renderAssessorias, 'Governança de Assessorias');
+  safe(renderFornecedores, 'Fornecedores');
+  safe(renderSaude, 'Saúde Financeira');
+  safe(buildFormLinhas, 'Formulário de Atualização');
 }
 
 /* ---------- VISÃO GERAL ---------- */
@@ -541,24 +663,16 @@ function renderSaude(){
   `;
 
   const labels = sf.meses.map(m=>m.mes.replace('/2026','/26'));
-  new Chart(document.getElementById('chartIec'), {
-    type:'line',
-    data:{ labels, datasets:[
-      { label:'IEC', data: sf.meses.map(m=>m.iec), borderColor:'#2563EB', backgroundColor:'rgba(37,99,235,.1)', tension:.3, fill:true },
-      { label:'Meta', data: sf.meses.map(()=>sf.metaIec), borderColor:'#D97706', borderDash:[6,4], pointRadius:0 }
-    ]},
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}}, scales:{ y:{ ticks:{ callback:v=>v+'%' } } } }
-  });
 
-  new Chart(document.getElementById('chartInvest'), {
-    type:'bar',
-    data:{ labels, datasets:[
-      { label:'Investimento', data: sf.meses.map(m=>m.investimentoTotal), backgroundColor:'#0F2461' },
-      { label:'Recuperação', data: sf.meses.map(m=>m.recuperacao), backgroundColor:'#2563EB', yAxisID:'y1' }
-    ]},
-    options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}},
-      scales:{ y:{ position:'left', ticks:{ callback:v=>(v/1000)+'k' } }, y1:{ position:'right', grid:{drawOnChartArea:false}, ticks:{ callback:v=>(v/1000)+'k' } } } }
-  });
+  drawLineChart('chartIec', labels, [
+    { data: sf.meses.map(m=>m.iec), color:'#2563EB', label:'IEC', fill:true, fmt:v=>v.toFixed(2).replace('.',',')+'%' },
+    { data: sf.meses.map(()=>sf.metaIec), color:'#D97706', label:'Meta', dash:true, fmt:v=>v.toFixed(2).replace('.',',')+'%' }
+  ], v=>v.toFixed(0)+'%');
+
+  drawDualBarChart('chartInvest', labels, [
+    { data: sf.meses.map(m=>m.investimentoTotal), color:'#0F2461', label:'Investimento' },
+    { data: sf.meses.map(m=>m.recuperacao), color:'#2563EB', label:'Recuperação' }
+  ], v=>'R$ '+(v/1000).toLocaleString('pt-BR',{maximumFractionDigits:0})+'k');
 
   document.getElementById('tblSaude').innerHTML = `
     <thead><tr><th style="text-align:left">Linha</th>${sf.meses.map(m=>`<th>${m.mes}</th>`).join('')}</tr></thead>
