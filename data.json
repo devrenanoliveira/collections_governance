@@ -353,7 +353,8 @@
           ],
           "assessoriasAtivas": [
             "Decisão",
-            "Fácil"
+            "Fácil",
+            "PG+"
           ],
           "etapas": [
             {
@@ -445,24 +446,24 @@
             {
               "dias": "181 a 360",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / PG+"
             },
             {
               "dias": "361 a 720",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / PG+"
             },
             {
               "dias": ">721",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / PG+"
             }
           ]
         }
       },
       "assessorias": {
         "status": "Versão 7.0 — Proposta de Implantação",
-        "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 2 players, os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
+        "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 3 players, os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
         "metas": "14 Índices de Eficiência individuais (um por faixa de aging) geram, de forma ponderada, uma Meta Geral de Eficiência. Os índices percentuais são convertidos em valores nominais de recuperação esperados (R$) por faixa, cujo somatório define o 'Valor X de Recuperação Total' — a obrigação final de entrega da assessoria no trimestre.",
         "comissaoBase": [
           {
@@ -532,6 +533,40 @@
             "comissao": 40.0
           }
         ],
+        "distribuicaoCarteira": {
+          "vigencia": "Decisão de 30/07/2026 — share da Decisão só passa a valer quando ela efetivamente entrar em operação (hoje em implantação); PG+ também em implantação.",
+          "faixas": [
+            "05 a 65 dias",
+            "66 a 180 dias",
+            "Acima de 181 dias (Pós-Prejuízo)"
+          ],
+          "assessorias": [
+            {
+              "nome": "Fácil",
+              "share": [
+                100,
+                90,
+                85
+              ]
+            },
+            {
+              "nome": "Decisão",
+              "share": [
+                0,
+                10,
+                10
+              ]
+            },
+            {
+              "nome": "PG+",
+              "share": [
+                0,
+                0,
+                5
+              ]
+            }
+          ]
+        },
         "multiplicadores": {
           "colunas": [
             {
@@ -713,9 +748,9 @@
           "acionamentoValido": "Contato com a Pessoa Certa (CPC), SMS entregue com relatório de recepção, e-mails entregues e interações de WhatsApp. Tentativas frustradas (caixa postal, ocupado, etc.) não geram direito de atribuição."
         },
         "concorrencial": {
-          "numeroPlayers": 2,
+          "numeroPlayers": 3,
           "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses.",
-          "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance."
+          "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance. A PG+ atua apenas nas faixas de Pós-Prejuízo (acima de 181 dias)."
         },
         "rituais": {
           "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",
@@ -735,6 +770,12 @@
           "categoria": "Assessoria de cobrança",
           "papel": "Assessoria de cobrança terceirizada.",
           "status": "ativo"
+        },
+        {
+          "nome": "PG+",
+          "categoria": "Assessoria de cobrança",
+          "papel": "Assessoria de cobrança terceirizada, parceira reativada para atuação nas faixas de Pós-Prejuízo (181 a 360, 361 a 720 e acima de 720 dias).",
+          "status": "em_implantacao"
         },
         {
           "nome": "SmartNX",

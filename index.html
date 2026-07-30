@@ -203,6 +203,12 @@
     </div>
 
     <div class="table-card">
+      <div class="table-card-header"><strong>Distribuição de share da carteira por assessoria</strong></div>
+      <div class="table-scroll"><table id="tblDistribuicaoCarteira"></table></div>
+      <p class="footnote" id="notaDistribuicaoCarteira" style="padding:0 16px 14px;"></p>
+    </div>
+
+    <div class="table-card">
       <div class="table-card-header"><strong>Matriz de alavancagem — multiplicador por atingimento da Meta Geral</strong></div>
       <div class="table-scroll"><table id="tblMultiplicadores"></table></div>
     </div>
@@ -214,7 +220,7 @@
         <div class="insight-text" id="comissaoIndireta"></div>
       </div>
       <div class="insight-panel">
-        <div class="insight-title">Estrutura concorrencial (2 players)</div>
+        <div class="insight-title" id="concorrencialTitulo">Estrutura concorrencial</div>
         <div class="insight-text" id="concorrencial"></div>
       </div>
     </div>
@@ -843,6 +849,19 @@ function renderAssessorias(){
     <thead><tr><th style="text-align:left">Faixa</th><th style="text-align:left">Intervalo</th><th>Comissão base</th></tr></thead>
     <tbody>${a.comissaoBase.map(r=>`<tr><td>${r.faixa}</td><td>${r.intervalo}</td><td class="${r.comissao===null?'td-dim':'td-blue'}">${r.comissao===null? (r.obs||'—') : pct(r.comissao,2)}</td></tr>`).join('')}</tbody>`;
 
+  const tblDist = document.getElementById('tblDistribuicaoCarteira');
+  const notaDist = document.getElementById('notaDistribuicaoCarteira');
+  if(a.distribuicaoCarteira){
+    const dc = a.distribuicaoCarteira;
+    tblDist.innerHTML = `
+      <thead><tr><th style="text-align:left">Assessoria</th>${dc.faixas.map(f=>`<th>${f}</th>`).join('')}</tr></thead>
+      <tbody>${dc.assessorias.map(as=>`<tr><td>${as.nome}</td>${as.share.map(s=>`<td class="${s>0?'td-blue':'td-dim'}">${s}%</td>`).join('')}</tr>`).join('')}</tbody>`;
+    notaDist.textContent = dc.vigencia || '';
+    tblDist.closest('.table-card').style.display = '';
+  } else {
+    tblDist.closest('.table-card').style.display = 'none';
+  }
+
   const cols = a.multiplicadores.colunas;
   document.getElementById('tblMultiplicadores').innerHTML = `
     <thead><tr><th style="text-align:left">Faixa</th>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
@@ -854,6 +873,7 @@ function renderAssessorias(){
     <p style="margin-top:8px;"><strong>0% (zerada):</strong> ${a.comissaoIndireta.descricaoZerada}</p>
     <p style="margin-top:8px;"><strong>Acionamento válido:</strong> ${a.comissaoIndireta.acionamentoValido}</p>`;
 
+  document.getElementById('concorrencialTitulo').textContent = `Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)`;
   document.getElementById('concorrencial').innerHTML = `
     <p><strong>${a.concorrencial.numeroPlayers} assessorias</strong> operando em paralelo.</p>
     <p style="margin-top:8px;">${a.concorrencial.periodoEstabilidade}</p>
