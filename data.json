@@ -254,6 +254,18 @@
         ]
       },
       "regua": {
+        "recursosDigitais": [
+          {
+            "label": "Fluxo de atendimento WhatsApp (mapa completo)",
+            "descricao": "Fluxograma detalhado do atendimento de cobrança via WhatsApp na régua digital.",
+            "url": "fluxo-whatsapp.html"
+          },
+          {
+            "label": "Quadro Miro — Régua Digital",
+            "descricao": "Estrutura completa da régua digital, em construção no Miro.",
+            "url": "https://miro.com/app/board/uXjVH2UKZHs=/"
+          }
+        ],
         "atual": {
           "titulo": "Régua Estrutural — Atual",
           "internaAte": 4,

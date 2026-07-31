@@ -20,6 +20,15 @@
   .product-empty strong{display:block;color:var(--ink-secondary);font-size:1rem;margin-bottom:6px;}
   @media (max-width:480px){ .product-nav{padding:8px 16px;} }
 
+  .recurso-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+  .recurso-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border:1px solid var(--surface-border,rgba(0,0,0,.08));border-radius:10px;background:var(--surface-2,rgba(0,0,0,.02));}
+  .recurso-card.recurso-pendente{opacity:.65;}
+  .recurso-info strong{font-size:.82rem;color:var(--ink-primary);display:block;}
+  .recurso-info p{font-size:.74rem;color:var(--ink-secondary);margin-top:3px;}
+  .recurso-btn{flex-shrink:0;padding:6px 12px;border-radius:8px;background:var(--brand-blue);color:#fff;font-size:.74rem;font-weight:700;text-decoration:none;white-space:nowrap;}
+  .recurso-btn:hover{opacity:.9;}
+  .recurso-btn-disabled{background:transparent;border:1px dashed var(--ink-muted);color:var(--ink-muted);cursor:default;}
+
   .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
   .status-pill.ativo{background:#ECFDF5;color:#065F46;}
   .status-pill.em_implantacao{background:#FFFBEB;color:#92400E;}
@@ -162,6 +171,11 @@
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Desejada — ferramentas e assessorias</strong></div>
         <div id="reguaFerramentasDesejada"></div>
       </div>
+    </div>
+
+    <div class="table-card" style="padding:16px 18px;" id="reguaRecursosCard">
+      <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Régua digital — recursos de referência</strong></div>
+      <div id="reguaRecursos"></div>
     </div>
 
     <div class="filter-row">
@@ -781,6 +795,23 @@ function reguaFerramentasHtml(r){
   `;
 }
 
+function reguaRecursosHtml(lista){
+  if(!lista || !lista.length) return '<p style="font-size:.78rem;color:var(--ink-muted);font-style:italic;">Nenhum recurso cadastrado ainda.</p>';
+  return `<div class="recurso-grid">${lista.map(r=>{
+    const disponivel = !!r.url;
+    return `
+      <div class="recurso-card ${disponivel?'':'recurso-pendente'}">
+        <div class="recurso-info">
+          <strong>${r.label}</strong>
+          ${r.descricao ? `<p>${r.descricao}</p>` : ''}
+        </div>
+        ${disponivel
+          ? `<a class="recurso-btn" href="${r.url}" target="_blank" rel="noopener">Abrir ↗</a>`
+          : `<span class="recurso-btn recurso-btn-disabled">Em breve</span>`}
+      </div>`;
+  }).join('')}</div>`;
+}
+
 function renderRegua(){
   const p = produto();
   const content = document.getElementById('reguaContent');
@@ -793,6 +824,8 @@ function renderRegua(){
   }
   content.style.display = '';
   empty.style.display = 'none';
+
+  document.getElementById('reguaRecursos').innerHTML = reguaRecursosHtml(p.regua.recursosDigitais);
 
   const atual = p.regua.atual, desejada = p.regua.desejada;
 

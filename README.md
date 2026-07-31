@@ -4,11 +4,12 @@
 - `index.html` — o site (abas: Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Atualizar Dados).
 - `style.css` — estilo visual (mesmo padrão do dashboard de resultados).
 - `data.json` — **fonte única dos dados**. Editar este arquivo é a única coisa necessária para atualizar o conteúdo do site.
+- `fluxo-whatsapp.html` — página à parte com o fluxograma detalhado de atendimento via WhatsApp, referenciada como recurso dentro da aba Régua de Cobrança.
 
 ## Como publicar (uma vez, no início)
 
 1. Crie um repositório novo no GitHub (pode ser privado ou público — se for privado, o GitHub Pages exige plano pago para publicar; se puder ser público, fica de graça).
-2. Envie estes 3 arquivos (`index.html`, `style.css`, `data.json`) para a raiz do repositório — pode arrastar e soltar direto na página do GitHub ("Add file" → "Upload files").
+2. Envie estes 4 arquivos (`index.html`, `style.css`, `data.json`, `fluxo-whatsapp.html`) para a raiz do repositório — pode arrastar e soltar direto na página do GitHub ("Add file" → "Upload files").
 3. Vá em **Settings → Pages**, em "Source" selecione a branch `main` e a pasta `/ (root)`, salve.
 4. Em alguns minutos o site estará no ar em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`.
 
@@ -49,6 +50,7 @@ Cada produto dentro de `"produtos.<id>"` tem a mesma estrutura:
 
 - `nome`: nome exibido no seletor e no cabeçalho.
 - `desconto`: fluxo do processo + tabelas `oficial` (piso) e `agressiva` (teto) por faixa de dias — alimenta também a calculadora embutida na aba de Política de Desconto.
+- `regua.recursosDigitais`: lista de links de referência mostrados no topo da aba Régua de Cobrança (ex: fluxograma de WhatsApp, quadro no Miro). Cada item tem `label`, `descricao` e `url` — se `url` for `null`, o card aparece com "Em breve" em vez de um botão clicável. Para adicionar um novo recurso, copie um item existente da lista.
 - `regua.atual` e `regua.desejada`: cada uma com lista de `etapas` (dias, ação, responsável) e as ferramentas/assessorias ativas naquela régua.
 - `assessorias`: objetivo, estrutura de metas, tabela de comissão base, matriz de multiplicadores, comissionamento indireto, estrutura concorrencial e rituais de gestão.
 - `fornecedores`: lista de objetos com `nome`, `categoria`, `papel` e `status` (`ativo` ou `em_implantacao`).
