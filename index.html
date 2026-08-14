@@ -259,7 +259,13 @@
 <!-- SAÚDE FINANCEIRA -->
 <div class="tab-panel" id="tab-saude">
   <p class="sec-label">Saúde financeira da cobrança</p>
-  <h1 class="sec-title">IEC — Índice de Eficiência de Custo</h1>
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <h1 class="sec-title" style="margin-bottom:0;">IEC — Índice de Eficiência de Custo</h1>
+    <div class="form-field" style="max-width:220px;margin:0;">
+      <label>Mês de referência</label>
+      <select id="saudeMesSelect"></select>
+    </div>
+  </div>
   <p class="sec-subtitle" id="iecFormula"></p>
   <div id="saudeContent">
     <div class="kpi-grid" id="saudeKpis"></div>
@@ -931,15 +937,20 @@ function renderFornecedores(){
 }
 
 /* ---------- SAÚDE FINANCEIRA ---------- */
+let saudeMesSelecionado = null; // mantém a escolha do usuário entre re-renders; reseta se o produto/lista de meses mudar
+let saudeMesSelectBound = false;
+
 function renderSaude(){
   const p = produto();
   const content = document.getElementById('saudeContent');
   const empty = document.getElementById('saudeEmpty');
+  const selEl = document.getElementById('saudeMesSelect');
   if(!p.saudeFinanceira || !p.saudeFinanceira.meses || !p.saudeFinanceira.meses.length){
     content.style.display = 'none';
     empty.style.display = '';
     empty.innerHTML = emptyState('Cadastre a saúde financeira (chave "saudeFinanceira", com ao menos um item em "meses") deste produto no data.json para habilitar esta aba.');
     document.getElementById('iecFormula').textContent = '';
+    if(selEl) selEl.innerHTML = '';
     return;
   }
   content.style.display = '';
@@ -947,8 +958,30 @@ function renderSaude(){
 
   const sf = p.saudeFinanceira;
   document.getElementById('iecFormula').textContent = sf.iecFormula + ' Meta: ' + sf.metaDescricao;
-  const ultimo = sf.meses[sf.meses.length-1];
-  const anterior = sf.meses.length>1 ? sf.meses[sf.meses.length-2] : null;
+
+  // popula o select de mês (mantém a seleção do usuário se ainda existir na lista atual)
+  const nomesMeses = sf.meses.map(m=>m.mes);
+  const assinaturaAtual = selEl.dataset.assinatura;
+  const assinaturaNova = nomesMeses.join('|');
+  if(assinaturaAtual !== assinaturaNova){
+    selEl.innerHTML = nomesMeses.map(m=>`<option value="${m}">${m}</option>`).join('');
+    selEl.dataset.assinatura = assinaturaNova;
+    saudeMesSelecionado = nomesMeses[nomesMeses.length-1]; // padrão: mês mais recente
+  }
+  if(!nomesMeses.includes(saudeMesSelecionado)) saudeMesSelecionado = nomesMeses[nomesMeses.length-1];
+  selEl.value = saudeMesSelecionado;
+
+  if(!saudeMesSelectBound){
+    selEl.addEventListener('change', ()=>{
+      saudeMesSelecionado = selEl.value;
+      renderSaude();
+    });
+    saudeMesSelectBound = true;
+  }
+
+  const idxSelecionado = sf.meses.findIndex(m=>m.mes === saudeMesSelecionado);
+  const ultimo = sf.meses[idxSelecionado];
+  const anterior = idxSelecionado>0 ? sf.meses[idxSelecionado-1] : null;
   const delta = anterior ? (ultimo.iec - anterior.iec) : null;
 
   document.getElementById('saudeKpis').innerHTML = `
@@ -974,13 +1007,14 @@ function renderSaude(){
     { data: sf.meses.map(m=>m.recuperacao), color:'#2563EB', label:'Recuperação' }
   ], v=>'R$ '+(v/1000).toLocaleString('pt-BR',{maximumFractionDigits:0})+'k');
 
+  const tdSel = i => i===idxSelecionado ? ' style="background:rgba(37,99,235,.10);font-weight:700;"' : '';
   document.getElementById('tblSaude').innerHTML = `
-    <thead><tr><th style="text-align:left">Linha</th>${sf.meses.map(m=>`<th>${m.mes}</th>`).join('')}</tr></thead>
+    <thead><tr><th style="text-align:left">Linha</th>${sf.meses.map((m,i)=>`<th${tdSel(i)}>${m.mes}</th>`).join('')}</tr></thead>
     <tbody>
-      ${sf.linhasInvestimento.map(linha=>`<tr><td>${linha}</td>${sf.meses.map(m=>`<td>${brl(m.investimentoPorLinha[linha]||0)}</td>`).join('')}</tr>`).join('')}
-      <tr style="font-weight:700;background:#F0F6FF;"><td>Investimento total</td>${sf.meses.map(m=>`<td>${brl(m.investimentoTotal)}</td>`).join('')}</tr>
-      <tr style="font-weight:700;"><td>Recuperação</td>${sf.meses.map(m=>`<td>${brl(m.recuperacao)}</td>`).join('')}</tr>
-      <tr style="font-weight:700;color:#2563EB;"><td>IEC</td>${sf.meses.map(m=>`<td>${pct(m.iec)}</td>`).join('')}</tr>
+      ${sf.linhasInvestimento.map(linha=>`<tr><td>${linha}</td>${sf.meses.map((m,i)=>`<td${tdSel(i)}>${brl(m.investimentoPorLinha[linha]||0)}</td>`).join('')}</tr>`).join('')}
+      <tr style="font-weight:700;background:#F0F6FF;"><td>Investimento total</td>${sf.meses.map((m,i)=>`<td${tdSel(i)}>${brl(m.investimentoTotal)}</td>`).join('')}</tr>
+      <tr style="font-weight:700;"><td>Recuperação</td>${sf.meses.map((m,i)=>`<td${tdSel(i)}>${brl(m.recuperacao)}</td>`).join('')}</tr>
+      <tr style="font-weight:700;color:#2563EB;"><td>IEC</td>${sf.meses.map((m,i)=>`<td${tdSel(i)}>${pct(m.iec)}</td>`).join('')}</tr>
     </tbody>`;
 }
 
