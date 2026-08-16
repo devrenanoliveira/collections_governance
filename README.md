@@ -1,59 +1,77 @@
-# Governança da Cobrança — site estático
+# Governança da Cobrança — README Completo
 
-## O que tem aqui
-- `index.html` — o site (abas: Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Atualizar Dados).
-- `style.css` — estilo visual (mesmo padrão do dashboard de resultados).
-- `data.json` — **fonte única dos dados**. Editar este arquivo é a única coisa necessária para atualizar o conteúdo do site.
-- `fluxo-whatsapp.html` — página à parte com o fluxograma detalhado de atendimento via WhatsApp, referenciada como recurso dentro da aba Régua de Cobrança.
+## Conteúdo do Repositório
 
-## Como publicar (uma vez, no início)
+O projeto consiste em quatro arquivos principais:
 
-1. Crie um repositório novo no GitHub (pode ser privado ou público — se for privado, o GitHub Pages exige plano pago para publicar; se puder ser público, fica de graça).
-2. Envie estes 4 arquivos (`index.html`, `style.css`, `data.json`, `fluxo-whatsapp.html`) para a raiz do repositório — pode arrastar e soltar direto na página do GitHub ("Add file" → "Upload files").
-3. Vá em **Settings → Pages**, em "Source" selecione a branch `main` e a pasta `/ (root)`, salve.
-4. Em alguns minutos o site estará no ar em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`.
+- **index.html**: O site com sete abas (Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Atualizar Dados)
+- **style.css**: Estilo visual consistente com o dashboard de resultados
+- **data.json**: Fonte única dos dados — toda atualização passa por este arquivo
+- **fluxo-whatsapp.html**: Página com fluxograma detalhado de atendimento via WhatsApp
 
-## Como atualizar depois (rotina)
+## Publicação Inicial
 
-1. No GitHub, abra o arquivo `data.json` e clique no ícone de lápis (editar).
-2. Altere o trecho da seção que mudou (ex: um novo mês em `saudeFinanceira.meses`, uma nova faixa de desconto, um novo fornecedor).
-3. Role até o final da página e clique em "Commit changes".
-4. Espere ~1 minuto e recarregue o site — ele atualiza sozinho.
+1. Criar repositório no GitHub (público para GitHub Pages gratuito)
+2. Fazer upload dos quatro arquivos para a raiz
+3. Em Settings → Pages, selecionar branch `main` e pasta `/ (root)`
+4. Aguardar alguns minutos; o site fica disponível em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`
 
-Para a Saúde Financeira (IEC), use a aba **"Atualizar Dados"** dentro do próprio site: preencha os valores do mês, ele calcula o IEC e gera o trecho de JSON pronto para colar dentro do array `"meses"` em `data.json`.
+## Atualizações Rotineiras
 
-## Testar localmente antes de publicar
+Editar o arquivo `data.json` diretamente no GitHub:
 
-Não abra o `index.html` com duplo clique — o navegador bloqueia a leitura do `data.json` por segurança quando o arquivo é aberto direto do disco (`file://`). Em vez disso, dentro da pasta, rode:
+1. Abrir `data.json` e clicar no ícone de lápis
+2. Alterar o trecho necessário (novo mês, faixa de desconto, fornecedor)
+3. Fazer commit
+4. Recarregar o site após ~1 minuto
+
+Para atualizações de Saúde Financeira, usar a aba **"Atualizar Dados"** do próprio site, que calcula o IEC e gera o JSON pronto.
+
+## Testes Locais
+
+Não abrir `index.html` com duplo clique — o navegador bloqueia `data.json` por segurança. Em vez disso, na pasta do projeto, executar:
 
 ```
 python -m http.server 8000
 ```
 
-e acesse `http://localhost:8000` no navegador. Depois de publicado no GitHub Pages isso não é mais necessário (funciona normalmente por `https://`).
+Acessar `http://localhost:8000`. Após publicação no GitHub Pages, funciona normalmente via HTTPS.
 
-## Múltiplos produtos
+## Suporte a Múltiplos Produtos
 
-O site suporta mais de um produto (ex: Z-ON, Produto A, Produto B...), cada um com as mesmas 7 abas e sua própria governança. Um seletor "Produto:" aparece automaticamente logo abaixo do cabeçalho, com um botão por produto cadastrado no `data.json` — não precisa mexer em nenhum código para isso, ele lê a lista sozinho.
+O site detecta automaticamente todos os produtos em `data.json` e exibe um seletor. Cada produto tem as mesmas sete abas e governança independente.
 
-### Como adicionar um produto novo
+### Adicionar Novo Produto
 
-1. Abra o `data.json` e encontre a chave `"produtos"`. Hoje ela tem `"zon"` (com todos os dados reais) e `"produtoA"` (um exemplo vazio, só para mostrar como fica o seletor com mais de uma opção).
-2. Copie o bloco inteiro de `"zon"` (ou de `"produtoA"` se preferir começar vazio), cole como um novo item dentro de `"produtos"`, com um novo id (ex: `"produtob"`) e troque o campo `"nome"` para o nome real do produto (ex: `"Produto B"`).
-3. Preencha as seções (`desconto`, `regua`, `assessorias`, `fornecedores`, `saudeFinanceira`) com os dados desse produto. Se alguma seção ainda não estiver pronta, deixe o valor como `null` (ou `[]` no caso de `fornecedores`) — a aba correspondente mostra uma mensagem de "ainda não configurado" em vez de quebrar.
-4. Pode apagar o `"produtoA"` de exemplo quando não precisar mais dele, ou mantê-lo como rascunho para o próximo produto.
-5. Se quiser que um produto específico seja o que abre por padrão ao carregar o site, mude o valor de `"produtoPadrao"` (no topo do arquivo) para o id desse produto.
+1. Abrir `data.json` e localizar a chave `"produtos"`
+2. Copiar um bloco completo existente (ex: `"zon"`)
+3. Colar como novo item com id único (ex: `"produtob"`)
+4. Alterar o campo `"nome"` para o nome real
+5. Preencher as seções ou deixar como `null`/`[]` se não estiverem prontas
+6. Opcionalmente, atualizar `"produtoPadrao"` para definir qual abre por padrão
 
-## Estrutura do `data.json` (resumo)
+## Estrutura do data.json
 
-Cada produto dentro de `"produtos.<id>"` tem a mesma estrutura:
+Cada produto contém:
 
-- `nome`: nome exibido no seletor e no cabeçalho.
-- `desconto`: fluxo do processo + tabelas `oficial` (piso) e `agressiva` (teto) por faixa de dias — alimenta também a calculadora embutida na aba de Política de Desconto.
-- `regua.recursosDigitais`: lista de links de referência mostrados no topo da aba Régua de Cobrança (ex: fluxograma de WhatsApp, quadro no Miro). Cada item tem `label`, `descricao` e `url` — se `url` for `null`, o card aparece com "Em breve" em vez de um botão clicável. Para adicionar um novo recurso, copie um item existente da lista.
-- `regua.atual` e `regua.desejada`: cada uma com lista de `etapas` (dias, ação, responsável) e as ferramentas/assessorias ativas naquela régua.
-- `assessorias`: objetivo, estrutura de metas, tabela de comissão base, matriz de multiplicadores, comissionamento indireto, estrutura concorrencial e rituais de gestão.
-- `fornecedores`: lista de objetos com `nome`, `categoria`, `papel` e `status` (`ativo` ou `em_implantacao`).
-- `saudeFinanceira`: `metaIec`, lista de `linhasInvestimento` e array `meses` (cada mês com investimento por linha, total, recuperação e IEC).
+- **nome**: Identificação no seletor e cabeçalho
+- **desconto**: Processo, tabelas oficial (piso) e agressiva (teto) por dias
+- **regua.recursosDigitais**: Links de referência (fluxogramas, quadros); `url: null` exibe "Em breve"
+- **regua.atual e regua.desejada**: Etapas, dias, ações, responsáveis e ferramentas
+- **assessorias**: Metas, comissão base, multiplicadores, estrutura concorrencial, rituais
+- **fornecedores**: Nome, categoria, papel, status (ativo ou em_implantacao)
+- **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
 
-Qualquer campo novo dentro desses padrões (nova linha de fornecedor, novo mês, nova faixa, novo produto) você consegue adicionar sozinha só copiando a estrutura de um item existente. Se precisar de uma seção nova ou mudança de layout, aí sim volte a pedir ajuda.
+Novos itens (fornecedores, meses, faixas, produtos) podem ser adicionados copiando estruturas existentes sem modificar código.
+
+## Aba Saúde Financeira — Seletor de Mês de Referência
+
+Ao lado do título da aba há um seletor **"Mês de referência"**, populado automaticamente com todos os meses cadastrados em `saudeFinanceira.meses` do produto atual. Por padrão ele abre no mês mais recente, mas pode ser trocado para qualquer mês do histórico.
+
+Trocar o mês recalcula dinamicamente:
+
+- Os 4 cards de KPI no topo (IEC do mês, Meta de IEC, Investimento e Recuperação do mês)
+- O comparativo "vs. mês anterior" no card de IEC, que passa a comparar com o mês imediatamente anterior ao selecionado
+- O destaque visual (coluna em azul claro) na tabela "Investimento por linha, por mês", marcando a coluna do mês escolhido
+
+Os gráficos de tendência (IEC mensal vs. meta e Investimento vs. Recuperação) continuam mostrando sempre a série histórica completa, independentemente do mês selecionado — o seletor afeta apenas os cards e o destaque da tabela.
