@@ -238,6 +238,13 @@ tbody td:first-child { text-align: left; font-weight: 500; }
 tr.row-selected td { background: #EFF6FF !important; font-weight: 700; }
 .td-dim    { color: var(--ink-muted); font-style: italic; }
 
+/* Coluna de "mês selecionado" (ex.: seletor de Mês de Referência da Saúde Financeira).
+   Não mexe no background do cabeçalho (que já é escuro com texto branco) — só um
+   traço dourado embaixo; no corpo, um tom âmbar suave que mantém o texto legível. */
+th.mes-sel { box-shadow: inset 0 -3px 0 0 var(--brand-gold-light); }
+td.mes-sel { background: rgba(245,158,11,.14) !important; font-weight: 700; }
+body.dark td.mes-sel { background: rgba(245,158,11,.20) !important; }
+
 /* ── PERFORMANCE SUMMARY CARDS ───────────────────────── */
 .perf-summary {
   display: grid;
@@ -296,6 +303,40 @@ tr.row-selected td { background: #EFF6FF !important; font-weight: 700; }
 }
 .legend-line {
   width: 18px; height: 2px; flex-shrink: 0;
+}
+
+/* ── TOOLTIP DOS GRÁFICOS SVG ─────────────────────────── */
+.chart-tooltip {
+  display: none;
+  position: absolute;
+  pointer-events: none;
+  z-index: 30;
+  background: var(--brand-navy);
+  color: #fff;
+  padding: 8px 11px;
+  border-radius: 7px;
+  font-size: .72rem;
+  line-height: 1.55;
+  box-shadow: 0 6px 18px rgba(0,0,0,.22);
+  white-space: nowrap;
+}
+.chart-tooltip .tt-title {
+  font-weight: 700;
+  margin-bottom: 3px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(255,255,255,.18);
+}
+.chart-tooltip .tt-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.chart-tooltip .tt-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+body.dark .chart-tooltip {
+  background: #1e293b;
+  border: 1px solid #334155;
 }
 
 /* ── FOOTNOTE ─────────────────────────────────────────── */

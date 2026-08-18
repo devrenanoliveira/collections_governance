@@ -361,6 +361,37 @@ function svgEl(tag, attrs){
   return el;
 }
 
+/* ---------- tooltip compartilhado pelos gráficos SVG ---------- */
+function chartTooltipEl(container){
+  let tip = container.querySelector('.chart-tooltip');
+  if(!tip){
+    tip = document.createElement('div');
+    tip.className = 'chart-tooltip';
+    container.appendChild(tip);
+  }
+  return tip;
+}
+function positionTooltip(container, tip, clientX, clientY){
+  const rect = container.getBoundingClientRect();
+  tip.style.display = 'block';
+  let left = clientX - rect.left + 14;
+  let top = clientY - rect.top + 14;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  if(left + tw > rect.width) left = clientX - rect.left - tw - 14;
+  if(top + th > rect.height) top = clientY - rect.top - th - 14;
+  if(left < 2) left = 2;
+  if(top < 2) top = 2;
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function svgCursorPoint(svg, evt){
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX; pt.y = evt.clientY;
+  const ctm = svg.getScreenCTM();
+  if(!ctm) return {x:0,y:0};
+  return pt.matrixTransform(ctm.inverse());
+}
+
 function drawLineChart(containerId, labels, series, yFmt){
   const container = document.getElementById(containerId);
   if(!container) return;
@@ -371,6 +402,7 @@ function drawLineChart(containerId, labels, series, yFmt){
   const isDark = document.body.classList.contains('dark');
   const gridColor = isDark ? '#334155' : '#e1e0d9';
   const textColor = isDark ? '#94a3b8' : '#898781';
+  const crosshairColor = isDark ? '#64748b' : '#c3c2b7';
 
   let allVals = [];
   series.forEach(s=>allVals = allVals.concat(s.data));
@@ -396,10 +428,12 @@ function drawLineChart(containerId, labels, series, yFmt){
   }
 
   // eixo X labels
+  const xLabelEls = [];
   labels.forEach((l,i)=>{
     const lbl = svgEl('text', {x:x(i), y:h-6, 'text-anchor':'middle', 'font-size':9, fill:textColor});
     lbl.textContent = l;
     svg.appendChild(lbl);
+    xLabelEls.push(lbl);
   });
 
   series.forEach(s=>{
@@ -412,17 +446,69 @@ function drawLineChart(containerId, labels, series, yFmt){
     if(s.dash) line.setAttribute('stroke-dasharray', '5,4');
     svg.appendChild(line);
     if(!s.dash){
-      pts.forEach((p,i)=>{
-        const c = svgEl('circle', {cx:p[0], cy:p[1], r:3, fill:s.color});
-        const title = svgEl('title', {});
-        title.textContent = labels[i] + ': ' + (s.fmt ? s.fmt(s.data[i]) : s.data[i]);
-        c.appendChild(title);
-        svg.appendChild(c);
+      pts.forEach(p=>{
+        svg.appendChild(svgEl('circle', {cx:p[0], cy:p[1], r:3, fill:s.color}));
       });
     }
   });
 
+  // crosshair vertical (oculto até o hover)
+  const crosshair = svgEl('line', {x1:0, x2:0, y1:padT, y2:padT+plotH, stroke:crosshairColor, 'stroke-width':1, 'stroke-dasharray':'3,3', opacity:0, 'pointer-events':'none'});
+  svg.appendChild(crosshair);
+
+  // pontos de destaque por série (mostrados no índice sob o cursor)
+  const hoverDots = series.map(s=>{
+    const dot = svgEl('circle', {r:5.5, fill:s.color, stroke:isDark?'#0f172a':'#fff', 'stroke-width':2, opacity:0, 'pointer-events':'none'});
+    svg.appendChild(dot);
+    return dot;
+  });
+
+  const tip = chartTooltipEl(container);
+
+  function hideHover(){
+    crosshair.setAttribute('opacity', 0);
+    hoverDots.forEach(d=>d.setAttribute('opacity', 0));
+    tip.style.display = 'none';
+    xLabelEls.forEach(el=>el.setAttribute('font-weight', 'normal'));
+  }
+
+  function updateHover(evt){
+    if(n===0) return;
+    const pt = svgCursorPoint(svg, evt);
+    const step = n<=1 ? plotW : plotW/(n-1);
+    let idx = Math.round((pt.x - padL) / step);
+    idx = Math.max(0, Math.min(n-1, idx));
+
+    crosshair.setAttribute('x1', x(idx));
+    crosshair.setAttribute('x2', x(idx));
+    crosshair.setAttribute('opacity', 1);
+    xLabelEls.forEach((el,i)=>el.setAttribute('font-weight', i===idx ? '700' : 'normal'));
+
+    let rows = '';
+    series.forEach((s,si)=>{
+      const v = s.data[idx];
+      if(!s.dash){
+        hoverDots[si].setAttribute('cx', x(idx));
+        hoverDots[si].setAttribute('cy', y(v));
+        hoverDots[si].setAttribute('opacity', 1);
+      } else {
+        hoverDots[si].setAttribute('opacity', 0);
+      }
+      rows += `<div class="tt-row"><span class="tt-dot" style="background:${s.color}"></span>${s.label}: <strong>${s.fmt ? s.fmt(v) : v}</strong></div>`;
+    });
+    tip.innerHTML = `<div class="tt-title">${labels[idx]}</div>${rows}`;
+    positionTooltip(container, tip, evt.clientX, evt.clientY);
+  }
+
+  const overlay = svgEl('rect', {x:0, y:0, width:w, height:h, fill:'transparent', 'pointer-events':'all', style:'cursor:crosshair;'});
+  overlay.addEventListener('pointermove', updateHover);
+  overlay.addEventListener('pointerdown', updateHover);
+  overlay.addEventListener('pointerleave', hideHover);
+  overlay.addEventListener('mouseleave', hideHover);
+  svg.appendChild(overlay);
+
   container.appendChild(svg);
+  container.appendChild(tip);
 
   // legenda
   const legend = document.createElement('div');
@@ -440,6 +526,7 @@ function drawDualBarChart(containerId, labels, series, valFmt){
   const plotW = w - padL - padR, plotH = h - padT - padB;
   const isDark = document.body.classList.contains('dark');
   const textColor = isDark ? '#94a3b8' : '#898781';
+  const hoverColBg = isDark ? 'rgba(148,163,184,.12)' : 'rgba(15,36,97,.06)';
 
   const svg = svgEl('svg', {viewBox:`0 0 ${w} ${h}`, width:'100%', height:'100%'});
   const n = labels.length;
@@ -447,25 +534,60 @@ function drawDualBarChart(containerId, labels, series, valFmt){
   const barW = Math.min(18, groupW/4);
   const maxes = series.map(s=>Math.max(...s.data, 1));
 
+  // retângulo de destaque de coluna (atrás das barras, oculto até o hover)
+  const hoverCol = svgEl('rect', {x:0, y:padT, width:groupW, height:plotH, fill:hoverColBg, opacity:0, 'pointer-events':'none'});
+  svg.appendChild(hoverCol);
+
+  const barsByGroup = [];
   labels.forEach((l,gi)=>{
     const gx = padL + gi*groupW + groupW/2;
+    const bars = [];
     series.forEach((s,si)=>{
       const v = s.data[gi];
       const bh = (v / maxes[si]) * plotH;
       const bx = gx - (series.length*barW)/2 + si*barW;
       const by = padT + plotH - bh;
-      const rect = svgEl('rect', {x:bx, y:by, width:barW-2, height:Math.max(bh,1), fill:s.color, rx:2});
-      const title = svgEl('title', {});
-      title.textContent = s.label + ' — ' + l + ': ' + (valFmt ? valFmt(v) : v);
-      rect.appendChild(title);
+      const rect = svgEl('rect', {x:bx, y:by, width:barW-2, height:Math.max(bh,1), fill:s.color, rx:2, style:'transition:opacity .1s;'});
       svg.appendChild(rect);
+      bars.push(rect);
     });
+    barsByGroup.push(bars);
     const lbl = svgEl('text', {x:gx, y:h-6, 'text-anchor':'middle', 'font-size':9, fill:textColor});
     lbl.textContent = l;
     svg.appendChild(lbl);
   });
 
+  const tip = chartTooltipEl(container);
+
+  function hideHover(){
+    hoverCol.setAttribute('opacity', 0);
+    barsByGroup.forEach(bars=>bars.forEach(b=>b.setAttribute('opacity', 1)));
+    tip.style.display = 'none';
+  }
+  function showHover(gi, evt){
+    hoverCol.setAttribute('x', padL + gi*groupW);
+    hoverCol.setAttribute('opacity', 1);
+    barsByGroup.forEach((bars,i)=>bars.forEach(b=>b.setAttribute('opacity', i===gi ? 1 : .45)));
+    const rows = series.map((s,si)=>{
+      const v = s.data[gi];
+      return `<div class="tt-row"><span class="tt-dot" style="background:${s.color}"></span>${s.label}: <strong>${valFmt ? valFmt(v) : v}</strong></div>`;
+    }).join('');
+    tip.innerHTML = `<div class="tt-title">${labels[gi]}</div>${rows}`;
+    positionTooltip(container, tip, evt.clientX, evt.clientY);
+  }
+
+  labels.forEach((l,gi)=>{
+    const zone = svgEl('rect', {x:padL+gi*groupW, y:0, width:groupW, height:h, fill:'transparent', 'pointer-events':'all', style:'cursor:pointer;'});
+    zone.addEventListener('pointermove', evt=>showHover(gi, evt));
+    zone.addEventListener('pointerdown', evt=>showHover(gi, evt));
+    zone.addEventListener('pointerenter', evt=>showHover(gi, evt));
+    zone.addEventListener('pointerleave', hideHover);
+    zone.addEventListener('mouseleave', hideHover);
+    svg.appendChild(zone);
+  });
+
   container.appendChild(svg);
+  container.appendChild(tip);
   const legend = document.createElement('div');
   legend.className = 'chart-legend';
   legend.innerHTML = series.map(s=>`<span class="legend-item"><span class="legend-dot" style="background:${s.color}"></span>${s.label} (escala própria)</span>`).join('');
@@ -1007,7 +1129,7 @@ function renderSaude(){
     { data: sf.meses.map(m=>m.recuperacao), color:'#2563EB', label:'Recuperação' }
   ], v=>'R$ '+(v/1000).toLocaleString('pt-BR',{maximumFractionDigits:0})+'k');
 
-  const tdSel = i => i===idxSelecionado ? ' style="background:rgba(37,99,235,.10);font-weight:700;"' : '';
+  const tdSel = i => i===idxSelecionado ? ' class="mes-sel"' : '';
   document.getElementById('tblSaude').innerHTML = `
     <thead><tr><th style="text-align:left">Linha</th>${sf.meses.map((m,i)=>`<th${tdSel(i)}>${m.mes}</th>`).join('')}</tr></thead>
     <tbody>
