@@ -1061,6 +1061,13 @@
           "descricao": "Bases salariais de referência para Operador de Call Center e Operador de Cobrança em Curitiba, jornadas de 6h e 8h, com custo total incluindo encargos CLT.",
           "arquivo": "estudo-salarial-curitiba.html",
           "data": "2026-08-25"
+        },
+        {
+          "id": "meta-perdas-2027",
+          "titulo": "Meta de Recuperação de Perdas 2027",
+          "descricao": "Confronto entre a meta do diretor para recuperação de perdas (Pós-Prejuízo, faixas H–J) e uma projeção construída a partir do histórico real de pagamento (2025–2026), para embasar a meta de PLR de 2027.",
+          "arquivo": "estudo-meta-perdas-2027.html",
+          "data": "2026-08-25"
         }
       ]
     },

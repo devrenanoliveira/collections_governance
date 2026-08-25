@@ -22,7 +22,7 @@ Then open `http://localhost:8000`. There is no build step, package manager, lint
 
 ## Architecture
 
-Five core content files, plus a growing set of standalone `estudo-*.html` study documents (currently two — see below), no framework, no bundler, **no third-party CDN dependencies** (deliberate — Chart.js via cdnjs was blocked in both dev and the user's corporate network, so all charts are hand-rolled SVG):
+Five core content files, plus a growing set of standalone `estudo-*.html` study documents (currently three — see below), no framework, no bundler, **no third-party CDN dependencies** (deliberate — Chart.js via cdnjs was blocked in both dev and the user's corporate network, so all charts are hand-rolled SVG):
 
 - **`index.html`** — the entire application: HTML markup for 8 tabs, page-specific CSS (inline `<style>`), and all JavaScript (rendering, charts, calculator, data-update form, product selector). Everything reads from the single global `DATA` object loaded from `data.json` at startup (`fetch('data.json?v=' + Date.now())`).
 - **`data.json`** — single source of truth for all content. Namespaced under `produtos.<id>` (e.g. `produtos.zon`) so the site can host governance for multiple credit products; `DATA.produtoPadrao` picks which one loads by default, and a product-selector nav switches between them at runtime (no reload).

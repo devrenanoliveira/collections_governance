@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta de Recuperação de Perdas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #F4F6FA;
+    --surface: #FFFFFF;
+    --surface-2: #EEF1F7;
+    --border: #DCE2ED;
+    --ink: #10192E;
+    --ink-soft: #3A4459;
+    --ink-muted: #6B7690;
+    --navy: #0F2461;
+    --navy-soft: #E5E9F5;
+    --gold: #B45309;
+    --gold-soft: #FDF1DE;
+    --teal: #0E7490;
+    --teal-soft: #E1F1F4;
+    --rose: #9D174D;
+    --rose-soft: #FBE7EF;
+    --good: #15803D;
+    --warn: #B45309;
+    --bad: #B91C1C;
+    --shadow: 0 1px 2px rgba(16,25,46,.04), 0 8px 24px -12px rgba(16,25,46,.12);
+    --radius: 14px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1220; --surface: #121B2E; --surface-2: #17223A; --border: #253252;
+      --ink: #E8ECF7; --ink-soft: #B9C2DA; --ink-muted: #7C88A8;
+      --navy: #7C9BEF; --navy-soft: #1B2748; --gold: #F0B25A; --gold-soft: #2B2313;
+      --teal: #5FCBDE; --teal-soft: #12262B; --rose: #F189B6; --rose-soft: #2B1420;
+      --good: #4ADE80; --warn: #F0B25A; --bad: #FB7185;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -10px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1220; --surface: #121B2E; --surface-2: #17223A; --border: #253252;
+    --ink: #E8ECF7; --ink-soft: #B9C2DA; --ink-muted: #7C88A8;
+    --navy: #7C9BEF; --navy-soft: #1B2748; --gold: #F0B25A; --gold-soft: #2B2313;
+    --teal: #5FCBDE; --teal-soft: #12262B; --rose: #F189B6; --rose-soft: #2B1420;
+    --good: #4ADE80; --warn: #F0B25A; --bad: #FB7185;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px -10px rgba(0,0,0,.6);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif; line-height: 1.5; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 40px 24px 64px; }
+  h1, h2, h3 { font-family: "Sora", "IBM Plex Sans", sans-serif; text-wrap: balance; }
+  .num { font-variant-numeric: tabular-nums; }
+  .mono { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+  code { font-family: "IBM Plex Mono", monospace; font-size: .92em; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+
+  header.top { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+  .eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--navy); margin: 0 0 6px; }
+  h1 { font-size: 1.7rem; font-weight: 700; margin: 0; color: var(--ink); }
+  .subtitle { color: var(--ink-muted); font-size: .92rem; margin-top: 6px; max-width: 620px; }
+  .meta-tag { font-size: .74rem; color: var(--ink-muted); text-align: right; line-height: 1.6; }
+
+  .verdict { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--navy); border-radius: var(--radius); padding: 22px 26px; box-shadow: var(--shadow); margin-bottom: 20px; }
+  .verdict .label { font-size: .7rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--navy); margin-bottom: 8px; }
+  .verdict p { margin: 0 0 10px; color: var(--ink-soft); font-size: .95rem; }
+  .verdict p:last-child { margin-bottom: 0; }
+  .verdict strong { color: var(--ink); }
+
+  .range-bar { display: flex; align-items: center; gap: 0; margin: 16px 0 4px; height: 34px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); font-size: .74rem; font-weight: 600; }
+  .range-bar > div { display: flex; align-items: center; justify-content: center; height: 100%; }
+  .range-neg { background: var(--rose-soft); color: var(--rose); }
+  .range-mark { background: var(--navy); color: white; width: 3px; flex: none; }
+  .range-pos { background: var(--teal-soft); color: var(--teal); }
+  .range-labels { display: flex; justify-content: space-between; font-size: .72rem; color: var(--ink-muted); margin-bottom: 4px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-bottom: 24px; }
+  .card h2 { font-size: 1.02rem; margin: 0 0 4px; }
+  .card .card-sub { font-size: .82rem; color: var(--ink-muted); margin: 0 0 18px; }
+
+  .timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+  .timeline li { display: grid; grid-template-columns: 92px 1fr; gap: 14px; font-size: .86rem; }
+  .timeline .t-step { font-weight: 700; color: var(--navy); font-family: "Sora", sans-serif; font-size: .78rem; }
+  .timeline .t-body { color: var(--ink-soft); }
+  .timeline .t-body strong { color: var(--ink); }
+
+  .chart-shell { position: relative; }
+  .chart-scroll { overflow-x: auto; }
+  svg#chart { width: 100%; height: auto; display: block; min-width: 760px; }
+  .gridline { stroke: var(--border); stroke-width: 1; }
+  .axis-label { fill: var(--ink-muted); font-size: 10.5px; font-family: "IBM Plex Sans", sans-serif; }
+  .divider-line { stroke: var(--ink-muted); stroke-width: 1; stroke-dasharray: 2 3; opacity: .55; }
+  .divider-label { fill: var(--ink-muted); font-size: 9.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  .series-line { fill: none; stroke-width: 2.25; stroke-linecap: round; stroke-linejoin: round; }
+  .series-dot { stroke: var(--surface); stroke-width: 1.5; }
+  .hover-line { stroke: var(--ink-muted); stroke-width: 1; opacity: 0; pointer-events: none; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: .8rem; color: var(--ink-soft); }
+  .swatch { width: 16px; height: 3px; border-radius: 2px; flex: none; }
+  .swatch.dashed { background: none; height: 0; border-top: 3px dashed; }
+
+  .tooltip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); border-radius: 8px; padding: 10px 13px; font-size: .78rem; box-shadow: 0 6px 20px rgba(0,0,0,.25); opacity: 0; transition: opacity .08s ease; min-width: 168px; z-index: 5; }
+  .tooltip .t-month { font-weight: 700; margin-bottom: 6px; font-family: "Sora", sans-serif; }
+  .tooltip .t-row { display: flex; justify-content: space-between; gap: 14px; padding: 1.5px 0; }
+  .tooltip .t-row .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+
+  table.dt { width: 100%; border-collapse: collapse; font-size: .86rem; }
+  table.dt th, table.dt td { padding: 10px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+  table.dt th:first-child, table.dt td:first-child { text-align: left; }
+  table.dt thead th { color: var(--ink-muted); font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .04em; }
+  table.dt tbody tr:last-child td { border-bottom: none; }
+  table.dt td.hero { font-weight: 700; font-size: .95rem; }
+  .delta-pos { color: var(--good); }
+  .delta-neg { color: var(--bad); }
+  .dt-wrap { overflow-x: auto; }
+
+  .callout-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .callout { background: var(--surface-2); border-radius: 10px; padding: 15px 17px; border: 1px solid var(--border); }
+  .callout .c-num { font-family: "Sora", sans-serif; font-weight: 700; font-size: .72rem; color: var(--navy); letter-spacing: .04em; margin-bottom: 5px; }
+  .callout p { margin: 0; font-size: .84rem; color: var(--ink-soft); }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 6px; }
+  .stat { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .stat .s-label { font-size: .7rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; margin-bottom: 6px; }
+  .stat .s-val { font-family: "Sora", sans-serif; font-weight: 700; font-size: 1.25rem; }
+
+  footer { margin-top: 32px; padding-top: 18px; border-top: 1px solid var(--border); font-size: .74rem; color: var(--ink-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+
+  @media (max-width: 640px) {
+    header.top { flex-direction: column; align-items: flex-start; }
+    .meta-tag { text-align: left; }
+    .timeline li { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+    <div>
+      <p class="eyebrow">Projeto #1 · KPIs Cobrança Z-ON</p>
+      <h1>Recuperação de Perdas — meta do diretor vs. modelo do motor</h1>
+      <p class="subtitle">Confronto entre a estimativa criada para servir de base de PLR e uma projeção construída a partir do histórico real de pagamento (2025–2026), Pós-Prejuízo (faixas H–J, &gt;180 dias).</p>
+    </div>
+    <div class="meta-tag">
+      Atualizado em 25/08/2026<br>
+      Base: <span class="num">19</span> meses fechados (Jan/25–Jul/26)<br>
+      Fonte: <code>Recuperação 2025/2026.csv</code> + <code>data.json</code>
+    </div>
+  </header>
+
+  <div class="verdict">
+    <p class="label">Veredito atualizado</p>
+    <p>Com o histórico completo (19 meses reais) e o modelo <strong>ancorado no último mês fechado</strong> (não numa reta que já estava atrasada em relação à aceleração recente — ver Passo 5), a meta do diretor para 2027 bate com a continuação do ritmo atual a <strong class="delta-pos">menos de 5% de diferença</strong> — praticamente um match.</p>
+    <p style="margin-top:10px">Testamos também uma leitura mais otimista (crescimento composto, não só continuação linear) e descartamos: ela exigiria a eficiência de recuperação em H-J subir de 2 a 6 vezes o nível atual — algo que não acontece por esforço operacional, só com mudança estrutural (venda de carteira, ação judicial em massa). Por isso não entra no gráfico como cenário — ver ressalva 04 pra essa conta.</p>
+  </div>
+
+  <div class="card">
+    <h2>Como chegamos até aqui</h2>
+    <p class="card-sub">Cada etapa desta análise revisou a anterior, à medida que mais dado real entrou na conta.</p>
+    <ol class="timeline">
+      <li><span class="t-step">Passo 1</span><span class="t-body"><strong>Confirmamos o que a linha 6 mede</strong>: batendo o valor de Ago/26 da planilha contra o dado real do dashboard (escalado por dia útil), confirmamos que " Recuperação Perdas" = Pós-Prejuízo H+I+J.</span></li>
+      <li><span class="t-step">Passo 2</span><span class="t-body"><strong>Primeira checagem (só 5 meses do dashboard)</strong> sugeriu que a meta era conservadora — nossa tendência batia igual ou acima. Mas 5 pontos é pouco pra confiar.</span></li>
+      <li><span class="t-step">Passo 3</span><span class="t-body"><strong>Olhamos o movimento de carteira</strong> (Jul→Ago): o total não cresceu, mas Pré-Prejuízo caiu 20% e Pós-Prejuízo subiu 6,75% — sinal de migração (saldo envelhecendo pra dentro de H-J), não necessariamente de mais eficiência.</span></li>
+      <li><span class="t-step">Passo 4</span><span class="t-body"><strong>Reconstruímos 19 meses reais</strong> a partir dos CSVs de histórico de pagamento (Jan/25–Jul/26) — a mesma fonte que o valor histórico do diretor bate quase exato (0,5%–3% de diferença). Ajustada nos 19 meses inteiros, a reta linear ficou mais conservadora que a meta dele.</span></li>
+      <li><span class="t-step">Passo 5</span><span class="t-body"><strong>Corrigimos um viés da reta</strong>: ajustada em 19 meses, ela previa só R$ 373 mil pro próprio julho — 26% abaixo do real (R$ 469 mil). Ou seja, a reta já estava "atrasada"; a projeção de agosto partia de onde <em>ela</em> estava, não de onde a recuperação realmente estava. Reancoramos os dois modelos no último mês fechado, mantendo a mesma inclinação/taxa — e o resultado bateu quase exato com o parcial real de agosto (R$ 381 mil com 16 de 21 dias úteis, equivalente a ~R$ 501 mil no mês cheio).</span></li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Recuperação mensal — Pós-Prejuízo (H–J), Jan/25 a Dez/27</h2>
+    <p class="card-sub">Linha cheia = histórico real, reconstruído do CSV de pagamentos. Linhas tracejadas = projeção (a partir de Ago/26). Passe o mouse para ver os valores mês a mês.</p>
+    <div class="chart-shell">
+      <div class="chart-scroll"><svg id="chart" viewBox="0 0 1200 460" preserveAspectRatio="xMinYMin meet"></svg></div>
+      <div class="tooltip" id="tooltip"></div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="card">
+    <h2>Checagem com o mês em andamento (Ago/26)</h2>
+    <p class="card-sub">O teste mais direto que existe: comparar a projeção contra o que já está acontecendo agora, com o mês ainda em curso.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="s-label">Parcial real (16 de 21 DUs)</div><div class="s-val">R$ 381.657</div></div>
+      <div class="stat"><div class="s-label">Escalado p/ mês cheio (×21/16)</div><div class="s-val" style="color:var(--navy)">R$ 500.925</div></div>
+      <div class="stat"><div class="s-label">Nosso modelo (linear reancorado)</div><div class="s-val" style="color:var(--teal)">R$ 484.913</div></div>
+    </div>
+    <p style="font-size:.86rem; color:var(--ink-soft); margin:10px 0 0">O modelo bate com o que o mês já está mostrando na prática (3,2% de diferença) — sem depender de nenhuma suposição sobre o futuro, só do que já aconteceu.</p>
+  </div>
+
+  <div class="card">
+    <h2>Somas por período (o que de fato importa para uma meta anual)</h2>
+    <p class="card-sub">O total acumulado em cada janela — é essa soma que vira meta de PLR, não um mês isolado.</p>
+    <div class="dt-wrap"><table class="dt" id="ck-table"></table></div>
+  </div>
+
+  <div class="card">
+    <h2>Por que os números de Mar–Jul/26 não batem com o dashboard</h2>
+    <p class="card-sub">Duas leituras do mesmo período, calculadas de formas diferentes.</p>
+    <div class="dt-wrap"><table class="dt" id="rec-table"></table></div>
+    <p style="font-size:.82rem; color:var(--ink-muted); margin:14px 0 0">O histórico apresentado usa a soma direta do "Recebido" por faixa. O <code>recupPos</code> do dashboard usa um cálculo adicional (rateio de acordo), por isso vem sistematicamente mais alto a partir de abril.</p>
+  </div>
+
+  <div class="card">
+    <h2>O sinal de migração (Jul → Ago/26)</h2>
+    <p class="card-sub">Por que parte do crescimento recente pode ser mecânico, não esforço do time.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="s-label">Pré-Prejuízo (B–G)</div><div class="s-val" style="color:var(--bad)">-20,1%</div></div>
+      <div class="stat"><div class="s-label">Pós-Prejuízo (H–J)</div><div class="s-val" style="color:var(--good)">+6,75%</div></div>
+      <div class="stat"><div class="s-label">Carteira total</div><div class="s-val">-1,5%</div></div>
+    </div>
+    <p style="font-size:.86rem; color:var(--ink-soft); margin:10px 0 0">Total praticamente parado, mas saldo saiu de Pré e entrou em Pós — clássico de envelhecimento (migração), não de portfólio crescendo. Como a taxa de recuperação em H-J é baixa (0,3%–0,9%), mais saldo entrando já basta pra gerar mais R$ recuperado, mesmo sem ganho de eficiência.</p>
+  </div>
+
+  <div class="card">
+    <h2>Ressalvas antes de usar isso como meta de PLR</h2>
+    <div class="callout-grid">
+      <div class="callout">
+        <p class="c-num">01 — LINEAR E META QUASE COINCIDEM</p>
+        <p>O modelo linear reancorado (continuação do ritmo atual, sem supor mais aceleração) fecha 2027 a só 4,3% abaixo da meta — dentro da margem de erro de qualquer projeção de 17 meses. É o cenário mais defensável, e valida o número dele.</p>
+      </div>
+      <div class="callout">
+        <p class="c-num">02 — TRÊS FONTES, TRÊS DEFINIÇÕES</p>
+        <p><code>recupPos</code> do dashboard, histórico do diretor e soma bruta do CSV medem coisas ligeiramente diferentes (provavelmente por causa do rateio de acordo). Vale alinhar qual é a definição oficial antes de travar a meta.</p>
+      </div>
+      <div class="callout">
+        <p class="c-num">03 — MIGRAÇÃO, NÃO SÓ ESFORÇO</p>
+        <p>Parte do crescimento recente em H-J vem de saldo envelhecendo desde B-G, não de melhora de recuperação. Isso depende da cobrança lá atrás, não da equipe de Pós-Prejuízo — não deveria ser cobrado como se fosse mérito exclusivo dela.</p>
+      </div>
+      <div class="callout">
+        <p class="c-num">04 — POR QUE DESCARTAMOS O CENÁRIO OTIMISTA</p>
+        <p>Testamos uma leitura de crescimento composto (6,8%/mês, dobra a cada ~10,5 meses) e ela chegaria a R$ 1,44 MM/mês em Dez/27. Pra isso acontecer com a carteira H-J de hoje (~R$81 MM), a taxa de recuperação precisaria sair de 0,3%–0,9% (nível atual) pra ~1,8% — <strong>2 a 6 vezes maior</strong>. Isso não acontece com mais esforço operacional; só com mudança estrutural (venda de carteira, ação judicial em massa). Por isso não aparece no gráfico como cenário — é matematicamente possível, mas não é um caminho real.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:0">
+    <h2>Conclusão e encaminhamento</h2>
+    <p style="font-size:.92rem; color:var(--ink-soft); margin:0 0 10px">
+      O modelo bate com a continuação do ritmo atual a menos de 5% de diferença — não há necessidade de ajustar o número proposto. Três pontos para fechar antes de tornar isso oficial:
+    </p>
+    <ol style="font-size:.9rem; color:var(--ink-soft); margin:0; padding-left:20px">
+      <li style="margin-bottom:6px"><strong>Manter o número como base</strong> — o modelo reancorado (continuação do ritmo atual, sem supor mudança nenhuma) bate a menos de 5% de diferença.</li>
+      <li style="margin-bottom:6px"><strong>Embutir revisão trimestral</strong> como prática padrão de qualquer meta de 17 meses construída em cima de tendência — não como sinal de dúvida, como rigor.</li>
+      <li><strong>Alinhar a definição da métrica</strong> (recupPos vs. soma bruta) antes de travar o número final — evita discussão de "por que o resultado de fechamento não bate" daqui a alguns meses.</li>
+    </ol>
+  </div>
+
+  <footer>
+    <span>Metodologia: regressão OLS (linear e log-linear) sobre 19 meses reconstruídos de <code>Recuperação 2025/2026.csv</code>, faixas H–J via <code>faixa_idx()</code> do motor.</span>
+    <span>Não substitui validação com o time financeiro sobre a definição exata de "Recuperação Perdas".</span>
+  </footer>
+
+</div>
+
+<script>
+(function() {
+  const DATA = {
+    mesesReais: ["Jan/25","Fev/25","Mar/25","Abr/25","Mai/25","Jun/25","Jul/25","Ago/25","Set/25","Out/25","Nov/25","Dez/25","Jan/26","Fev/26","Mar/26","Abr/26","Mai/26","Jun/26","Jul/26"],
+    valsReais: [123332.88,130159.16,148037.68,132058.86,141265.85,159891.55,204414.03,203990.68,225079.12,238097.04,226498.26,228711.31,266591.66,220067.03,293764.68,271926.02,358681.17,400204.84,469422.23],
+    mesesFuturos: ["Ago/26","Set/26","Out/26","Nov/26","Dez/26","Jan/27","Fev/27","Mar/27","Abr/27","Mai/27","Jun/27","Jul/27","Ago/27","Set/27","Out/27","Nov/27","Dez/27"],
+    linear: {"Ago/26":484912.52,"Set/26":500402.81,"Out/26":515893.11,"Nov/26":531383.4,"Dez/26":546873.69,"Jan/27":562363.98,"Fev/27":577854.27,"Mar/27":593344.56,"Abr/27":608834.86,"Mai/27":624325.15,"Jun/27":639815.44,"Jul/27":655305.73,"Ago/27":670796.02,"Set/27":686286.32,"Out/27":701776.61,"Nov/27":717266.9,"Dez/27":732757.19},
+    exponencial: {"Ago/26":501356.08,"Set/26":535462.32,"Out/26":571888.73,"Nov/26":610793.17,"Dez/26":652344.19,"Jan/27":696721.85,"Fev/27":744118.43,"Mar/27":794739.3,"Abr/27":848803.81,"Mai/27":906546.22,"Jun/27":968216.72,"Jul/27":1034082.55,"Ago/27":1104429.1,"Set/27":1179561.18,"Out/27":1259804.34,"Nov/27":1345506.28,"Dez/27":1437038.35},
+    diretor: {"Ago/26":498605.03,"Set/26":523535.28,"Out/26":549712.04,"Nov/26":560706.28,"Dez/26":571920.41,"Jan/27":571920.41,"Fev/27":589078.02,"Mar/27":606750.36,"Abr/27":624952.87,"Mai/27":643701.46,"Jun/27":663012.5,"Jul/27":682902.88,"Ago/27":703389.96,"Set/27":724491.66,"Out/27":746226.41,"Nov/27":768613.2,"Dez/27":791671.6},
+    diretorHist: {"Mar/26":295911.05,"Abr/26":276226.93,"Mai/26":363767.58,"Jun/26":406207.52,"Jul/26":474861.93},
+    dashboardRecupPos: {"Mar/26":341602.49,"Abr/26":373973.09,"Mai/26":405435.61,"Jun/26":428617.88,"Jul/26":434138.35},
+    rawReconstruido: {"Mar/26":293764.68,"Abr/26":271926.02,"Mai/26":358681.17,"Jun/26":400204.84,"Jul/26":469422.23},
+    somas: {
+      "Ago–Dez/26 (resto do ano)": {diretor:2704479.04, linear:2579465.73, exp:2871844.47},
+      "Jan–Jun/27 (1º semestre)":  {diretor:3699415.62, linear:3606538.24, exp:4959146.42},
+      "Jul–Dez/27 (2º semestre)":  {diretor:4417295.71, linear:4164189.18, exp:7360421.9},
+      "Jan–Dez/27 (ano cheio)":    {diretor:8116711.33, linear:7770727.42, exp:12319568.32},
+    }
+  };
+
+  const meses = [...DATA.mesesReais, ...DATA.mesesFuturos];
+  const N = meses.length;
+  const REAL_N = DATA.mesesReais.length;
+
+  const seriesDef = [
+    { key: 'real',   label: 'Real (histórico reconstruído)', color: 'var(--navy)', dash: null,  },
+    { key: 'diretor',label: 'Meta do diretor',            color: 'var(--gold)', dash: '6 4' },
+    { key: 'linear', label: 'Nosso modelo (linear, reancorado)',   color: 'var(--teal)', dash: '6 4' },
+  ];
+
+  function seriesArray(key) {
+    const arr = new Array(N).fill(null);
+    if (key === 'real') {
+      DATA.valsReais.forEach((v,i) => arr[i] = v);
+    } else if (key === 'diretor' || key === 'linear') {
+      const src = key === 'diretor' ? DATA.diretor : DATA.linear;
+      DATA.mesesFuturos.forEach((m,i) => arr[REAL_N + i] = src[m]);
+      arr[REAL_N - 1] = DATA.valsReais[REAL_N - 1]; // bridge from last real point
+    }
+    return arr;
+  }
+
+  const allSeries = {};
+  seriesDef.forEach(s => allSeries[s.key] = seriesArray(s.key));
+
+  function fmtBRL(v) {
+    if (v == null) return '—';
+    const abs = Math.abs(v);
+    if (abs >= 1000000) return 'R$ ' + (v/1000000).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) + ' MM';
+    return 'R$ ' + v.toLocaleString('pt-BR', {maximumFractionDigits:0});
+  }
+
+  const svg = document.getElementById('chart');
+  const W = 1200, H = 460;
+  const padL = 64, padR = 20, padT = 18, padB = 56;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const maxVal = 900000;
+  const yTicks = [0, 150000, 300000, 450000, 600000, 750000, 900000];
+
+  function xPos(i) { return padL + (i / (N - 1)) * plotW; }
+  function yPos(v) { return padT + plotH - (v / maxVal) * plotH; }
+
+  const svgns = 'http://www.w3.org/2000/svg';
+  function el(tag, attrs) { const e = document.createElementNS(svgns, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+
+  yTicks.forEach(v => {
+    const y = yPos(v);
+    svg.appendChild(el('line', { class: 'gridline', x1: padL, x2: W - padR, y1: y, y2: y }));
+    const t = el('text', { class: 'axis-label', x: padL - 10, y: y + 4, 'text-anchor': 'end' });
+    t.textContent = v === 0 ? 'R$ 0' : (v/1000000).toLocaleString('pt-BR', {minimumFractionDigits:1}) + ' MM';
+    svg.appendChild(t);
+  });
+
+  meses.forEach((m, i) => {
+    if (i % 3 !== 0 && i !== N-1) return;
+    const t = el('text', { class: 'axis-label', x: xPos(i), y: H - padB + 18, 'text-anchor': 'middle' });
+    t.textContent = m;
+    svg.appendChild(t);
+  });
+
+  const divX = (xPos(REAL_N - 1) + xPos(REAL_N)) / 2;
+  svg.appendChild(el('line', { class: 'divider-line', x1: divX, x2: divX, y1: padT, y2: H - padB }));
+  const divLabel = el('text', { class: 'divider-label', x: divX, y: padT - 4, 'text-anchor': 'middle' });
+  divLabel.textContent = 'início da projeção';
+  svg.appendChild(divLabel);
+
+  function pathFor(arr) {
+    let d = ''; let started = false;
+    for (let i = 0; i < N; i++) {
+      if (arr[i] == null) { started = false; continue; }
+      const x = xPos(i), y = yPos(arr[i]);
+      d += (started ? ' L ' : 'M ') + x + ' ' + y;
+      started = true;
+    }
+    return d;
+  }
+
+  seriesDef.forEach(s => {
+    const arr = allSeries[s.key];
+    const path = el('path', { class: 'series-line', d: pathFor(arr), stroke: s.color });
+    if (s.dash) path.setAttribute('stroke-dasharray', s.dash);
+    svg.appendChild(path);
+  });
+
+  DATA.valsReais.forEach((v, i) => {
+    svg.appendChild(el('circle', { class: 'series-dot', cx: xPos(i), cy: yPos(v), r: 3, fill: 'var(--navy)' }));
+  });
+
+  const hoverLine = el('line', { class: 'hover-line', x1:0, x2:0, y1: padT, y2: H - padB });
+  svg.appendChild(hoverLine);
+  const hoverDots = {};
+  seriesDef.forEach(s => {
+    const d = el('circle', { r: 4, fill: s.color, opacity: 0 });
+    svg.appendChild(d);
+    hoverDots[s.key] = d;
+  });
+
+  const tooltip = document.getElementById('tooltip');
+  const chartShell = document.querySelector('.chart-shell');
+
+  function nearestIndex(mouseX) {
+    const rel = (mouseX - padL) / plotW;
+    return Math.max(0, Math.min(N - 1, Math.round(rel * (N - 1))));
+  }
+
+  svg.addEventListener('mousemove', (ev) => {
+    const rect = svg.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const mx = (ev.clientX - rect.left) * scaleX;
+    const i = nearestIndex(mx);
+    const x = xPos(i);
+    hoverLine.setAttribute('x1', x); hoverLine.setAttribute('x2', x); hoverLine.style.opacity = 1;
+
+    let rows = '';
+    let maxY = 0;
+    seriesDef.forEach(s => {
+      const v = allSeries[s.key][i];
+      const dot = hoverDots[s.key];
+      if (v != null) {
+        dot.setAttribute('cx', x); dot.setAttribute('cy', yPos(v)); dot.style.opacity = 1;
+        maxY = Math.max(maxY, yPos(v));
+        rows += `<div class="t-row"><span><span class="dot" style="background:${s.color}"></span>${s.label}</span><span class="mono">${fmtBRL(v)}</span></div>`;
+      } else { dot.style.opacity = 0; }
+    });
+    tooltip.innerHTML = `<div class="t-month">${meses[i]}</div>${rows}`;
+    tooltip.style.opacity = 1;
+
+    let left = (x / W) * rect.width + 14;
+    let top = (maxY / H) * rect.height - 10;
+    if (left + 190 > rect.width) left = (x / W) * rect.width - 200;
+    tooltip.style.left = left + 'px';
+    tooltip.style.top = Math.max(0, top) + 'px';
+  });
+  svg.addEventListener('mouseleave', () => {
+    hoverLine.style.opacity = 0;
+    tooltip.style.opacity = 0;
+    Object.values(hoverDots).forEach(d => d.style.opacity = 0);
+  });
+
+  const legendEl = document.getElementById('legend');
+  seriesDef.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    const sw = document.createElement('span');
+    sw.className = 'swatch' + (s.dash ? ' dashed' : '');
+    if (s.dash) { sw.style.borderColor = s.color; } else { sw.style.background = s.color; }
+    item.appendChild(sw);
+    const txt = document.createElement('span');
+    txt.textContent = s.label;
+    item.appendChild(txt);
+    legendEl.appendChild(item);
+  });
+
+  // ---- Soma por periodo table ----
+  const ckTable = document.getElementById('ck-table');
+  let thead = '<thead><tr><th>Janela</th><th>Meta diretor (soma)</th><th>Nosso modelo (soma)</th><th>Diferença</th></tr></thead>';
+  let tbody = '<tbody>';
+  Object.entries(DATA.somas).forEach(([nome, v]) => {
+    const dLin = (v.linear/v.diretor - 1) * 100;
+    tbody += `<tr>
+      <td class="hero">${nome}</td>
+      <td class="mono hero">${fmtBRL(v.diretor)}</td>
+      <td class="mono">${fmtBRL(v.linear)}</td>
+      <td class="mono ${dLin>=0?'delta-pos':'delta-neg'}">${dLin>=0?'+':''}${dLin.toFixed(1)}%</td>
+    </tr>`;
+  });
+  ckTable.innerHTML = thead + tbody + '</tbody>';
+
+  // ---- Reconciliation table (2 fontes) ----
+  const recTable = document.getElementById('rec-table');
+  let rthead = '<thead><tr><th>Mês</th><th>Histórico apresentado</th><th>Dashboard (recupPos)</th></tr></thead>';
+  let rtbody = '<tbody>';
+  Object.keys(DATA.diretorHist).forEach(m => {
+    rtbody += `<tr>
+      <td>${m}</td>
+      <td class="mono">${fmtBRL(DATA.diretorHist[m])}</td>
+      <td class="mono">${fmtBRL(DATA.dashboardRecupPos[m])}</td>
+    </tr>`;
+  });
+  recTable.innerHTML = rthead + rtbody + '</tbody>';
+
+})();
+</script>
+</body>
+</html>
