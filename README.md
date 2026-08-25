@@ -2,12 +2,28 @@
 
 ## Conteúdo do Repositório
 
-O projeto consiste em quatro arquivos principais:
+O projeto consiste em cinco arquivos principais:
 
 - **index.html**: O site com sete abas (Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Atualizar Dados)
 - **style.css**: Estilo visual consistente com o dashboard de resultados
 - **data.json**: Fonte única dos dados — toda atualização passa por este arquivo
 - **fluxo-whatsapp.html**: Página com fluxograma detalhado de atendimento via WhatsApp
+- **calculadora-desconto.html**: Versão avulsa da Calculadora de Aprovação de Negociação (ver seção própria abaixo)
+
+## Calculadora de Aprovação — Versão Avulsa
+
+`calculadora-desconto.html` é a mesma calculadora da aba "Política de Desconto", mas exportada como um arquivo único e autônomo — sem depender do `index.html`, do `data.json` ou de conexão com a internet. Pode ser aberta com duplo clique e enviada para qualquer pessoa (assessoria, aprovador, etc.) sem dar acesso ao dashboard completo de governança.
+
+Ela inclui um painel "Como funciona esta calculadora" explicando piso/teto e o escalonamento por número de parcelas, para quem não tem contexto do dashboard.
+
+**Importante**: os valores de piso/teto ficam embutidos no arquivo no momento da exportação — se a política de desconto mudar no `data.json`, este arquivo fica desatualizado até ser gerado de novo. Para regenerar, no console do navegador com o `index.html` aberto (ou pedindo para o Claude Code):
+
+```js
+const p = DATA.produtos.zon;
+buildCalcHtml(p.desconto.oficial, p.desconto.agressiva, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao});
+```
+
+O retorno é o HTML completo do arquivo — salve como `calculadora-desconto.html`.
 
 ## Publicação Inicial
 
