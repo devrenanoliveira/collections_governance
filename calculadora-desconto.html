@@ -29,6 +29,13 @@ details.explainer[open] summary:before{content:'▾ ';}
 .verdict-legend span{display:flex;align-items:center;gap:6px;}
 .vdot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .vdot.ok{background:var(--teal);} .vdot.warn{background:var(--gold);} .vdot.bad{background:var(--crimson);}
+details.advanced{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);}
+details.advanced summary{cursor:pointer;font-size:10.5px;font-weight:700;color:var(--slate);list-style:none;text-transform:uppercase;letter-spacing:.05em;}
+details.advanced summary::-webkit-details-marker{display:none;}
+details.advanced summary:before{content:'▸ ';}
+details.advanced[open] summary:before{content:'▾ ';}
+.adv-body{margin-top:12px;}
+.adv-warn{font-size:10.5px;color:#8a6415;background:var(--gold-soft);padding:7px 9px;border-radius:3px;margin-bottom:12px;line-height:1.5;}
 .result{padding:20px;}
 .band-label{font-size:11px;color:var(--slate);letter-spacing:.02em;margin-bottom:14px;}
 .band-label b{color:var(--ink);}
@@ -79,10 +86,16 @@ footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;col
     <h2>Dados da proposta</h2>
     <div class="field"><label for="dias">Dias em atraso</label><input type="number" id="dias" min="0" value="95"></div>
     <div class="field"><label for="parcelas">Parcelas (1 = à vista)</label><input type="number" id="parcelas" min="1" max="12" step="1" value="1"></div>
-    <div class="field"><label for="margem">Margem do teto para parcelado, referência em 2x (%)</label><input type="number" id="margem" min="1" max="100" step="1" value="90"></div>
-    <div class="field"><label for="aperto">Aperto adicional até a 12ª parcela (%)</label><input type="number" id="aperto" min="0" max="100" step="1" value="85"></div>
     <div class="field"><label for="desc">Desconto proposto (%)</label><input type="number" id="desc" min="0" max="100" step="0.5" value="20"></div>
     <div class="hint"><b>Piso</b> = mínimo já autorizado.<br><b>Teto</b> = máximo negociável sem exceção.<br>Veja "Como funciona esta calculadora" acima para o detalhe do escalonamento por parcela.</div>
+    <details class="advanced">
+      <summary>Parâmetros de política (avançado)</summary>
+      <div class="adv-body">
+        <div class="adv-warn">Estes campos definem a régua de desconto para todas as faixas de atraso — não são dados da proposta. Altere apenas por decisão do time de Crédito e Risco.</div>
+        <div class="field"><label for="margem">Margem do teto para parcelado, referência em 2x (%)</label><input type="number" id="margem" min="1" max="100" step="1" value="90"></div>
+        <div class="field"><label for="aperto">Aperto adicional até a 12ª parcela (%)</label><input type="number" id="aperto" min="0" max="100" step="1" value="85"></div>
+      </div>
+    </details>
   </div>
   <div class="card result">
     <div class="band-label" id="bandLabel"></div>
