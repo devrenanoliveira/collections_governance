@@ -54,6 +54,7 @@
   body.dark .provider-name{color:#f1f5f9;}
 
   .calc-frame{width:100%;height:640px;border:1px solid #E2E8F0;border-radius:8px;background:#fff;}
+  .estudo-frame{width:100%;height:820px;border:1px solid #E2E8F0;border-radius:8px;background:#fff;}
 
   .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px;margin-bottom:16px;}
   .form-field label{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);margin-bottom:5px;}
@@ -91,6 +92,7 @@
     <button class="tab-btn" data-tab="assessorias">Governança de Assessorias</button>
     <button class="tab-btn" data-tab="fornecedores">Fornecedores</button>
     <button class="tab-btn" data-tab="saude">Saúde Financeira</button>
+    <button class="tab-btn" data-tab="estudos">Estudos e Comparativos</button>
     <button class="tab-btn" data-tab="atualizar">Atualizar Dados</button>
   </div>
 </div>
@@ -285,6 +287,22 @@
     </div>
   </div>
   <div id="saudeEmpty" style="display:none;"></div>
+</div>
+
+<!-- ESTUDOS E COMPARATIVOS -->
+<div class="tab-panel" id="tab-estudos">
+  <p class="sec-label">Estudos e comparativos</p>
+  <h1 class="sec-title">Estudos e Comparativos Gerais</h1>
+  <p class="sec-subtitle">Análises pontuais de cenário e comparativos de custo, fora do ciclo mensal de governança — cada estudo é um documento independente.</p>
+
+  <div id="estudosContent">
+    <div class="filter-row" id="estudosToggle"></div>
+    <div class="chart-card wide" style="margin-bottom:18px;">
+      <div class="chart-title" id="estudoTitulo"></div>
+      <iframe class="estudo-frame" id="estudoFrame"></iframe>
+    </div>
+  </div>
+  <div id="estudosEmpty" style="display:none;"></div>
 </div>
 
 <!-- ATUALIZAR DADOS -->
@@ -645,6 +663,7 @@ function renderAll(){
   safe(renderAssessorias, 'Governança de Assessorias');
   safe(renderFornecedores, 'Fornecedores');
   safe(renderSaude, 'Saúde Financeira');
+  safe(renderEstudos, 'Estudos e Comparativos');
   safe(buildFormLinhas, 'Formulário de Atualização');
 }
 
@@ -1218,6 +1237,38 @@ function renderSaude(){
       <tr style="font-weight:700;"><td>Recuperação</td>${sf.meses.map((m,i)=>`<td${tdSel(i)}>${brl(m.recuperacao)}</td>`).join('')}</tr>
       <tr style="font-weight:700;color:#2563EB;"><td>IEC</td>${sf.meses.map((m,i)=>`<td${tdSel(i)}>${pct(m.iec)}</td>`).join('')}</tr>
     </tbody>`;
+}
+
+/* ---------- ESTUDOS E COMPARATIVOS ---------- */
+let estudoAtual = null;
+function renderEstudos(){
+  const p = produto();
+  const content = document.getElementById('estudosContent');
+  const empty = document.getElementById('estudosEmpty');
+  const lista = p.estudos || [];
+  if(!lista.length){
+    content.style.display = 'none';
+    empty.style.display = '';
+    empty.innerHTML = emptyState('Cadastre estudos e comparativos deste produto no data.json (chave "estudos") para habilitar esta aba.');
+    return;
+  }
+  content.style.display = '';
+  empty.style.display = 'none';
+  if(!estudoAtual || !lista.find(e=>e.id===estudoAtual)) estudoAtual = lista[0].id;
+
+  document.getElementById('estudosToggle').innerHTML = lista.map(e=>
+    `<button class="filter-btn ${e.id===estudoAtual?'active':''}" data-estudo="${e.id}">${e.titulo}</button>`
+  ).join('');
+  document.querySelectorAll('#estudosToggle .filter-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      estudoAtual = btn.dataset.estudo;
+      renderEstudos();
+    });
+  });
+
+  const atual = lista.find(e=>e.id===estudoAtual);
+  document.getElementById('estudoTitulo').textContent = atual.titulo + (atual.data ? ' · ' + atual.data : '');
+  document.getElementById('estudoFrame').src = atual.arquivo;
 }
 
 /* ---------- ATUALIZAR DADOS ---------- */

@@ -1046,7 +1046,23 @@
             "iec": 5.72
           }
         ]
-      }
+      },
+      "estudos": [
+        {
+          "id": "smartnx-meta",
+          "titulo": "SmartNX × Novo Modelo Meta",
+          "descricao": "Comparativo de cenários de custo para Atendimento e Cobrança diante do novo tarifário da Meta (vigência a partir de out/2026) e do modelo proposto pela SmartNX.",
+          "arquivo": "estudo-smartnx-meta.html",
+          "data": "2026-08-14"
+        },
+        {
+          "id": "salarial-curitiba",
+          "titulo": "Estudo Salarial — Curitiba",
+          "descricao": "Bases salariais de referência para Operador de Call Center e Operador de Cobrança em Curitiba, jornadas de 6h e 8h, com custo total incluindo encargos CLT.",
+          "arquivo": "estudo-salarial-curitiba.html",
+          "data": "2026-08-25"
+        }
+      ]
     },
     "produtoA": {
       "nome": "Produto A (exemplo)",
@@ -1055,7 +1071,8 @@
       "regua": null,
       "assessorias": null,
       "fornecedores": [],
-      "saudeFinanceira": null
+      "saudeFinanceira": null,
+      "estudos": []
     }
   }
 }

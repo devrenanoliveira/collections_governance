@@ -2,13 +2,14 @@
 
 ## Conteúdo do Repositório
 
-O projeto consiste em cinco arquivos principais:
+O projeto consiste em cinco arquivos principais, mais um conjunto de estudos avulsos que cresce com o tempo:
 
-- **index.html**: O site com sete abas (Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Atualizar Dados)
+- **index.html**: O site com oito abas (Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Estudos e Comparativos, Atualizar Dados)
 - **style.css**: Estilo visual consistente com o dashboard de resultados
 - **data.json**: Fonte única dos dados — toda atualização passa por este arquivo
 - **fluxo-whatsapp.html**: Página com fluxograma detalhado de atendimento via WhatsApp
 - **calculadora-desconto.html**: Versão avulsa da Calculadora de Aprovação de Negociação (ver seção própria abaixo)
+- **estudo-\*.html** (ex.: `estudo-smartnx-meta.html`, `estudo-salarial-curitiba.html`): estudos e comparativos avulsos, um arquivo por estudo (ver seção "Estudos e Comparativos Gerais" abaixo)
 
 ## Calculadora de Aprovação — Versão Avulsa
 
@@ -25,10 +26,25 @@ buildCalcHtml(p.desconto.oficial, p.desconto.agressiva, {produto: p.nome, ultima
 
 O retorno é o HTML completo do arquivo — salve como `calculadora-desconto.html`.
 
+## Estudos e Comparativos Gerais
+
+A aba **"Estudos e Comparativos"** reúne análises pontuais de cenário e comparativos de custo que não fazem parte do ciclo mensal de governança (política de desconto, régua, assessorias, saúde financeira) — cada estudo é um documento HTML independente, com seu próprio design e sem dependência do `data.json`, exibido dentro da aba via `<iframe>` e alternado por um toggle.
+
+Estudos atuais:
+
+- **SmartNX × Novo Modelo Meta** (`estudo-smartnx-meta.html`): comparativo de custo de Atendimento e Cobrança diante do novo tarifário da Meta e da proposta da SmartNX.
+- **Estudo Salarial — Curitiba** (`estudo-salarial-curitiba.html`): bases salariais de referência para Operador de Call Center e Operador de Cobrança, jornadas de 6h e 8h.
+
+### Adicionar Novo Estudo
+
+1. Criar o arquivo `estudo-<nome>.html` na raiz do repositório — precisa ser autocontido (CSS/JS inline, sem depender de `index.html`, `data.json` ou `style.css`) para funcionar tanto dentro do iframe quanto aberto sozinho.
+2. No `data.json`, dentro de `produtos.<id>.estudos`, adicionar um item novo: `id` (único), `titulo` (aparece no toggle), `descricao`, `arquivo` (nome do arquivo do passo 1) e `data`.
+3. Publicar os dois arquivos — o estudo aparece automaticamente como um novo toggle na aba.
+
 ## Publicação Inicial
 
 1. Criar repositório no GitHub (público para GitHub Pages gratuito)
-2. Fazer upload dos quatro arquivos para a raiz
+2. Fazer upload dos arquivos do projeto para a raiz
 3. Em Settings → Pages, selecionar branch `main` e pasta `/ (root)`
 4. Aguardar alguns minutos; o site fica disponível em `https://SEU-USUARIO.github.io/NOME-DO-REPO/`
 
@@ -55,7 +71,7 @@ Acessar `http://localhost:8000`. Após publicação no GitHub Pages, funciona no
 
 ## Suporte a Múltiplos Produtos
 
-O site detecta automaticamente todos os produtos em `data.json` e exibe um seletor. Cada produto tem as mesmas sete abas e governança independente.
+O site detecta automaticamente todos os produtos em `data.json` e exibe um seletor. Cada produto tem as mesmas oito abas e governança independente.
 
 ### Adicionar Novo Produto
 
@@ -77,8 +93,9 @@ Cada produto contém:
 - **assessorias**: Metas, comissão base, multiplicadores, estrutura concorrencial, rituais
 - **fornecedores**: Nome, categoria, papel, status (ativo ou em_implantacao)
 - **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
+- **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) e data
 
-Novos itens (fornecedores, meses, faixas, produtos) podem ser adicionados copiando estruturas existentes sem modificar código.
+Novos itens (fornecedores, meses, faixas, produtos, estudos) podem ser adicionados copiando estruturas existentes sem modificar código.
 
 ## Aba Saúde Financeira — Seletor de Mês de Referência
 

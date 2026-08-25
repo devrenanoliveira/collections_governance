@@ -22,22 +22,24 @@ Then open `http://localhost:8000`. There is no build step, package manager, lint
 
 ## Architecture
 
-Five content files, no framework, no bundler, **no third-party CDN dependencies** (deliberate — Chart.js via cdnjs was blocked in both dev and the user's corporate network, so all charts are hand-rolled SVG):
+Five core content files, plus a growing set of standalone `estudo-*.html` study documents (currently two — see below), no framework, no bundler, **no third-party CDN dependencies** (deliberate — Chart.js via cdnjs was blocked in both dev and the user's corporate network, so all charts are hand-rolled SVG):
 
-- **`index.html`** — the entire application: HTML markup for 7 tabs, page-specific CSS (inline `<style>`), and all JavaScript (rendering, charts, calculator, data-update form, product selector). Everything reads from the single global `DATA` object loaded from `data.json` at startup (`fetch('data.json?v=' + Date.now())`).
+- **`index.html`** — the entire application: HTML markup for 8 tabs, page-specific CSS (inline `<style>`), and all JavaScript (rendering, charts, calculator, data-update form, product selector). Everything reads from the single global `DATA` object loaded from `data.json` at startup (`fetch('data.json?v=' + Date.now())`).
 - **`data.json`** — single source of truth for all content. Namespaced under `produtos.<id>` (e.g. `produtos.zon`) so the site can host governance for multiple credit products; `DATA.produtoPadrao` picks which one loads by default, and a product-selector nav switches between them at runtime (no reload).
 - **`style.css`** — base design system shared with sibling dashboards in the same operation (brand color tokens, KPI cards, tables, tab-nav, dark mode, print styles). Not touched for project-specific styling — that lives in `index.html`'s inline `<style>`.
 - **`fluxo-whatsapp.html`** — standalone reference page (WhatsApp collections flowchart), linked from the "Régua de Cobrança" tab. Bundles the Mermaid.js library inline (~3.2 MB), which is why it's large; this is the only third-party dependency anywhere in the project, and it's isolated in this file (not loaded by `index.html`).
 - **`calculadora-desconto.html`** — a standalone snapshot of the discount-approval calculator (same markup/JS `buildCalcHtml()` produces, wrapped as a full document instead of an iframe fragment), for sharing with people who shouldn't get the full governance dashboard. It embeds the current `oficial`/`agressiva` tables as literal JSON at generation time, so it has **no dependency on `data.json`** and goes stale if the discount policy changes — regenerate it (see README's "Calculadora de Aprovação — Versão Avulsa" section) after any policy edit.
+- **`estudo-*.html`** (e.g. `estudo-smartnx-meta.html`, `estudo-salarial-curitiba.html`) — standalone, self-contained one-off studies/comparatives (cost scenarios, salary benchmarks, etc.), each with its own inline `<style>`/`<script>` and no shared dependency on `index.html`, `data.json`, or `style.css`. Surfaced in the "Estudos e Comparativos" tab, loaded into an `<iframe src="...">` and switched via a toggle built from `produtos.<id>.estudos` — see Rendering flow and Data model below. Because each file is fully independent, class names don't need to avoid colliding with the main dashboard's CSS.
 
 ### Rendering flow (`index.html`)
 
 1. On load, `fetch('data.json...')` populates global `DATA`; `produtoAtual` tracks the selected product id.
 2. `produto()` returns `DATA.produtos[produtoAtual]`.
-3. `renderAll()` calls one `render*()` function per tab (`renderVisaoGeral`, `renderDesconto`, `renderRegua`, `renderAssessorias`, `renderFornecedores`, `renderSaude`), each reading straight from `produto()` and writing HTML into the tab's container. Tab switching is just show/hide via `data-tab` attributes — no router.
+3. `renderAll()` calls one `render*()` function per tab (`renderVisaoGeral`, `renderDesconto`, `renderRegua`, `renderAssessorias`, `renderFornecedores`, `renderSaude`, `renderEstudos`), each reading straight from `produto()` and writing HTML into the tab's container. Tab switching is just show/hide via `data-tab` attributes — no router.
 4. Charts (`drawLineChart`, `drawDualBarChart`) are custom SVG builders driven by native JS — no charting library. They handle hover tooltips, crosshairs, and dark-mode-aware coloring internally.
 5. The discount-approval calculator (in the "Política de Desconto" tab) is generated as a **self-contained HTML/JS string** and injected via `iframe srcdoc` (`buildCalcHtml(oficial, agressiva, meta)`), so its logic (`findBand`, `update()`, verdict thresholds) is separate from the main page scope — edit it inside `buildCalcHtml()`, not as top-level functions. The same function's return value is also written directly to `calculadora-desconto.html` as a standalone export (see that file's entry above) — any change to `buildCalcHtml()` should be followed by regenerating that file so the two stay in sync. Inside the generated document, "Calculadora" and "Como funciona" are two `.calc-panel` divs toggled by `.calc-tab-btn` clicks (plain show/hide, no router), and the `margem`/`aperto` policy knobs live inside a collapsed `<details class="advanced">` so day-to-day users (dias/parcelas/desconto) don't see or accidentally edit them.
 6. The "Atualizar Dados" tab builds a full `data.json` in-browser from form input (notably computing IEC for Saúde Financeira) so non-technical editors never hand-edit JSON for routine monthly updates.
+7. `renderEstudos()` (in the "Estudos e Comparativos" tab) builds a `.filter-btn` toggle row from `produto().estudos` and points a plain `<iframe src="...">` (`#estudoFrame`) at the selected study's `arquivo` — unlike the calculator, studies are static standalone files, not generated strings, so there's no `srcdoc`/JS-string round trip involved.
 
 ### Data model (`data.json`, per product)
 
@@ -48,8 +50,11 @@ Five content files, no framework, no bundler, **no third-party CDN dependencies*
 - `assessorias` — third-party agency commissioning: `comissaoBase` by aging band, `distribuicaoCarteira` (portfolio share by agency/band), `multiplicadores` (efficiency-based commission multiplier matrix), `comissaoIndireta`, `concorrencial`, `rituais`.
 - `fornecedores` — vendor list: `nome`, `categoria`, `papel`, `status` (`ativo` | `em_implantacao`).
 - `saudeFinanceira` — `metaIec`, `linhasInvestimento` (cost lines), `meses` (monthly history: `investimentoPorLinha`, `investimentoTotal`, `recuperacao`, `iec`).
+- `estudos` — one-off studies list: `id` (matches the toggle button and must be unique within the product), `titulo` (toggle label), `descricao`, `arquivo` (the standalone `estudo-*.html` file to load in the iframe), `data` (shown next to the title).
 
 To add a new product: copy an existing `produtos.<id>` block in `data.json`, give it a unique id, fill in or leave `null`/`[]`. Full field-by-field structure is documented in [README.md](README.md).
+
+To add a new study: create a self-contained `estudo-<slug>.html` file at the repo root (no dependency on `index.html`/`data.json`/`style.css` — it must work opened directly via `file://` too), then append an entry to `produtos.<id>.estudos` in `data.json` pointing `arquivo` at it.
 
 ## Key business rules (encoded in the calculator / render logic, not just data)
 

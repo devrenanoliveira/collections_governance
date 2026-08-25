@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estudo Salarial — Call Center & Cobrança | Curitiba 2026</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --surface-page:   #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-1:       #2a78d6; /* 6h - blue */
+    --series-2:       #eb6834; /* 8h - orange */
+    --series-3:       #1baf7a; /* comissão - aqua */
+    --series-4:       #4a3aa7; /* encargos - violet */
+    --good:           #0ca30c;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--surface-page);
+    color: var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header.page-head {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-1);
+  }
+
+  header.page-head h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  header.page-head p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  nav.tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 32px;
+    background: var(--surface-1);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  nav.tabs button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .15s ease, border-color .15s ease;
+  }
+
+  nav.tabs button:hover { color: var(--text-primary); }
+
+  nav.tabs button.active {
+    color: var(--series-1);
+    border-bottom-color: var(--series-1);
+  }
+
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 32px 64px;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 32px 0 4px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin: 0 0 16px;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 760px) {
+    .cards { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .card-head h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    color: #fff;
+  }
+
+  .badge.b6 { background: var(--series-1); }
+  .badge.b8 { background: var(--series-2); }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--grid);
+    font-size: 13px;
+  }
+
+  .stat-row:last-of-type { border-bottom: none; }
+
+  .stat-row .label { color: var(--text-secondary); }
+
+  .stat-row .value {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .stat-row.total .value {
+    font-size: 16px;
+    color: var(--series-1);
+  }
+
+  .stat-row.total.b8 .value { color: var(--series-2); }
+
+  .foot-note {
+    margin-top: 12px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Bar chart */
+  .chart-wrap {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px 12px;
+    margin-top: 16px;
+  }
+
+  .chart-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 0 2px;
+  }
+
+  .chart-caption {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 0 0 18px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex: none;
+  }
+
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 40px;
+    height: 220px;
+    padding: 0 8px;
+    border-bottom: 1px solid var(--baseline);
+  }
+
+  .bar-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    flex: 1;
+    max-width: 160px;
+  }
+
+  .stack {
+    width: 64px;
+    display: flex;
+    flex-direction: column-reverse;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+  }
+
+  .seg {
+    width: 100%;
+  }
+
+  .bar-total {
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .bar-label {
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    margin-top: 8px;
+  }
+
+  table.data-table th, table.data-table td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--grid);
+  }
+
+  table.data-table th {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+  }
+
+  table.data-table td.num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .legal-box {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--series-1);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .legal-box strong { color: var(--text-primary); }
+
+  .sources {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .sources a { color: var(--series-1); text-decoration: none; }
+  .sources a:hover { text-decoration: underline; }
+
+  .sources ul { margin: 8px 0 0; padding-left: 18px; }
+  .sources li { margin-bottom: 4px; }
+</style>
+</head>
+<body class="viz-root">
+
+<header class="page-head">
+  <h1>Estudo Salarial — Curitiba (2026)</h1>
+  <p>Bases de referência para Operador de Call Center e Operador de Cobrança, em jornadas de 6h e 8h diárias, com custo total incluindo encargos CLT.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="callcenter">Operador de Call Center</button>
+  <button class="tab-btn" data-tab="cobranca">Operador de Cobrança</button>
+</nav>
+
+<main>
+
+  <!-- ===================== CALL CENTER ===================== -->
+  <section id="callcenter" class="panel active">
+
+    <p class="section-sub" style="margin-top:20px;">
+      Função de teleatendimento (receptivo/ativo). A jornada de <strong>6 horas</strong> (36h/semana) é obrigatória para quem exerce atividade exclusiva ou preponderante de atendimento telefônico — conforme NR-17 Anexo II e Art. 227 da CLT, confirmado pelo TST como tese vinculante (Tema 176, julho/2025). A jornada de <strong>8 horas</strong> só é aplicável quando a função tem escopo diferente, com atividades relevantes além do telefone (back-office, vendas presenciais, gestão de carteira etc.) — não é uma "extensão" do mesmo cargo.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-head">
+          <h3>Jornada 6h (36h/semana)</h3>
+          <span class="badge b6">6H</span>
+        </div>
+        <div class="stat-row"><span class="label">Piso sindical (CCT Teleatendimento PR 2026)</span><span class="value">R$ 1.621,00</span></div>
+        <div class="stat-row"><span class="label">Faixa de mercado</span><span class="value">R$ 1.621 – R$ 1.900</span></div>
+        <div class="stat-row"><span class="label">Base definida para o estudo</span><span class="value">R$ 2.200,00</span></div>
+        <div class="stat-row"><span class="label">Bônus produtividade (opcional)</span><span class="value">R$ 0 – 100</span></div>
+        <div class="stat-row total b6"><span class="label">Custo total p/ empresa (≈65% encargos)</span><span class="value">≈ R$ 3.753,75</span></div>
+        <p class="foot-note">Jornada máxima legal para atendimento telefônico contínuo (NR-17 Anexo II / Art. 227 CLT) — não pode ser estendida via CCT, conforme Tema 176/TST. Base acima da faixa de mercado mapeada, alinhada a oportunidades observadas.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Jornada 8h (44h/semana)</h3>
+          <span class="badge b8">8H</span>
+        </div>
+        <div class="stat-row"><span class="label">Faixa de mercado Curitiba (Indeed)</span><span class="value">R$ 1.621 – R$ 5.109</span></div>
+        <div class="stat-row"><span class="label">Base proporcional à jornada de 6h (fator 44/36)</span><span class="value">R$ 2.688,89</span></div>
+        <div class="stat-row"><span class="label">Bônus produtividade (opcional)</span><span class="value">R$ 0 – 122</span></div>
+        <div class="stat-row total b8"><span class="label">Custo total p/ empresa (≈65% encargos)</span><span class="value">≈ R$ 4.588,47</span></div>
+        <p class="foot-note">Valor-hora idêntico ao da jornada de 6h (R$ 14,10/h) — só é legalmente aplicável se o cargo tiver escopo além do atendimento telefônico puro.</p>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <p class="chart-title">Comparativo de custo — Call Center: 6h vs 8h</p>
+      <p class="chart-caption">Composição do custo total mensal para a empresa (R$)</p>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--series-1)"></span>Salário base</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--series-3)"></span>Bônus / produtividade</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--series-4)"></span>Encargos (≈65%)</div>
+      </div>
+      <div class="bars">
+        <div class="bar-group">
+          <div class="bar-total">R$ 3.754</div>
+          <div class="stack" style="height:180px;">
+            <div class="seg" style="background:var(--series-4); height:39%;"></div>
+            <div class="seg" style="background:var(--series-3); height:2%;"></div>
+            <div class="seg" style="background:var(--series-1); height:59%;"></div>
+          </div>
+          <div class="bar-label">6h<br>R$ 2.200 + R$ 75 bônus</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-total">R$ 4.588</div>
+          <div class="stack" style="height:220px;">
+            <div class="seg" style="background:var(--series-4); height:39%;"></div>
+            <div class="seg" style="background:var(--series-3); height:2%;"></div>
+            <div class="seg" style="background:var(--series-1); height:59%;"></div>
+          </div>
+          <div class="bar-label">8h<br>R$ 2.688,89 + R$ 92 bônus</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">Detalhamento de encargos (padrão interno: 65% sobre o bruto)</p>
+    <table class="data-table">
+      <thead><tr><th>Encargo</th><th>%</th><th class="num">6h — sobre R$2.275</th><th class="num">8h — sobre R$2.780,89</th></tr></thead>
+      <tbody>
+        <tr><td>FGTS</td><td>8,00%</td><td class="num">R$ 182,00</td><td class="num">R$ 222,47</td></tr>
+        <tr><td>INSS Patronal</td><td>20,00%</td><td class="num">R$ 455,00</td><td class="num">R$ 556,18</td></tr>
+        <tr><td>RAT/FAP</td><td>2,00%</td><td class="num">R$ 45,50</td><td class="num">R$ 55,62</td></tr>
+        <tr><td>Sistema S</td><td>5,80%</td><td class="num">R$ 131,95</td><td class="num">R$ 161,29</td></tr>
+        <tr><td>13º salário (provisão)</td><td>8,33%</td><td class="num">R$ 189,51</td><td class="num">R$ 231,67</td></tr>
+        <tr><td>Férias + 1/3 (provisão)</td><td>11,11%</td><td class="num">R$ 252,75</td><td class="num">R$ 308,98</td></tr>
+        <tr><td>Multa rescisória FGTS</td><td>4,00%</td><td class="num">R$ 91,00</td><td class="num">R$ 111,24</td></tr>
+        <tr><td>Ajuste ao padrão interno (até 65%)</td><td>5,76%</td><td class="num">R$ 131,04</td><td class="num">R$ 160,18</td></tr>
+        <tr><td><strong>Total encargos (65%)</strong></td><td><strong>65,00%</strong></td><td class="num"><strong>R$ 1.478,75</strong></td><td class="num"><strong>R$ 1.807,58</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="legal-box">
+      <strong>Base legal — jornada de 6h:</strong> A NR-17 (Anexo II — Teleatendimento/Telemarketing) fixa o tempo de trabalho efetivo em, no máximo, 6 horas diárias (36h/semana), já incluindo as pausas obrigatórias. O Art. 227 da CLT dá o mesmo tratamento aos telefonistas. Em julho/2025, o TST consolidou esse entendimento como <strong>tese vinculante (Tema 176)</strong>: quem exerce atividade exclusiva ou preponderante de teleatendimento/telemarketing tem direito à jornada de 6 horas, e <strong>convenção coletiva não pode estabelecer jornada superior</strong> — nem mesmo o arranjo de 7h12min em 5 dias (compensação do sábado), praticado por algumas CCTs antes dessa decisão. A CCT de Teleatendimento (SINTTEL-PR/SINTRATEL, vigência 2026) fixa piso normativo de R$ 1.621,00 a R$ 1.625,28, com reajuste retroativo a janeiro/2026.<br><br>
+      <strong>Nota sobre encargos:</strong> os itens estatutários (FGTS, INSS Patronal, RAT/FAP, Sistema S, 13º, férias e multa rescisória) somam ≈59,24% sobre o bruto. A linha "Ajuste ao padrão interno" completa os 65% adotados como referência de custeio total, cobrindo margem para benefícios e provisões adicionais praticadas internamente.
+    </div>
+  </section>
+
+  <!-- ===================== COBRANÇA ===================== -->
+  <section id="cobranca" class="panel">
+
+    <p class="section-sub" style="margin-top:20px;">
+      Operador de cobrança com atuação predominante por telefone. Jurisprudência do TST/TRTs (ex.: TRT-3ª e TRT-23ª Região) reconhece o enquadramento no Art. 227 da CLT quando a atividade é essencialmente telefônica, garantindo jornada de <strong>6 horas</strong>. A jornada de <strong>8 horas</strong> se aplica quando a função envolve negociação, análise de carteira, elaboração de acordos e outras tarefas além da ligação em si.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-head">
+          <h3>Jornada 6h (36h/semana)</h3>
+          <span class="badge b6">6H</span>
+        </div>
+        <div class="stat-row"><span class="label">Piso de referência (proporcional ao piso teleatendimento)</span><span class="value">R$ 1.621 – R$ 1.700</span></div>
+        <div class="stat-row"><span class="label">Base definida para o estudo</span><span class="value">R$ 2.200,00</span></div>
+        <div class="stat-row"><span class="label">Comissão média (100% da meta, proporcional)</span><span class="value">R$ 400,00</span></div>
+        <div class="stat-row"><span class="label">Remuneração bruta total</span><span class="value">R$ 2.600,00</span></div>
+        <div class="stat-row total b6"><span class="label">Custo total p/ empresa (≈65% encargos)</span><span class="value">≈ R$ 4.290,00</span></div>
+        <p class="foot-note">Base alinhada à do Call Center (mesma jornada de 6h, mesmo enquadramento legal), refletindo oportunidades observadas no mercado. Comissão proporcional — 2/3 da comissão de 8h, mantendo a mesma régua de metas.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Jornada 8h (44h/semana)</h3>
+          <span class="badge b8">8H</span>
+        </div>
+        <div class="stat-row"><span class="label">Faixa de mercado Curitiba (Indeed)</span><span class="value">R$ 1.775 – R$ 4.800</span></div>
+        <div class="stat-row"><span class="label">Base proporcional à jornada de 6h (fator 44/36)</span><span class="value">R$ 2.688,89</span></div>
+        <div class="stat-row"><span class="label">Comissão média (100% da meta)</span><span class="value">R$ 600,00</span></div>
+        <div class="stat-row"><span class="label">Remuneração bruta total</span><span class="value">R$ 3.288,89</span></div>
+        <div class="stat-row total b8"><span class="label">Custo total p/ empresa (≈65% encargos)</span><span class="value">≈ R$ 5.426,67</span></div>
+        <p class="foot-note">Valor-hora do salário base idêntico ao da jornada de 6h (R$ 14,10/h). Cobrança bancária/especializada pode ter comissões maiores — ajustar conforme perfil da carteira.</p>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <p class="chart-title">Comparativo de custo — Cobrança: 6h vs 8h</p>
+      <p class="chart-caption">Composição do custo total mensal para a empresa (R$)</p>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--series-1)"></span>Salário base</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--series-3)"></span>Comissão (100% meta)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--series-4)"></span>Encargos (≈65%)</div>
+      </div>
+      <div class="bars">
+        <div class="bar-group">
+          <div class="bar-total">R$ 4.290</div>
+          <div class="stack" style="height:174px;">
+            <div class="seg" style="background:var(--series-4); height:39%;"></div>
+            <div class="seg" style="background:var(--series-3); height:9%;"></div>
+            <div class="seg" style="background:var(--series-1); height:52%;"></div>
+          </div>
+          <div class="bar-label">6h<br>R$ 2.200 base + R$ 400 comissão</div>
+        </div>
+        <div class="bar-group">
+          <div class="bar-total">R$ 5.427</div>
+          <div class="stack" style="height:220px;">
+            <div class="seg" style="background:var(--series-4); height:39%;"></div>
+            <div class="seg" style="background:var(--series-3); height:11%;"></div>
+            <div class="seg" style="background:var(--series-1); height:50%;"></div>
+          </div>
+          <div class="bar-label">8h<br>R$ 2.688,89 base + R$ 600 comissão</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-title">Detalhamento de encargos (padrão interno: 65% sobre o bruto)</p>
+    <table class="data-table">
+      <thead><tr><th>Encargo</th><th>%</th><th class="num">6h — sobre R$2.600</th><th class="num">8h — sobre R$3.288,89</th></tr></thead>
+      <tbody>
+        <tr><td>FGTS</td><td>8,00%</td><td class="num">R$ 208,00</td><td class="num">R$ 263,11</td></tr>
+        <tr><td>INSS Patronal</td><td>20,00%</td><td class="num">R$ 520,00</td><td class="num">R$ 657,78</td></tr>
+        <tr><td>RAT/FAP</td><td>2,00%</td><td class="num">R$ 52,00</td><td class="num">R$ 65,78</td></tr>
+        <tr><td>Sistema S</td><td>5,80%</td><td class="num">R$ 150,80</td><td class="num">R$ 190,76</td></tr>
+        <tr><td>13º salário (provisão)</td><td>8,33%</td><td class="num">R$ 216,58</td><td class="num">R$ 273,98</td></tr>
+        <tr><td>Férias + 1/3 (provisão)</td><td>11,11%</td><td class="num">R$ 288,86</td><td class="num">R$ 365,40</td></tr>
+        <tr><td>Multa rescisória FGTS</td><td>4,00%</td><td class="num">R$ 104,00</td><td class="num">R$ 131,56</td></tr>
+        <tr><td>Ajuste ao padrão interno (até 65%)</td><td>5,76%</td><td class="num">R$ 149,76</td><td class="num">R$ 189,44</td></tr>
+        <tr><td><strong>Total encargos (65%)</strong></td><td><strong>65,00%</strong></td><td class="num"><strong>R$ 1.690,00</strong></td><td class="num"><strong>R$ 2.137,78</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="legal-box">
+      <strong>Base legal — jornada de 6h:</strong> Tribunais Regionais do Trabalho (ex.: TRT-3ª Região, caso "Agente de cobrança enquadrada como operadora de telemarketing") reconhecem que operadores de cobrança com atuação essencialmente telefônica fazem jus à jornada reduzida do Art. 227 da CLT, mesma proteção dos telefonistas/teleatendentes. Esse entendimento ganhou ainda mais força após o TST fixar, em julho/2025, o <strong>Tema 176</strong> como tese vinculante para atividade exclusiva ou preponderante de teleatendimento/telemarketing — reforçando que a jornada de 6h não pode ser estendida por convenção coletiva quando a atuação é essencialmente por telefone. A comissão sobre valores recuperados também sofre incidência de FGTS e reflexos em 13º/férias, o que pode elevar levemente o total de encargos apresentado.<br><br>
+      <strong>Nota sobre encargos:</strong> os itens estatutários somam ≈59,24% sobre o bruto; a linha "Ajuste ao padrão interno" completa os 65% adotados como referência de custeio total.
+    </div>
+  </section>
+
+</main>
+
+<div class="sources">
+  Fontes consultadas:
+  <ul>
+    <li><a href="https://br.indeed.com/career/operador-de-telemarketing/salaries/Curitiba--PR" target="_blank">Salário de Operador de Telemarketing — Indeed Curitiba</a></li>
+    <li><a href="https://br.indeed.com/career/operador-de-cobran%C3%A7a/salaries/Curitiba--PR" target="_blank">Salário de Operador de Cobrança — Indeed Curitiba</a></li>
+    <li><a href="https://www.salario.com.br/profissao/operador-de-cobranca-cbo-421310/" target="_blank">Operador de Cobrança — Salario.com.br (Nacional)</a></li>
+    <li><a href="https://www.salario.com.br/profissao/operador-de-cobranca-bancaria-cbo-413230/" target="_blank">Operador de Cobrança Bancária — Salario.com.br</a></li>
+    <li><a href="https://www.sinttel.com.br/cct-teleatendimento-trabalhadores-aprovam-a-convencao-coletiva-2026/" target="_blank">CCT Teleatendimento PR 2026 — SINTTEL-PR</a></li>
+    <li><a href="https://sintelmark.org.br/2026_Conven%C3%A7%C3%A3o%20Coletiva_Camp.pdf" target="_blank">Convenção Coletiva Telemarketing 2026-2027 — Sintelmark</a></li>
+    <li><a href="https://portal.trt3.jus.br/internet/conheca-o-trt/comunicacao/noticias-juridicas/agente-de-cobranca-e-enquadrada-como-operadora-de-telemarketing-e-tem-reconhecido-o-direito-a-jornada-diferenciada" target="_blank">TRT-3ª Região — Enquadramento de agente de cobrança como telemarketing</a></li>
+    <li><a href="https://contaja.com.br/blog/quanto-custa-um-funcionario-para-empresa/" target="_blank">Custo de Funcionário CLT 2026 — Contaja</a></li>
+  </ul>
+  <p style="margin-top:14px;">Valores de mercado têm caráter estimativo, com base em amostras de portais de emprego e convenções coletivas vigentes em 2026. Recomenda-se validar o piso normativo específico da categoria da empresa junto ao sindicato patronal/laboral aplicável antes de formalizar a política salarial.</p>
+</div>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>
