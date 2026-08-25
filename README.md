@@ -14,7 +14,7 @@ O projeto consiste em cinco arquivos principais:
 
 `calculadora-desconto.html` é a mesma calculadora da aba "Política de Desconto", mas exportada como um arquivo único e autônomo — sem depender do `index.html`, do `data.json` ou de conexão com a internet. Pode ser aberta com duplo clique e enviada para qualquer pessoa (assessoria, aprovador, etc.) sem dar acesso ao dashboard completo de governança.
 
-Ela inclui um painel "Como funciona esta calculadora" explicando piso/teto e o escalonamento por número de parcelas, para quem não tem contexto do dashboard.
+Ela tem duas abas: **Calculadora** (uso do dia a dia — dias em atraso, parcelas, desconto proposto) e **Como funciona** (explica piso/teto e o escalonamento por número de parcelas, para quem não tem contexto do dashboard). Os parâmetros de política (margem e aperto) ficam num bloco recolhido "Parâmetros de política (avançado)", dentro da aba Calculadora, para não serem alterados sem querer.
 
 **Importante**: os valores de piso/teto ficam embutidos no arquivo no momento da exportação — se a política de desconto mudar no `data.json`, este arquivo fica desatualizado até ser gerado de novo. Para regenerar, no console do navegador com o `index.html` aberto (ou pedindo para o Claude Code):
 
