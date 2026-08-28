@@ -438,13 +438,24 @@ function drawLineChart(containerId, labels, series, yFmt){
   const x = i => padL + (n<=1 ? plotW/2 : (i/(n-1)) * plotW);
   const y = v => padT + plotH - ((v - vMin)/(vMax - vMin)) * plotH;
 
-  // gridlines (4 faixas horizontais)
-  for(let g=0; g<=3; g++){
-    const gv = vMin + (vMax-vMin)*(g/3);
+  // gridlines (passos "redondos", evita dois rótulos formatados iguais quando
+  // os dados ficam num range estreito perto de uma meta fixa — bug real visto
+  // em 28/08/2026: duas linhas de "7%" no eixo quando a meta de IEC subiu pra
+  // 7% e passou a ficar perto do teto do range dos dados)
+  const rawStep = (vMax - vMin) / 3;
+  const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const normStep = rawStep / mag;
+  const niceStep = (normStep < 1.5 ? 1 : normStep < 3 ? 2 : normStep < 7 ? 5 : 10) * mag;
+  const niceMin = Math.ceil(vMin / niceStep) * niceStep;
+  let lastGridLabel = null;
+  for(let gv = niceMin; gv <= vMax + niceStep*1e-6; gv += niceStep){
+    const label = yFmt ? yFmt(gv) : gv.toFixed(1);
+    if(label === lastGridLabel) continue; // mesmo texto que o rótulo anterior — pula em vez de duplicar
+    lastGridLabel = label;
     const gy = y(gv);
     svg.appendChild(svgEl('line', {x1:padL, x2:w-padR, y1:gy, y2:gy, stroke:gridColor, 'stroke-width':1}));
     const lbl = svgEl('text', {x:padL-6, y:gy+3, 'text-anchor':'end', 'font-size':9, fill:textColor});
-    lbl.textContent = yFmt ? yFmt(gv) : gv.toFixed(1);
+    lbl.textContent = label;
     svg.appendChild(lbl);
   }
 
