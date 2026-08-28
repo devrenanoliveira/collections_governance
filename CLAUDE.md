@@ -66,6 +66,34 @@ To add a new study: create a self-contained `estudo-<slug>.html` file at the rep
 - **Commission multiplier**: efficiency attainment below 75% for two consecutive quarters triggers automatic contract termination for the agency (this is domain knowledge reflected in copy/data, not enforced by code).
 - **Indirect commission**: 30% of the band's commission is payable only if there was a valid contact attempt (CPC, delivered SMS/email, WhatsApp interaction) in the 5 days before payment; otherwise it zeroes out and the recovered amount reverts to the creditor.
 
+## Revisão de UX (sessão "Zarbon", 28/08/2026→)
+
+Zarbon (revisão visual/UX cross-project do workspace) está revisando este dashboard
+aba a aba, a pedido do usuário. Mudanças feitas aqui devem ser reportadas a quem se
+identificar como "Kaioh do Norte" no `ListAgents`, conforme a regra descrita no topo
+deste arquivo.
+
+- **Bug corrigido (28/08/2026): fonte de botão não herdava do `body`.** `<button>`/
+  `<input>`/`<select>`/`<textarea>` não herdam `font-family` por padrão nos
+  navegadores — todo botão do dashboard (inclusive dentro do iframe da calculadora
+  de desconto) renderizava em Arial em vez da fonte do design system, mesmo com
+  `body{font-family:...}` definido em `style.css`. Fix: `button, input, select,
+  textarea { font-family: inherit; }` logo após o reset universal — uma linha, sem
+  tocar em nenhum token/estrutura de componente (respeita o aviso no topo do
+  `style.css`). Mesmo bug encontrado e corrigido no mesmo dia em
+  `zon-dashboard-powered`, `acionamentos-zon` (ambas branches) e Qualidade — não era
+  específico daqui; este arquivo é o template-base de onde Qualidade/Comitê de Risco
+  herdaram os tokens, então vale conferir se algum dashboard futuro derivado também
+  precisa do mesmo reset.
+- **Observações levantadas, ainda não implementadas** (revisão em andamento, tab a
+  tab): botões fragmentados em pelo menos 3 tratamentos visuais diferentes sem uma
+  classe unificada (`.product-btn`/`.filter-btn` em pill 20px, `.btn`/`.btn.gold`
+  retangular 6px, `.tab-btn` sem radius — mesmo problema já resolvido no
+  `zon-dashboard-powered` com `.btn-primary`); ícones em emoji (🌓 modo escuro, 🖨️
+  exportar PDF) em vez do padrão de ícone SVG `stroke-width="2.2"` usado nos outros 3
+  dashboards; comentário no topo deste arquivo referencia `references/design-system.md`,
+  que não existe em nenhum lugar do workspace.
+
 ## Known non-blocking issues
 
 - `desconto.oficial` bands for 1081–1440, 1441–1800, and >1801 days all share `"prioridade": 14` — harmless, since that field isn't used for tie-breaking in the current UI.
