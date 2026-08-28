@@ -85,14 +85,40 @@ deste arquivo.
   específico daqui; este arquivo é o template-base de onde Qualidade/Comitê de Risco
   herdaram os tokens, então vale conferir se algum dashboard futuro derivado também
   precisa do mesmo reset.
-- **Observações levantadas, ainda não implementadas** (revisão em andamento, tab a
-  tab): botões fragmentados em pelo menos 3 tratamentos visuais diferentes sem uma
-  classe unificada (`.product-btn`/`.filter-btn` em pill 20px, `.btn`/`.btn.gold`
-  retangular 6px, `.tab-btn` sem radius — mesmo problema já resolvido no
-  `zon-dashboard-powered` com `.btn-primary`); ícones em emoji (🌓 modo escuro, 🖨️
-  exportar PDF) em vez do padrão de ícone SVG `stroke-width="2.2"` usado nos outros 3
-  dashboards; comentário no topo deste arquivo referencia `references/design-system.md`,
-  que não existe em nenhum lugar do workspace.
+- **Bug real encontrado pelo Kaioh do Norte ao conferir o fix acima, corrigido no
+  mesmo dia**: `button,input,select,textarea{font-family:inherit}` só cobria o
+  `style.css` principal — a calculadora de desconto (`buildCalcHtml()`, injetada via
+  `iframe srcdoc` na aba "Política de Desconto") tem seu **próprio** `<style>`
+  autocontido, com paleta própria (`--ink`/`--paper`/`--gold`/`--teal`/`--crimson`,
+  nada a ver com os tokens `--brand-*` do resto do site) — o fix não alcançava esse
+  `<style>` separado. Mesma linha adicionada logo após o `*{box-sizing:border-box;}`
+  de dentro de `buildCalcHtml()`. Como esse HTML também é exportado como arquivo
+  avulso (`calculadora-desconto.html`, ver README "Calculadora de Aprovação — Versão
+  Avulsa"), apliquei a mesma linha direto nesse arquivo também — mais seguro que
+  regenerar via `buildCalcHtml()` no console (README) porque não arrisca reescrever
+  os valores de piso/teto embutidos com dado desatualizado por engano.
+- **Botões unificados (28/08/2026)**: `.btn`/`.btn.gold` (usados em "Atualizar
+  Dados") ganharam `display:inline-flex;align-items:center;gap:8px` +
+  `:active{transform:translateY(1px)}` + hover no `.gold` (`--brand-gold-light`) —
+  mesma estrutura de `.btn-primary`/`.btn-primary.btn-gold` do `zon-dashboard-powered`,
+  só que reaproveitando os nomes de classe que **já existiam aqui** (`.btn`/`.gold`),
+  não importando o nome de outro projeto. `.recurso-btn` (links "Abrir ↗" na aba
+  Régua de Cobrança) passou a usar o mesmo radius (6px, era 8px) e a mesma família de
+  transição, mantendo a cor azul (`--brand-blue`) de propósito — é um link de
+  referência, não uma ação primária, então continua visualmente distinto de
+  `.btn`/`.btn.gold` por design, só não diverge mais em padding/radius/fonte por
+  acidente. `.tab-btn`/`.filter-btn`/`.product-btn` **não** foram tocados — são
+  papéis de UI genuinamente diferentes (aba, filtro, seletor de produto), não o
+  mesmo botão reinventado 3 vezes.
+- **Ícones SVG no header (28/08/2026)**: 🌓/🖨️ trocados pelos mesmos SVGs
+  (`stroke-width="2.2"`) já usados no `zon-dashboard-powered` — lua/sol com troca de
+  ícone via `toggleDark()` (`#iconMoon`/`#iconSun`, `display:none` alternado) +
+  sincronização no load (`_syncDarkIcon()`, cobre o caso de a página já abrir em modo
+  escuro via `localStorage`). Botão de export usa agora `.print-btn.btn.gold`
+  (reaproveitando a unificação acima) em vez de `style=""` inline.
+- **Ainda não implementado, fora de escopo por ora**: `references/design-system.md`
+  referenciado no topo do `style.css` continua não existindo em nenhum lugar do
+  workspace.
 
 ## Known non-blocking issues
 
