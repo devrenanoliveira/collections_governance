@@ -714,8 +714,8 @@ function renderVisaoGeral(){
   if(temSaude){
     const labels = meses.map(m=>m.mes.replace('/2026','/26'));
     drawLineChart('visaoIecMini', labels, [
-      { data: meses.map(m=>m.iec), color:'#2563EB', label:'IEC', fill:true },
-      { data: meses.map(()=>p.saudeFinanceira.metaIec), color:'#D97706', label:'Meta', dash:true }
+      { data: meses.map(m=>m.iec), color:'#2563EB', label:'IEC', fill:true, fmt:v=>v.toFixed(2).replace('.',',')+'%' },
+      { data: meses.map(()=>p.saudeFinanceira.metaIec), color:'#D97706', label:'Meta', dash:true, fmt:v=>v.toFixed(2).replace('.',',')+'%' }
     ], v=>v.toFixed(1)+'%');
   } else {
     document.getElementById('visaoIecMini').innerHTML = emptyState('Cadastre a Saúde Financeira deste produto no data.json para ver a tendência aqui.');
