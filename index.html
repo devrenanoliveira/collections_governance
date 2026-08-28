@@ -50,6 +50,9 @@
   .provider-name{font-size:.95rem;font-weight:700;color:var(--brand-navy);margin-bottom:2px;}
   .provider-cat{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--brand-blue);margin-bottom:8px;}
   .provider-papel{font-size:.8rem;color:var(--ink-secondary);line-height:1.5;margin-bottom:10px;}
+  .provider-topicos{list-style:none;padding:0;margin:0 0 10px;font-size:.8rem;color:var(--ink-secondary);line-height:1.6;}
+  .provider-topicos li{margin-bottom:3px;}
+  .provider-topicos strong{color:var(--ink-primary);font-weight:700;}
   body.dark .provider-card{border-color:#334155;}
   body.dark .provider-name{color:#f1f5f9;}
 
@@ -1152,7 +1155,7 @@ function renderFornecedores(){
     <div class="provider-card">
       <div class="provider-name">${f.nome}</div>
       <div class="provider-cat">${f.categoria}</div>
-      <div class="provider-papel">${f.papel}</div>
+      ${f.topicos && f.topicos.length ? `<ul class="provider-topicos">${f.topicos.map(t=>`<li><strong>${t.label}:</strong> ${t.valor}</li>`).join('')}</ul>` : `<div class="provider-papel">${f.papel}</div>`}
       <span class="status-pill ${f.status}">${f.status==='ativo'?'Ativo':'Em implantação'}</span>
     </div>`).join('') : emptyState('Cadastre os fornecedores deste produto no data.json (chave "fornecedores") para preencher esta aba.');
 }

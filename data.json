@@ -263,7 +263,7 @@
           {
             "label": "Quadro Miro — Régua Digital",
             "descricao": "Estrutura completa da régua digital, em construção no Miro.",
-            "url": "https://miro.com/app/board/uXjVH2UKZHs=/"
+            "url": "https://miro.com/app/board/uXjVHQxCx6I=/?share_link_id=470945304574"
           }
         ],
         "atual": {
@@ -775,30 +775,54 @@
           "nome": "Decisão",
           "categoria": "Assessoria de cobrança",
           "papel": "Assessoria de cobrança terceirizada. Iniciou operação oficialmente em 18/08/2026, atuando a partir de 66 dias de atraso, com 5% do share acima de 65 dias (início reduzido para avaliação de resultados; combinado original era 10%, com possível ajuste até o início de setembro/2026).",
+          "topicos": [
+            { "label": "Início", "valor": "18/08/2026" },
+            { "label": "Atuação", "valor": "a partir de 66 dias de atraso" },
+            { "label": "Carteira (share)", "valor": "5% nas faixas 66–180 e acima de 181 dias (combinado original 10%; possível ajuste até início de set/2026)" }
+          ],
           "status": "ativo"
         },
         {
           "nome": "Fácil",
           "categoria": "Assessoria de cobrança",
           "papel": "Assessoria de cobrança terceirizada.",
+          "topicos": [
+            { "label": "Atuação", "valor": "desde 05 dias de atraso" },
+            { "label": "Carteira (share)", "valor": "100% na faixa 05–65 dias, 95% na faixa 66–180 dias, 90% acima de 181 dias" }
+          ],
           "status": "ativo"
         },
         {
           "nome": "PG+",
           "categoria": "Assessoria de cobrança",
           "papel": "Assessoria de cobrança terceirizada, parceria retomada em 07/08/2026. Atua nas faixas de Pós-Prejuízo (181 a 360, 361 a 720 e acima de 720 dias), com 5% do share acima de 181 dias.",
+          "topicos": [
+            { "label": "Parceria retomada em", "valor": "07/08/2026" },
+            { "label": "Atuação", "valor": "faixas de Pós-Prejuízo (181 a 360, 361 a 720 e acima de 720 dias)" },
+            { "label": "Carteira (share)", "valor": "5% acima de 181 dias" }
+          ],
           "status": "ativo"
         },
         {
           "nome": "SmartNX",
           "categoria": "Plataforma digital",
-          "papel": "Futura plataforma de gerenciamento da régua digital de acionamento de cobrança.",
+          "papel": "Futura plataforma de gerenciamento da régua digital de acionamento de cobrança via WhatsApp (Meta Flows). Kick off do projeto em 27/08/2026, com projeção de término ao final de setembro/2026.",
+          "topicos": [
+            { "label": "Início do projeto", "valor": "27/08/2026" },
+            { "label": "Previsão de conclusão", "valor": "final de setembro/2026" },
+            { "label": "Tecnologia", "valor": "Meta Flows (mini app dentro do WhatsApp)" },
+            { "label": "Status", "valor": "em processo de implantação" }
+          ],
           "status": "em_implantacao"
         },
         {
           "nome": "Acordo Online",
           "categoria": "Portal de autonegociação",
           "papel": "Portal de autonegociação para o cliente. Previsão de entrada em operação: setembro/2026.",
+          "topicos": [
+            { "label": "Função", "valor": "portal de autonegociação para o cliente" },
+            { "label": "Previsão de entrada em operação", "valor": "setembro/2026" }
+          ],
           "status": "em_implantacao"
         },
         {
@@ -816,19 +840,33 @@
         {
           "nome": "Serasa Limpa Nome",
           "categoria": "Portal de autonegociação",
-          "papel": "Portal de autonegociação via Serasa, funciona por fee de sucesso. Previsão de entrada em operação: 2ª quinzena de agosto/2026.",
+          "papel": "Portal de autonegociação via Serasa, funciona por fee de sucesso, com foco na carteira acima de 65 dias. Previsão de entrada em operação: meados de setembro/2026.",
+          "topicos": [
+            { "label": "Função", "valor": "portal de autonegociação via Serasa (fee de sucesso)" },
+            { "label": "Foco", "valor": "carteira acima de 65 dias de atraso" },
+            { "label": "Previsão de entrada", "valor": "meados de setembro/2026" },
+            { "label": "Status", "valor": "em implantação" }
+          ],
           "status": "em_implantacao"
         },
         {
           "nome": "CobranSaaS",
           "categoria": "CRM de cobrança",
           "papel": "CRM de cobrança utilizado para realizar a cobrança pós-Creli (acima de 65 dias de atraso). Operado pela Celcoin.",
+          "topicos": [
+            { "label": "Função", "valor": "CRM de cobrança pós-Creli (acima de 65 dias de atraso)" },
+            { "label": "Operado por", "valor": "Celcoin" }
+          ],
           "status": "ativo"
         },
         {
           "nome": "RPE",
           "categoria": "Processadora de cartão",
           "papel": "Processadora do cartão usada para gerar/parcelar faturas até 65 dias de atraso. Plataforma CARDS funciona como CRM dessa fase.",
+          "topicos": [
+            { "label": "Função", "valor": "processadora do cartão (gera/parcela faturas até 65 dias de atraso)" },
+            { "label": "CRM da fase", "valor": "plataforma CARDS" }
+          ],
           "status": "ativo"
         },
         {
@@ -840,8 +878,8 @@
       ],
       "saudeFinanceira": {
         "iecFormula": "IEC (Índice de Eficiência de Custo) = Investimento Total ÷ Recuperação do mês. Quanto menor, mais eficiente.",
-        "metaIec": 5.9,
-        "metaDescricao": "Manter abaixo da média atual de 5,9%.",
+        "metaIec": 7,
+        "metaDescricao": "Meta ajustada para 7,0% (média histórica: 5,9%).",
         "linhasInvestimento": [
           "Fácil Assessoria",
           "Assessoria Decisão",

@@ -10,6 +10,8 @@ Published via GitHub Pages at `https://devrenanoliveira.github.io/collections_go
 
 The site's content, UI copy, and data are entirely in **Portuguese (pt-BR)** — match that language for any user-facing text, labels, or data you add.
 
+Esta sessão ("Kaioh do Norte", Governança de Dados cross-project do workspace) é a responsável de conteúdo por este dashboard. Qualquer outra sessão que alterar algo aqui (ex.: revisões de UX do Zarbon) deve mandar um resumo curto (o que mudou + pontos de atenção) via `SendMessage` pra quem se identificar como "Kaioh do Norte" no `ListAgents` — endereço muda com frequência, nunca hardcodar um `claude-code-XX`.
+
 ## Commands
 
 Do not open `index.html` directly (double-click) — the browser blocks `fetch('data.json')` under `file://`. Serve it locally instead:
@@ -48,7 +50,7 @@ Five core content files, plus a growing set of standalone `estudo-*.html` study 
 - `regua.atual` / `regua.desejada` — collection ladder state (current vs. target), each with `internaAte`, `ferramentasInternas`, `assessoriasAtivas`, and `etapas` (steps with `dias`, `acao`, `responsavel`, optional `marco: true`).
 - `regua.recursosDigitais` — reference links (flowchart, Miro board); `url: null` renders as "Em breve".
 - `assessorias` — third-party agency commissioning: `comissaoBase` by aging band, `distribuicaoCarteira` (portfolio share by agency/band), `multiplicadores` (efficiency-based commission multiplier matrix), `comissaoIndireta`, `concorrencial`, `rituais`.
-- `fornecedores` — vendor list: `nome`, `categoria`, `papel`, `status` (`ativo` | `em_implantacao`).
+- `fornecedores` — vendor list: `nome`, `categoria`, `papel` (short one-line summary — also used verbatim in the Visão Geral "em implantação" banner, keep it a single readable sentence), `status` (`ativo` | `em_implantacao`), optional `topicos` (array of `{label, valor}`, added 2026-08-28 — rendered as a bullet list in the Fornecedores card in place of `papel` when present; `papel` itself is never removed, since the Visão Geral banner still reads it directly).
 - `saudeFinanceira` — `metaIec`, `linhasInvestimento` (cost lines), `meses` (monthly history: `investimentoPorLinha`, `investimentoTotal`, `recuperacao`, `iec`).
 - `estudos` — one-off studies list: `id` (matches the toggle button and must be unique within the product), `titulo` (toggle label), `descricao`, `arquivo` (the standalone `estudo-*.html` file to load in the iframe), `data` (shown next to the title).
 

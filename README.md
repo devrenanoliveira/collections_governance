@@ -92,7 +92,7 @@ Cada produto contém:
 - **regua.recursosDigitais**: Links de referência (fluxogramas, quadros); `url: null` exibe "Em breve"
 - **regua.atual e regua.desejada**: Etapas, dias, ações, responsáveis e ferramentas
 - **assessorias**: Metas, comissão base, multiplicadores, estrutura concorrencial, rituais
-- **fornecedores**: Nome, categoria, papel, status (ativo ou em_implantacao)
+- **fornecedores**: Nome, categoria, papel (resumo curto), status (ativo ou em_implantacao), topicos opcional (lista de {label, valor} exibida como bullets no card — quando ausente, o card cai de volta pro texto corrido de "papel")
 - **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
 - **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) e data
 
