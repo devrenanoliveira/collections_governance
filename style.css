@@ -49,7 +49,7 @@
 button, input, select, textarea { font-family: inherit; }
 
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: 'Manrope', system-ui, -apple-system, "Segoe UI", sans-serif;
   background: var(--surface);
   color: var(--ink-primary);
   font-size: 14px;
@@ -151,6 +151,7 @@ body {
 .kpi-value {
   font-size: 1.8rem; font-weight: 700; line-height: 1;
   color: var(--brand-navy); margin-bottom: 4px;
+  font-variant-numeric: tabular-nums;
 }
 .kpi-card.navy .kpi-value,
 .kpi-card.blue .kpi-value { color: #fff; }
@@ -274,6 +275,7 @@ body.dark td.mes-sel { background: rgba(245,158,11,.20) !important; }
 }
 .perf-big {
   font-size: 2.4rem; font-weight: 700; line-height: 1; margin-bottom: 2px;
+  font-variant-numeric: tabular-nums;
 }
 .perf-card.gold .perf-big { color: var(--brand-navy); }
 .perf-vs {

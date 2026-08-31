@@ -116,6 +116,16 @@ deste arquivo.
   sincronização no load (`_syncDarkIcon()`, cobre o caso de a página já abrir em modo
   escuro via `localStorage`). Botão de export usa agora `.print-btn.btn.gold`
   (reaproveitando a unificação acima) em vez de `style=""` inline.
+- **Tipografia Manrope (28/08/2026)**: `body{font-family:'Manrope',...}` (fallback
+  pro stack antigo mantido) + `<link>` do Google Fonts no `<head>` do `index.html` +
+  `font-variant-numeric:tabular-nums` em `.kpi-value`/`.perf-big`. Mesmo pacote já
+  aplicado em `zon-dashboard-powered`/`acionamentos-zon` (ver
+  `Motor - KPIs, Carteira e Collection Score/CLAUDE.md`), replicado aqui e na
+  Qualidade a pedido do usuário. Dependência de rede nova
+  (fonts.googleapis.com/fonts.gstatic.com) — confirmado carregando com sucesso
+  (`document.fonts.check('700 16px Manrope')` → `true`), mas se o site precisar
+  funcionar 100% offline/sem CDN externo algum dia, isso precisa ser revisto (mesma
+  ressalva já registrada nos outros dois projetos).
 - **Ainda não implementado, fora de escopo por ora**: `references/design-system.md`
   referenciado no topo do `style.css` continua não existindo em nenhum lugar do
   workspace.
