@@ -366,7 +366,7 @@
           "assessoriasAtivas": [
             "Decisão",
             "Fácil",
-            "PG+"
+            "Ciclo"
           ],
           "etapas": [
             {
@@ -458,17 +458,17 @@
             {
               "dias": "181 a 360",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil / PG+"
+              "responsavel": "Decisão / Fácil / Ciclo"
             },
             {
               "dias": "361 a 720",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil / PG+"
+              "responsavel": "Decisão / Fácil / Ciclo"
             },
             {
               "dias": ">721",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil / PG+"
+              "responsavel": "Decisão / Fácil / Ciclo"
             }
           ]
         }
@@ -546,7 +546,7 @@
           }
         ],
         "distribuicaoCarteira": {
-          "vigencia": "Decisão iniciou operação oficialmente em 18/08/2026 — share inicial reduzido para 5% (combinado original era 10%) para avaliação de resultados, com possível ajuste para 10% até o início de setembro/2026. PG+ ativa desde 07/08/2026.",
+          "vigencia": "Decisão iniciou operação oficialmente em 18/08/2026 — share inicial reduzido para 5% (combinado original era 10%) para avaliação de resultados, com possível ajuste para 10% até o início de setembro/2026. Ciclo ativa desde 07/08/2026.",
           "faixas": [
             "05 a 65 dias",
             "66 a 180 dias",
@@ -570,7 +570,7 @@
               ]
             },
             {
-              "nome": "PG+",
+              "nome": "Ciclo",
               "share": [
                 0,
                 0,
@@ -762,7 +762,7 @@
         "concorrencial": {
           "numeroPlayers": 3,
           "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses.",
-          "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance. A PG+ atua apenas nas faixas de Pós-Prejuízo (acima de 181 dias)."
+          "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance. A Ciclo atua apenas nas faixas de Pós-Prejuízo (acima de 181 dias)."
         },
         "rituais": {
           "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",
@@ -793,7 +793,7 @@
           "status": "ativo"
         },
         {
-          "nome": "PG+",
+          "nome": "Ciclo",
           "categoria": "Assessoria de cobrança",
           "papel": "Assessoria de cobrança terceirizada, parceria retomada em 07/08/2026. Atua nas faixas de Pós-Prejuízo (181 a 360, 361 a 720 e acima de 720 dias), com 5% do share acima de 181 dias.",
           "topicos": [
@@ -883,7 +883,7 @@
         "linhasInvestimento": [
           "Fácil Assessoria",
           "Assessoria Decisão",
-          "PG+ Assessoria",
+          "Ciclo Assessoria",
           "Serasa Limpa Nome",
           "Negativação SPC",
           "Negativação ACP",
@@ -906,7 +906,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 243869.68,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 0,
+              "Ciclo Assessoria": 0,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 8467.39,
               "Negativação ACP": 10662.64,
@@ -932,7 +932,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 295847.58,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 0,
+              "Ciclo Assessoria": 0,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 9399.15,
               "Negativação ACP": 2960.13,
@@ -958,7 +958,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 328452.7,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 33281.83,
+              "Ciclo Assessoria": 33281.83,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 7065,
               "Negativação ACP": 10271.81,
@@ -984,7 +984,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 270373.97,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 8260.46,
+              "Ciclo Assessoria": 8260.46,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 11904.13,
               "Negativação ACP": 7845.53,
@@ -1010,7 +1010,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 323808.6,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 7349.51,
+              "Ciclo Assessoria": 7349.51,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 10144.9,
               "Negativação ACP": 13928.96,
@@ -1036,7 +1036,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 314200.51,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 0,
+              "Ciclo Assessoria": 0,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 3977.44,
               "Negativação ACP": 13757.51,
@@ -1062,7 +1062,7 @@
             "investimentoPorLinha": {
               "Fácil Assessoria": 325510,
               "Assessoria Decisão": 0,
-              "PG+ Assessoria": 0,
+              "Ciclo Assessoria": 0,
               "Serasa Limpa Nome": 0,
               "Negativação SPC": 12000,
               "Negativação ACP": 12997.25,
