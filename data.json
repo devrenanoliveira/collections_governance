@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-08-18",
+      "ultimaAtualizacao": "2026-09-11",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso da política oficial e o teto da política agressiva, para o número de dias em atraso informado.",
         "legendas": {
@@ -1082,6 +1082,32 @@
             "investimentoTotal": 401802.9,
             "recuperacao": 7029390.56,
             "iec": 5.72
+          },
+          {
+            "mes": "Agosto/2026",
+            "investimentoPorLinha": {
+              "Fácil Assessoria": 320872.4,
+              "Assessoria Decisão": 2290.8,
+              "Ciclo Assessoria": 2290.8,
+              "Serasa Limpa Nome": 0,
+              "Negativação SPC": 7796.81,
+              "Negativação ACP": 0,
+              "A2M (Power BI)": 520,
+              "Celcoin - CobranSaaS": 18571.99,
+              "QL (time)": 31200,
+              "Portal": 0,
+              "Setup SmartNX": 0,
+              "Mensalidade SmartNX": 0,
+              "Mensageria SMS": 0,
+              "Mensageria RCS": 0,
+              "Mensageria E-mail": 0,
+              "Mensageria WhatsApp": 0,
+              "Discador": 0,
+              "Telecom": 0
+            },
+            "investimentoTotal": 383542.8,
+            "recuperacao": 6380000,
+            "iec": 6.01
           }
         ]
       },
