@@ -73,6 +73,36 @@
   .btn.gold{background:var(--brand-gold);color:var(--brand-navy);}
   .btn.gold:hover{background:var(--brand-gold-light);}
   textarea#jsonOut{width:100%;min-height:220px;font-family:'IBM Plex Mono',monospace,monospace;font-size:.75rem;padding:12px;border:1px solid #CBD5E1;border-radius:6px;background:#0f172a;color:#e2e8f0;}
+
+  /* callouts (regulamento de assessorias) */
+  .callout{border-radius:8px;padding:12px 16px;margin:12px 0;font-size:.83rem;line-height:1.55;border-left:3px solid;background:var(--surface-card);border-top:1px solid #E2E8F0;border-right:1px solid #E2E8F0;border-bottom:1px solid #E2E8F0;}
+  .callout p{margin:0;color:var(--ink-secondary);}
+  .callout-label{display:block;font-weight:700;margin-bottom:4px;}
+  .callout-info{border-left-color:var(--brand-blue);} .callout-info .callout-label{color:var(--brand-blue);}
+  .callout-alert{border-left-color:var(--delta-neg);} .callout-alert .callout-label{color:var(--delta-neg);}
+  .callout-success{border-left-color:var(--status-good);} .callout-success .callout-label{color:var(--status-good);}
+  body.dark .callout{background:var(--surface-card);border-top-color:#334155;border-right-color:#334155;border-bottom-color:#334155;}
+
+  .prizegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;}
+  @media (max-width:640px){ .prizegrid{grid-template-columns:1fr;} }
+  .prizecard{border:1px solid #E2E8F0;border-radius:8px;padding:14px;background:var(--surface-card);}
+  body.dark .prizecard{border-color:#334155;}
+  .prizecard .place{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px;}
+  .prizecard .row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:.8rem;color:var(--ink-secondary);}
+  .prizecard .row .amt{font-weight:700;color:var(--ink-primary);font-variant-numeric:tabular-nums;}
+  .prizecard .row.turbo{margin:4px -14px -14px;padding:8px 14px;background:#ECFDF5;border-top:1px solid #bbf0cd;border-radius:0 0 7px 7px;}
+  .prizecard .row.turbo .amt{color:var(--status-good);}
+  body.dark .prizecard .row.turbo{background:#0f2d1a;border-top-color:#1f4a2e;}
+
+  .criteria-legend{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 16px;}
+  .criteria-item{flex:1 1 240px;display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:8px;font-size:.8rem;color:var(--ink-secondary);border:1px solid #E2E8F0;background:var(--surface-card);}
+  .criteria-item .tag{flex-shrink:0;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:4px 9px;border-radius:100px;}
+  .criteria-item.base .tag{background:#F1F5F9;color:var(--ink-secondary);border:1px solid #CBD5E1;}
+  .criteria-item.turbo{border-color:#bbf0cd;background:#ECFDF5;}
+  .criteria-item.turbo .tag{background:var(--status-good);color:#fff;}
+  body.dark .criteria-item{border-color:#334155;}
+  body.dark .criteria-item.base .tag{background:#1e293b;border-color:#334155;}
+  body.dark .criteria-item.turbo{border-color:#1f4a2e;background:#0f2d1a;}
 </style>
 </head>
 <body>
@@ -252,19 +282,47 @@
         <div class="insight-title" id="concorrencialTitulo">Estrutura concorrencial</div>
         <div class="insight-text" id="concorrencial"></div>
       </div>
-      <iframe class="estudo-frame" id="shareFrame"></iframe>
+
+      <div class="table-card">
+        <div class="table-card-header"><strong>Arquitetura do portfólio por faixas de atraso — vigente</strong></div>
+        <div class="table-scroll"><table id="tblPortfolioVigente"></table></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header" id="tblPortfolioExpectativaHeader"><strong>Expectativa a partir do último trimestre de 2026</strong></div>
+        <div class="table-scroll"><table id="tblPortfolioExpectativa"></table></div>
+      </div>
+      <div class="callout callout-info" id="portfolioExpectativaNota"></div>
+
+      <div class="table-card" style="padding:18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Perde e Ganha de Carteira (Trimestral)</strong></div>
+        <div class="destaque-text" id="perdeGanhaRegra"></div>
+        <div class="callout callout-alert" id="perdeGanhaAmostragem"></div>
+      </div>
     </div>
 
     <div id="assessoriasVista-premiacao" style="display:none;">
-      <iframe class="estudo-frame" id="premiacaoFrame"></iframe>
+      <div class="table-card" style="padding:18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Premiação mensal</strong></div>
+        <div id="premiacaoMensalGrid"></div>
+        <div class="criteria-legend" id="premiacaoMensalCriterios"></div>
+      </div>
+      <div class="table-card" style="padding:18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Premiação trimestral</strong></div>
+        <div id="premiacaoTrimestralGrid"></div>
+        <div class="criteria-legend" id="premiacaoTrimestralCriterios"></div>
+      </div>
+      <div class="callout callout-success" id="premiacaoBonusPrejuizo"></div>
+      <div class="callout callout-info" id="premiacaoTravaMinima"></div>
+      <div class="callout callout-info" id="premiacaoFormaPagamento"></div>
     </div>
 
     <div id="assessoriasVista-rituais" style="display:none;">
-      <div class="table-card" style="padding:18px;margin-bottom:12px;">
+      <div class="table-card" style="padding:18px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
         <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
       </div>
-      <iframe class="estudo-frame" id="governancaFrame"></iframe>
+      <div class="destaque-text" id="governancaRepasse"></div>
     </div>
   </div>
   <div id="assessoriasEmpty" style="display:none;"></div>
@@ -1132,26 +1190,38 @@ document.querySelectorAll('#tab-regua .filter-btn').forEach(btn=>{
 /* ---------- ASSESSORIAS ---------- */
 let assessoriasToggleBound = false;
 const ASSESSORIAS_VISTAS = ['metas', 'share', 'premiacao', 'rituais'];
-const ASSESSORIAS_FRAME_POR_VISTA = { share: ['shareFrame', 'portfolio'], premiacao: ['premiacaoFrame', 'premiacao'], rituais: ['governancaFrame', 'governanca'] };
 
 function assessoriasMostrarVista(vista){
   document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
   ASSESSORIAS_VISTAS.forEach(v=>{ document.getElementById('assessoriasVista-' + v).style.display = (v === vista) ? '' : 'none'; });
-  const frameInfo = ASSESSORIAS_FRAME_POR_VISTA[vista];
-  const arquivo = produto().assessorias && produto().assessorias.regulamento;
-  if(frameInfo && arquivo){
-    const [frameId, ancora] = frameInfo;
-    const frame = document.getElementById(frameId);
-    if(!frame.getAttribute('src')) frame.src = arquivo + '#' + ancora;
-  }
+}
+
+function portfolioTableHtml(bloco, faixas, comDiretriz){
+  return `
+    <thead><tr><th style="text-align:left">Bloco de atraso</th>${bloco.assessorias.map(a=>`<th>${a.nome}</th>`).join('')}${comDiretriz ? '<th style="text-align:left">Diretriz estratégica</th>' : ''}</tr></thead>
+    <tbody>${faixas.map((faixa, i)=>`<tr><td>${faixa}</td>${bloco.assessorias.map(a=>`<td class="${a.share[i]>0?'td-blue':'td-dim'}">${a.share[i]}%</td>`).join('')}${comDiretriz ? `<td style="text-align:left;font-variant-numeric:normal;">${bloco.diretrizes[i]}</td>` : ''}</tr>`).join('')}</tbody>`;
+}
+
+function prizeCardsHtml(lugares){
+  return `<div class="prizegrid">${lugares.map(l=>`
+    <div class="prizecard">
+      <div class="place">${l.posicao}</div>
+      <div class="row"><span>Base de ranking</span><span class="amt">${brl(l.base)}</span></div>
+      <div class="row turbo"><span>Turbinado</span><span class="amt">${brl(l.turbinado)}</span></div>
+    </div>`).join('')}</div>`;
+}
+
+function criteriosHtml(criterioBase, criterioTurbinado){
+  return `
+    <div class="criteria-item base"><span class="tag">Base de ranking</span> ${criterioBase}</div>
+    <div class="criteria-item turbo"><span class="tag">Turbinado</span> ${criterioTurbinado}</div>`;
 }
 
 function renderAssessorias(){
   const p = produto();
   const content = document.getElementById('assessoriasContent');
   const empty = document.getElementById('assessoriasEmpty');
-  // volta pra 1ª vista a cada render (ex.: troca de produto) e força os iframes a recarregar
-  Object.values(ASSESSORIAS_FRAME_POR_VISTA).forEach(([frameId])=>document.getElementById(frameId).removeAttribute('src'));
+  // volta pra 1ª vista a cada render (ex.: troca de produto)
   assessoriasMostrarVista('metas');
   if(!p.assessorias){
     content.style.display = 'none';
@@ -1187,13 +1257,43 @@ function renderAssessorias(){
 
   document.getElementById('concorrencialTitulo').textContent = `Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)`;
   document.getElementById('concorrencial').innerHTML = `
-    <p><strong>${a.concorrencial.numeroPlayers} assessorias</strong> operando em paralelo. ${a.concorrencial.periodoEstabilidade}</p>
-    <p style="margin-top:8px;">Regras completas de share e de redistribuição trimestral (Perde e Ganha) na tabela e no regulamento abaixo.</p>`;
+    <p><strong>${a.concorrencial.numeroPlayers} assessorias</strong> operando em paralelo. ${a.concorrencial.periodoEstabilidade}</p>`;
+
+  document.getElementById('tblPortfolioVigente').innerHTML = portfolioTableHtml(a.portfolioVigente, a.portfolioVigente.faixas, true);
+
+  const pe = a.portfolioExpectativa;
+  document.getElementById('tblPortfolioExpectativaHeader').innerHTML = `<strong>Expectativa a partir do ${pe.vigenciaInicio}${pe.confirmado ? '' : ' — não confirmado'}</strong>`;
+  document.getElementById('tblPortfolioExpectativa').innerHTML = portfolioTableHtml(pe, a.portfolioVigente.faixas, false);
+  document.getElementById('portfolioExpectativaNota').innerHTML = `<span class="callout-label">Ainda em estudo</span><p>${pe.nota}</p>`;
+
+  document.getElementById('perdeGanhaRegra').innerHTML = `
+    <p><strong>Regra geral:</strong> ${a.perdeGanha.regraGeral}</p>
+    <p style="margin-top:8px;"><strong>Trava de segurança da âncora:</strong> ${a.perdeGanha.travaAncora}</p>`;
+  document.getElementById('perdeGanhaAmostragem').innerHTML = `<span class="callout-label">Amostragem proporcional por aging</span><p>${a.perdeGanha.amostragemProporcional}</p>`;
+
+  const pr = a.premiacao;
+  document.getElementById('premiacaoMensalGrid').innerHTML = prizeCardsHtml(pr.mensal.lugares);
+  document.getElementById('premiacaoMensalCriterios').innerHTML = criteriosHtml(pr.mensal.criterioBase, pr.mensal.criterioTurbinado);
+  document.getElementById('premiacaoTrimestralGrid').innerHTML = prizeCardsHtml(pr.trimestral.lugares);
+  document.getElementById('premiacaoTrimestralCriterios').innerHTML = criteriosHtml(pr.trimestral.criterioBase, pr.trimestral.criterioTurbinado);
+  document.getElementById('premiacaoBonusPrejuizo').innerHTML = `
+    <span class="callout-label">🚀 Bônus extra de prejuízo (mensal)</span>
+    <p>${pr.bonusPrejuizo.descricao}</p>
+    <ul style="margin:8px 0 0 18px;padding:0;color:var(--ink-secondary);">
+      <li style="margin-bottom:4px;"><strong>1º lugar</strong> com meta de prejuízo batida — ${brl(pr.bonusPrejuizo.primeiroLugar)}</li>
+      <li><strong>2º lugar</strong> com meta de prejuízo batida — ${brl(pr.bonusPrejuizo.segundoLugar)}</li>
+    </ul>`;
+  document.getElementById('premiacaoTravaMinima').innerHTML = `<span class="callout-label">Trava mínima de elegibilidade</span><p>${pr.travaMinima}</p>`;
+  document.getElementById('premiacaoFormaPagamento').innerHTML = `<span class="callout-label">Forma de pagamento</span><p>${pr.formaPagamento}</p>`;
 
   document.getElementById('rituaisGrid').innerHTML = `
     <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Diário</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.diario}</p></div>
     <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Semanal</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.semanal}</p></div>
     <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Mensal</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.mensal}</p></div>`;
+
+  document.getElementById('governancaRepasse').innerHTML = `
+    <p><strong>Repasse mínimo de 50% para a ponta:</strong> ${a.governancaRepasse.repasseMinimo}</p>
+    <p style="margin-top:8px;"><strong>Prestação de contas:</strong> ${a.governancaRepasse.prestacaoContas}</p>`;
 }
 
 /* ---------- FORNECEDORES ---------- */

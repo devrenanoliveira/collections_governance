@@ -545,7 +545,6 @@
             "comissao": 40
           }
         ],
-        "regulamento": "regulamento.html",
         "comissaoIndireta": {
           "percentual": 30,
           "descricaoPagavel": "30% da comissão da faixa correspondente, se a assessoria comprovar (via integração de logs de sistema) contato efetivo ou envio de acionamento válido nos últimos 5 dias corridos anteriores à data do pagamento interno do cliente.",
@@ -555,6 +554,65 @@
         "concorrencial": {
           "numeroPlayers": 3,
           "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses."
+        },
+        "portfolioVigente": {
+          "faixas": ["05 a 65 dias", "66 a 180 dias", "Acima de 181 dias (Pós-Prejuízo)"],
+          "assessorias": [
+            { "nome": "Fácil", "share": [100, 95, 90] },
+            { "nome": "Decisão", "share": [0, 5, 5] },
+            { "nome": "Ciclo", "share": [0, 0, 5] }
+          ],
+          "diretrizes": [
+            "Não elegível ao Perde e Ganha (foco em internalização).",
+            "A Fácil detém a liderança; a Decisão em fase de teste de tração.",
+            "Bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo."
+          ]
+        },
+        "portfolioExpectativa": {
+          "confirmado": false,
+          "vigenciaInicio": "último trimestre de 2026 (out–dez)",
+          "assessorias": [
+            { "nome": "Fácil", "share": [100, 85, 80] },
+            { "nome": "Decisão", "share": [0, 15, 15] },
+            { "nome": "Ciclo", "share": [0, 0, 5] }
+          ],
+          "nota": "A tabela acima é uma expectativa, não uma decisão fechada: a ideia é iniciar essa nova rodada de redistribuição no último trimestre de 2026, para equilibrar melhor o portfólio de cobrança terceirizada e evitar a concentração (monopólio) de carteira numa única assessoria. Até lá, vale a tabela vigente."
+        },
+        "perdeGanha": {
+          "regraGeral": "O 3º colocado cede 15% do seu estoque sob gestão nas faixas elegíveis (> 65D), sendo 10% repassados ao 1º lugar e 5% ao 2º lugar.",
+          "travaAncora": "Se a Fácil ficar em 3º lugar, o repasse de estoque fica limitado ao teto máximo de 5% do share geral das faixas elegíveis, preservando a estabilidade da maior operação.",
+          "amostragemProporcional": "A fatia transferida do 3º colocado deve obrigatoriamente conter uma amostra proporcional de todas as faixas de atraso (de D a M) para permitir o trabalho de \"segunda perna\" na assessoria recebedora."
+        },
+        "premiacao": {
+          "mensal": {
+            "criterioBase": "exige ≥ 90% ICM Geral",
+            "criterioTurbinado": "exige meta de eficiência batida no mês",
+            "lugares": [
+              { "posicao": "1º lugar", "base": 5000, "turbinado": 7000 },
+              { "posicao": "2º lugar", "base": 2500, "turbinado": 4000 },
+              { "posicao": "3º lugar", "base": 0, "turbinado": 1000 }
+            ]
+          },
+          "trimestral": {
+            "criterioBase": "exige ≥ 90% ICM acumulado",
+            "criterioTurbinado": "exige meta de eficiência acumulada batida",
+            "lugares": [
+              { "posicao": "1º lugar", "base": 10000, "turbinado": 15000 },
+              { "posicao": "2º lugar", "base": 5000, "turbinado": 7000 },
+              { "posicao": "3º lugar", "base": 0, "turbinado": 3000 }
+            ]
+          },
+          "bonusPrejuizo": {
+            "descricao": "Além das premiações do ranking acima, se a assessoria bater a meta geral do mês E atingir a meta do bloco pós-prejuízo (> 180D), recebe um bônus adicional acumulativo:",
+            "primeiroLugar": 2000,
+            "segundoLugar": 1000
+          },
+          "travaMinima": "É obrigatório atingir no mínimo 90% de ICM Global para liberação de qualquer prêmio base de ranking.",
+          "formaPagamento": "Toda premiação em dinheiro (ranking base, turbinado e bônus extra de prejuízo) é paga via a própria Nota Fiscal do comissionamento variável da assessoria, sem lançamento à parte."
+        },
+        "governancaRepasse": {
+          "repasseMinimo": "No mínimo metade de qualquer premiação em dinheiro deve ser distribuída diretamente aos operadores, monitores e supervisores da carteira.",
+          "prestacaoContas": "Prazo de até 15 dias após o recebimento dos valores para envio dos comprovantes de repasse à operação."
         },
         "rituais": {
           "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",
