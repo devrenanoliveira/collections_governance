@@ -178,22 +178,34 @@
   <p class="sec-subtitle" id="descontoFluxo"></p>
 
   <div id="descontoContent">
-    <div class="chart-card wide" style="margin-bottom:18px;">
-      <div class="chart-title">Calculadora de Aprovação de Negociação</div>
-      <iframe class="calc-frame" id="calcFrame"></iframe>
+    <div class="filter-row" id="descontoToggle">
+      <button class="filter-btn active" data-vista="calculadora">Calculadora</button>
+      <button class="filter-btn" data-vista="oficial">Política Oficial (Piso)</button>
+      <button class="filter-btn" data-vista="agressiva">Política Agressiva (Teto)</button>
     </div>
 
-    <div class="table-card">
-      <div class="table-card-header"><strong>Política oficial (piso) — por fase de aging</strong></div>
-      <div class="table-scroll">
-        <table id="tblOficial"></table>
+    <div id="descontoVista-calculadora">
+      <div class="chart-card wide" style="margin-bottom:0;">
+        <div class="chart-title">Calculadora de Aprovação de Negociação</div>
+        <iframe class="calc-frame" id="calcFrame"></iframe>
       </div>
     </div>
 
-    <div class="table-card">
-      <div class="table-card-header"><strong>Política agressiva (teto) — máximo negociável</strong></div>
-      <div class="table-scroll">
-        <table id="tblAgressiva"></table>
+    <div id="descontoVista-oficial" style="display:none;">
+      <div class="table-card">
+        <div class="table-card-header"><strong>Política oficial (piso) — por fase de aging</strong></div>
+        <div class="table-scroll">
+          <table id="tblOficial"></table>
+        </div>
+      </div>
+    </div>
+
+    <div id="descontoVista-agressiva" style="display:none;">
+      <div class="table-card">
+        <div class="table-card-header"><strong>Política agressiva (teto) — máximo negociável</strong></div>
+        <div class="table-scroll">
+          <table id="tblAgressiva"></table>
+        </div>
       </div>
     </div>
   </div>
@@ -839,10 +851,19 @@ function renderVisaoGeral(){
 }
 
 /* ---------- POLÍTICA DE DESCONTO ---------- */
+let descontoToggleBound = false;
+const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva'];
+
+function descontoMostrarVista(vista){
+  document.querySelectorAll('#descontoToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
+  DESCONTO_VISTAS.forEach(v=>{ document.getElementById('descontoVista-' + v).style.display = (v === vista) ? '' : 'none'; });
+}
+
 function renderDesconto(){
   const p = produto();
   const content = document.getElementById('descontoContent');
   const empty = document.getElementById('descontoEmpty');
+  descontoMostrarVista('calculadora');
   if(!p.desconto){
     content.style.display = 'none';
     empty.style.display = '';
@@ -852,6 +873,13 @@ function renderDesconto(){
   }
   content.style.display = '';
   empty.style.display = 'none';
+
+  if(!descontoToggleBound){
+    document.querySelectorAll('#descontoToggle .filter-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=> descontoMostrarVista(btn.dataset.vista));
+    });
+    descontoToggleBound = true;
+  }
 
   document.getElementById('descontoFluxo').textContent = p.desconto.descricaoFluxo;
 
