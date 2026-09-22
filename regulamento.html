@@ -286,6 +286,13 @@
   .prizecard .row.turbo{ margin:4px -14px -14px; padding:8px 14px; background:var(--success-soft); border-top:1px solid var(--success-border); border-radius:0 0 9px 9px; }
   .prizecard .row.turbo .rowlbl{ color:var(--success); font-weight:700; text-transform:uppercase; letter-spacing:.03em; font-size:10.5px; }
 
+  .criteria-legend{ display:flex; flex-wrap:wrap; gap:10px; margin:2px 0 20px; }
+  .criteria-item{ flex:1 1 240px; display:flex; align-items:center; gap:9px; padding:10px 13px; border-radius:8px; font-size:13px; color:var(--ink-soft); border:1px solid var(--border); background:var(--surface); }
+  .criteria-item .tag{ flex-shrink:0; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; padding:4px 9px; border-radius:100px; }
+  .criteria-item.base .tag{ background:var(--surface-2); color:var(--ink-soft); border:1px solid var(--border-strong); }
+  .criteria-item.turbo{ border-color:var(--success-border); background:var(--success-soft); }
+  .criteria-item.turbo .tag{ background:var(--success); color:#fff; }
+
   footer{
     margin-top:48px;
     padding-top:20px;
@@ -393,7 +400,10 @@
         <div class="row turbo"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 1.000</span></div>
       </div>
     </div>
-    <p style="font-size:12px;color:var(--muted);max-width:none;">Base de ranking exige &ge; 90% ICM Geral &middot; Turbinado exige meta de eficiência batida no mês.</p>
+    <div class="criteria-legend">
+      <div class="criteria-item base"><span class="tag">Base de ranking</span> exige &ge; 90% ICM Geral</div>
+      <div class="criteria-item turbo"><span class="tag">Turbinado</span> exige meta de eficiência batida no mês</div>
+    </div>
 
     <h3>4.2 &middot; Premiação trimestral</h3>
     <div class="prizegrid">
@@ -413,7 +423,10 @@
         <div class="row turbo"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 3.000</span></div>
       </div>
     </div>
-    <p style="font-size:12px;color:var(--muted);max-width:none;">Base de ranking exige &ge; 90% ICM acumulado &middot; Turbinado exige meta de eficiência acumulada batida.</p>
+    <div class="criteria-legend">
+      <div class="criteria-item base"><span class="tag">Base de ranking</span> exige &ge; 90% ICM acumulado</div>
+      <div class="criteria-item turbo"><span class="tag">Turbinado</span> exige meta de eficiência acumulada batida</div>
+    </div>
 
     <div class="box success">
       <strong class="label">&#128640; Bônus extra de prejuízo (mensal)</strong>
