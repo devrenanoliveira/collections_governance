@@ -224,11 +224,13 @@
 
   <div id="assessoriasContent">
     <div class="filter-row" id="assessoriasToggle">
-      <button class="filter-btn active" data-vista="comissionamento">Comissionamento</button>
-      <button class="filter-btn" data-vista="regulamento">Política de Perde/Ganha</button>
+      <button class="filter-btn active" data-vista="metas">Metas &amp; Comissão</button>
+      <button class="filter-btn" data-vista="share">Share &amp; Redistribuição</button>
+      <button class="filter-btn" data-vista="premiacao">Premiação &amp; Bônus</button>
+      <button class="filter-btn" data-vista="rituais">Rituais &amp; Governança</button>
     </div>
 
-    <div id="assessoriasComissionamento">
+    <div id="assessoriasVista-metas">
       <div class="destaque-block">
         <div class="destaque-title">Estrutura de metas</div>
         <div class="destaque-text" id="assessoriasMetas"></div>
@@ -239,31 +241,30 @@
         <div class="table-scroll"><table id="tblComissaoBase"></table></div>
       </div>
 
-      <div class="table-card">
-        <div class="table-card-header"><strong>Distribuição de share da carteira por assessoria</strong></div>
-        <div class="table-scroll"><table id="tblDistribuicaoCarteira"></table></div>
-        <p class="footnote" id="notaDistribuicaoCarteira" style="padding:0 16px 14px;"></p>
-      </div>
-
-      <div class="two-col">
-        <div class="insight-panel">
-          <div class="insight-title">Comissionamento indireto</div>
-          <div class="insight-text" id="comissaoIndireta"></div>
-        </div>
-        <div class="insight-panel">
-          <div class="insight-title" id="concorrencialTitulo">Estrutura concorrencial</div>
-          <div class="insight-text" id="concorrencial"></div>
-        </div>
-      </div>
-
-      <div class="table-card" style="padding:18px;">
-        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
-        <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
+      <div class="insight-panel">
+        <div class="insight-title">Comissionamento indireto</div>
+        <div class="insight-text" id="comissaoIndireta"></div>
       </div>
     </div>
 
-    <div id="assessoriasRegulamento" style="display:none;">
-      <iframe class="estudo-frame" id="regulamentoFrame"></iframe>
+    <div id="assessoriasVista-share" style="display:none;">
+      <div class="insight-panel" style="margin-bottom:12px;">
+        <div class="insight-title" id="concorrencialTitulo">Estrutura concorrencial</div>
+        <div class="insight-text" id="concorrencial"></div>
+      </div>
+      <iframe class="estudo-frame" id="shareFrame"></iframe>
+    </div>
+
+    <div id="assessoriasVista-premiacao" style="display:none;">
+      <iframe class="estudo-frame" id="premiacaoFrame"></iframe>
+    </div>
+
+    <div id="assessoriasVista-rituais" style="display:none;">
+      <div class="table-card" style="padding:18px;margin-bottom:12px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
+        <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
+      </div>
+      <iframe class="estudo-frame" id="governancaFrame"></iframe>
     </div>
   </div>
   <div id="assessoriasEmpty" style="display:none;"></div>
@@ -1130,15 +1131,28 @@ document.querySelectorAll('#tab-regua .filter-btn').forEach(btn=>{
 
 /* ---------- ASSESSORIAS ---------- */
 let assessoriasToggleBound = false;
+const ASSESSORIAS_VISTAS = ['metas', 'share', 'premiacao', 'rituais'];
+const ASSESSORIAS_FRAME_POR_VISTA = { share: ['shareFrame', 'portfolio'], premiacao: ['premiacaoFrame', 'premiacao'], rituais: ['governancaFrame', 'governanca'] };
+
+function assessoriasMostrarVista(vista){
+  document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
+  ASSESSORIAS_VISTAS.forEach(v=>{ document.getElementById('assessoriasVista-' + v).style.display = (v === vista) ? '' : 'none'; });
+  const frameInfo = ASSESSORIAS_FRAME_POR_VISTA[vista];
+  const arquivo = produto().assessorias && produto().assessorias.regulamento;
+  if(frameInfo && arquivo){
+    const [frameId, ancora] = frameInfo;
+    const frame = document.getElementById(frameId);
+    if(!frame.getAttribute('src')) frame.src = arquivo + '#' + ancora;
+  }
+}
+
 function renderAssessorias(){
   const p = produto();
   const content = document.getElementById('assessoriasContent');
   const empty = document.getElementById('assessoriasEmpty');
-  // volta pra visão de comissionamento a cada render (ex.: troca de produto) e força o iframe a recarregar
-  document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista==='comissionamento'));
-  document.getElementById('assessoriasComissionamento').style.display = '';
-  document.getElementById('assessoriasRegulamento').style.display = 'none';
-  document.getElementById('regulamentoFrame').removeAttribute('src');
+  // volta pra 1ª vista a cada render (ex.: troca de produto) e força os iframes a recarregar
+  Object.values(ASSESSORIAS_FRAME_POR_VISTA).forEach(([frameId])=>document.getElementById(frameId).removeAttribute('src'));
+  assessoriasMostrarVista('metas');
   if(!p.assessorias){
     content.style.display = 'none';
     empty.style.display = '';
@@ -1159,31 +1173,9 @@ function renderAssessorias(){
     <thead><tr><th style="text-align:left">Faixa</th><th style="text-align:left">Intervalo</th><th>Comissão base</th></tr></thead>
     <tbody>${a.comissaoBase.map(r=>`<tr><td>${r.faixa}</td><td>${r.intervalo}</td><td class="${r.comissao===null?'td-dim':'td-blue'}">${r.comissao===null? (r.obs||'—') : pct(r.comissao,2)}</td></tr>`).join('')}</tbody>`;
 
-  const tblDist = document.getElementById('tblDistribuicaoCarteira');
-  const notaDist = document.getElementById('notaDistribuicaoCarteira');
-  if(a.distribuicaoCarteira){
-    const dc = a.distribuicaoCarteira;
-    tblDist.innerHTML = `
-      <thead><tr><th style="text-align:left">Assessoria</th>${dc.faixas.map(f=>`<th>${f}</th>`).join('')}</tr></thead>
-      <tbody>${dc.assessorias.map(as=>`<tr><td>${as.nome}</td>${as.share.map(s=>`<td class="${s>0?'td-blue':'td-dim'}">${s}%</td>`).join('')}</tr>`).join('')}</tbody>`;
-    notaDist.textContent = dc.vigencia || '';
-    tblDist.closest('.table-card').style.display = '';
-  } else {
-    tblDist.closest('.table-card').style.display = 'none';
-  }
-
   if(!assessoriasToggleBound){
     document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-        const regulamento = btn.dataset.vista === 'regulamento';
-        document.getElementById('assessoriasComissionamento').style.display = regulamento ? 'none' : '';
-        document.getElementById('assessoriasRegulamento').style.display = regulamento ? '' : 'none';
-        const frame = document.getElementById('regulamentoFrame');
-        const arquivo = produto().assessorias && produto().assessorias.regulamento;
-        if(regulamento && arquivo && !frame.getAttribute('src')) frame.src = arquivo;
-      });
+      btn.addEventListener('click', ()=> assessoriasMostrarVista(btn.dataset.vista));
     });
     assessoriasToggleBound = true;
   }
@@ -1195,9 +1187,8 @@ function renderAssessorias(){
 
   document.getElementById('concorrencialTitulo').textContent = `Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)`;
   document.getElementById('concorrencial').innerHTML = `
-    <p><strong>${a.concorrencial.numeroPlayers} assessorias</strong> operando em paralelo.</p>
-    <p style="margin-top:8px;">${a.concorrencial.periodoEstabilidade}</p>
-    <p style="margin-top:8px;">${a.concorrencial.redistribuicao}</p>`;
+    <p><strong>${a.concorrencial.numeroPlayers} assessorias</strong> operando em paralelo. ${a.concorrencial.periodoEstabilidade}</p>
+    <p style="margin-top:8px;">Regras completas de share e de redistribuição trimestral (Perde e Ganha) na tabela e no regulamento abaixo.</p>`;
 
   document.getElementById('rituaisGrid').innerHTML = `
     <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Diário</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.diario}</p></div>

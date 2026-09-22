@@ -545,40 +545,6 @@
             "comissao": 40
           }
         ],
-        "distribuicaoCarteira": {
-          "vigencia": "Decisão iniciou operação oficialmente em 18/08/2026 — share inicial reduzido para 5% (combinado original era 10%) para avaliação de resultados, com possível ajuste para 10% até o início de setembro/2026. Ciclo ativa desde 07/08/2026.",
-          "faixas": [
-            "05 a 65 dias",
-            "66 a 180 dias",
-            "Acima de 181 dias (Pós-Prejuízo)"
-          ],
-          "assessorias": [
-            {
-              "nome": "Fácil",
-              "share": [
-                100,
-                95,
-                90
-              ]
-            },
-            {
-              "nome": "Decisão",
-              "share": [
-                0,
-                5,
-                5
-              ]
-            },
-            {
-              "nome": "Ciclo",
-              "share": [
-                0,
-                0,
-                5
-              ]
-            }
-          ]
-        },
         "regulamento": "regulamento.html",
         "comissaoIndireta": {
           "percentual": 30,
@@ -588,8 +554,7 @@
         },
         "concorrencial": {
           "numeroPlayers": 3,
-          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses.",
-          "redistribuicao": "Ao final do trimestre, o parceiro com melhor resultado na Meta Geral de Eficiência recebe repasse de 10% do share total da carteira, retirado da assessoria de menor performance. A Ciclo atua apenas nas faixas de Pós-Prejuízo (acima de 181 dias)."
+          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses."
         },
         "rituais": {
           "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",

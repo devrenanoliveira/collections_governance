@@ -91,7 +91,7 @@ Cada produto contém:
 - **desconto**: Processo, tabelas oficial (piso) e agressiva (teto) por dias
 - **regua.recursosDigitais**: Links de referência (fluxogramas, quadros); `url: null` exibe "Em breve"
 - **regua.atual e regua.desejada**: Etapas, dias, ações, responsáveis e ferramentas
-- **assessorias**: Metas, comissão base, estrutura concorrencial, rituais, regulamento (arquivo HTML standalone, exibido via toggle "Política de Perde/Ganha" na aba)
+- **assessorias**: Metas, comissão base, estrutura concorrencial (só contexto, sem números de share/redistribuição), rituais, regulamento (arquivo HTML standalone). A aba tem 4 toggles — Metas & Comissão / Share & Redistribuição / Premiação & Bônus / Rituais & Governança — e a tabela de share por assessoria e a regra de redistribuição trimestral moraram só no `regulamento.html` desde 22/09/2026 (antes existiam duplicadas em `data.json` e tinham divergido para números diferentes)
 - **fornecedores**: Nome, categoria, papel (resumo curto), status (ativo ou em_implantacao), topicos opcional (lista de {label, valor} exibida como bullets no card — quando ausente, o card cai de volta pro texto corrido de "papel")
 - **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
 - **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) e data
