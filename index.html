@@ -223,42 +223,49 @@
   <p class="sec-subtitle" id="assessoriasObjetivo"></p>
 
   <div id="assessoriasContent">
-    <div class="destaque-block">
-      <div class="destaque-title">Estrutura de metas</div>
-      <div class="destaque-text" id="assessoriasMetas"></div>
+    <div class="filter-row" id="assessoriasToggle">
+      <button class="filter-btn active" data-vista="comissionamento">Comissionamento</button>
+      <button class="filter-btn" data-vista="regulamento">Regulamento</button>
     </div>
 
-    <div class="table-card">
-      <div class="table-card-header"><strong>Comissão base por faixa de aging (100% da meta)</strong></div>
-      <div class="table-scroll"><table id="tblComissaoBase"></table></div>
-    </div>
-
-    <div class="table-card">
-      <div class="table-card-header"><strong>Distribuição de share da carteira por assessoria</strong></div>
-      <div class="table-scroll"><table id="tblDistribuicaoCarteira"></table></div>
-      <p class="footnote" id="notaDistribuicaoCarteira" style="padding:0 16px 14px;"></p>
-    </div>
-
-    <div class="table-card">
-      <div class="table-card-header"><strong>Matriz de alavancagem — multiplicador por atingimento da Meta Geral</strong></div>
-      <div class="table-scroll"><table id="tblMultiplicadores"></table></div>
-    </div>
-    <p class="footnote" id="notaRescisao"></p>
-
-    <div class="two-col">
-      <div class="insight-panel">
-        <div class="insight-title">Comissionamento indireto</div>
-        <div class="insight-text" id="comissaoIndireta"></div>
+    <div id="assessoriasComissionamento">
+      <div class="destaque-block">
+        <div class="destaque-title">Estrutura de metas</div>
+        <div class="destaque-text" id="assessoriasMetas"></div>
       </div>
-      <div class="insight-panel">
-        <div class="insight-title" id="concorrencialTitulo">Estrutura concorrencial</div>
-        <div class="insight-text" id="concorrencial"></div>
+
+      <div class="table-card">
+        <div class="table-card-header"><strong>Comissão base por faixa de aging (100% da meta)</strong></div>
+        <div class="table-scroll"><table id="tblComissaoBase"></table></div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-card-header"><strong>Distribuição de share da carteira por assessoria</strong></div>
+        <div class="table-scroll"><table id="tblDistribuicaoCarteira"></table></div>
+        <p class="footnote" id="notaDistribuicaoCarteira" style="padding:0 16px 14px;"></p>
+      </div>
+
+      <div class="two-col">
+        <div class="insight-panel">
+          <div class="insight-title">Comissionamento indireto</div>
+          <div class="insight-text" id="comissaoIndireta"></div>
+        </div>
+        <div class="insight-panel">
+          <div class="insight-title" id="concorrencialTitulo">Estrutura concorrencial</div>
+          <div class="insight-text" id="concorrencial"></div>
+        </div>
+      </div>
+
+      <div class="table-card" style="padding:18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
+        <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
       </div>
     </div>
 
-    <div class="table-card" style="padding:18px;">
-      <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
-      <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
+    <div id="assessoriasRegulamento" style="display:none;">
+      <div class="chart-card wide" style="margin-bottom:0;">
+        <iframe class="estudo-frame" id="regulamentoFrame"></iframe>
+      </div>
     </div>
   </div>
   <div id="assessoriasEmpty" style="display:none;"></div>
@@ -1124,10 +1131,16 @@ document.querySelectorAll('#tab-regua .filter-btn').forEach(btn=>{
 });
 
 /* ---------- ASSESSORIAS ---------- */
+let assessoriasToggleBound = false;
 function renderAssessorias(){
   const p = produto();
   const content = document.getElementById('assessoriasContent');
   const empty = document.getElementById('assessoriasEmpty');
+  // volta pra visão de comissionamento a cada render (ex.: troca de produto) e força o iframe a recarregar
+  document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista==='comissionamento'));
+  document.getElementById('assessoriasComissionamento').style.display = '';
+  document.getElementById('assessoriasRegulamento').style.display = 'none';
+  document.getElementById('regulamentoFrame').removeAttribute('src');
   if(!p.assessorias){
     content.style.display = 'none';
     empty.style.display = '';
@@ -1161,11 +1174,21 @@ function renderAssessorias(){
     tblDist.closest('.table-card').style.display = 'none';
   }
 
-  const cols = a.multiplicadores.colunas;
-  document.getElementById('tblMultiplicadores').innerHTML = `
-    <thead><tr><th style="text-align:left">Faixa</th>${cols.map(c=>`<th>${c.label}</th>`).join('')}</tr></thead>
-    <tbody>${a.multiplicadores.linhas.map(l=>`<tr><td>${l.faixa} — ${l.intervalo}</td>${cols.map(c=>`<td class="${c.chave==='meta'?'td-blue':''}">${pct(l[c.chave],2)}</td>`).join('')}</tr>`).join('')}</tbody>`;
-  document.getElementById('notaRescisao').textContent = a.multiplicadores.notaRescisao;
+  if(!assessoriasToggleBound){
+    document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const regulamento = btn.dataset.vista === 'regulamento';
+        document.getElementById('assessoriasComissionamento').style.display = regulamento ? 'none' : '';
+        document.getElementById('assessoriasRegulamento').style.display = regulamento ? '' : 'none';
+        const frame = document.getElementById('regulamentoFrame');
+        const arquivo = produto().assessorias && produto().assessorias.regulamento;
+        if(regulamento && arquivo && !frame.getAttribute('src')) frame.src = arquivo;
+      });
+    });
+    assessoriasToggleBound = true;
+  }
 
   document.getElementById('comissaoIndireta').innerHTML = `
     <p><strong>${a.comissaoIndireta.percentual}% pagável:</strong> ${a.comissaoIndireta.descricaoPagavel}</p>

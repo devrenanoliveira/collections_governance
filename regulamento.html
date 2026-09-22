@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regulamento de Performance</title>
+<meta name="description" content="Regulamento de comissionamento, rebalanceamento de carteira e premiação para as assessorias Fácil, Decisão e Ciclo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+  :root{
+    --bg:#f4f5f8;
+    --surface:#ffffff;
+    --surface-2:#eef1f6;
+    --ink:#12182b;
+    --ink-soft:#4a5165;
+    --muted:#7a8199;
+    --border:#e1e4ec;
+    --border-strong:#c7cce0;
+    --accent:#1d4ed8;
+    --accent-ink:#1e3a8a;
+    --accent-soft:#eaf0ff;
+    --accent-soft-border:#c9d9ff;
+    --success:#15803d;
+    --success-soft:#eefdf3;
+    --success-border:#bbf0cd;
+    --alert:#b91c1c;
+    --alert-soft:#fef2f2;
+    --alert-border:#f8c9c9;
+    --gold:#a16207;
+    --gold-soft:#fdf6e8;
+    --shadow: 0 1px 2px rgba(18,24,43,.04), 0 10px 30px -12px rgba(18,24,43,.10);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0d1017;
+      --surface:#161a24;
+      --surface-2:#1d222e;
+      --ink:#eef0f6;
+      --ink-soft:#c2c7d6;
+      --muted:#8890a6;
+      --border:#2a2f3d;
+      --border-strong:#3a4054;
+      --accent:#6d94ff;
+      --accent-ink:#c3d3ff;
+      --accent-soft:#182140;
+      --accent-soft-border:#2d3c6e;
+      --success:#4ade80;
+      --success-soft:#122a1c;
+      --success-border:#1f4a2e;
+      --alert:#f87171;
+      --alert-soft:#2c1414;
+      --alert-border:#5a2323;
+      --gold:#e2b04a;
+      --gold-soft:#2b2410;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.5);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0d1017;
+    --surface:#161a24;
+    --surface-2:#1d222e;
+    --ink:#eef0f6;
+    --ink-soft:#c2c7d6;
+    --muted:#8890a6;
+    --border:#2a2f3d;
+    --border-strong:#3a4054;
+    --accent:#6d94ff;
+    --accent-ink:#c3d3ff;
+    --accent-soft:#182140;
+    --accent-soft-border:#2d3c6e;
+    --success:#4ade80;
+    --success-soft:#122a1c;
+    --success-border:#1f4a2e;
+    --alert:#f87171;
+    --alert-soft:#2c1414;
+    --alert-border:#5a2323;
+    --gold:#e2b04a;
+    --gold-soft:#2b2410;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -12px rgba(0,0,0,.5);
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    padding-inline:20px;
+    padding-block:0 40px;
+    line-height:1.55;
+  }
+  .wrap{ max-width:900px; margin:0 auto; }
+
+  /* ---- masthead ---- */
+  header.masthead{
+    padding-block:36px 28px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:32px;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); }
+  h1{
+    font-family:'Source Serif 4',Georgia,serif;
+    font-size:clamp(28px,4.4vw,40px);
+    font-weight:700;
+    line-height:1.12;
+    letter-spacing:-.01em;
+    text-wrap:balance;
+    margin:0 0 16px;
+    color:var(--ink);
+  }
+  .partners{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:4px;
+  }
+  .chip{
+    font-size:12.5px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:100px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    color:var(--ink-soft);
+  }
+  .chip.f{ background:var(--accent-soft); border-color:var(--accent-soft-border); color:var(--accent-ink); }
+
+  /* ---- section chrome ---- */
+  section{ margin-bottom:44px; }
+  .sec-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:16px;
+    padding-bottom:10px;
+    border-bottom:2px solid var(--ink);
+  }
+  .sec-num{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    letter-spacing:.02em;
+  }
+  h2{
+    font-family:'Source Serif 4',Georgia,serif;
+    font-size:21px;
+    font-weight:600;
+    margin:0;
+    color:var(--ink);
+  }
+  h3{
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    font-weight:700;
+    letter-spacing:.01em;
+    color:var(--ink-soft);
+    margin:22px 0 10px;
+    text-transform:uppercase;
+    font-size:12.5px;
+    letter-spacing:.06em;
+  }
+  p{ color:var(--ink-soft); margin:0 0 10px; max-width:66ch; }
+  ul.plain{ margin:0 0 10px; padding-left:20px; color:var(--ink-soft); }
+  ul.plain li{ margin-bottom:6px; max-width:64ch; }
+  ul.plain li strong{ color:var(--ink); }
+
+  /* ---- tables ---- */
+  .table-scroll{
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:10px;
+    box-shadow:var(--shadow);
+    background:var(--surface);
+  }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+    min-width:560px;
+  }
+  table.wide{ min-width:920px; }
+  thead th{
+    background:var(--ink);
+    color:#fff;
+    font-weight:600;
+    text-align:left;
+    padding:11px 12px;
+    font-size:12px;
+    letter-spacing:.02em;
+    white-space:nowrap;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) thead th{ background:var(--surface-2); color:var(--ink); }
+  }
+  :root[data-theme="dark"] thead th{ background:var(--surface-2); color:var(--ink); }
+  tbody td{
+    padding:9px 12px;
+    border-top:1px solid var(--border);
+    font-variant-numeric:tabular-nums;
+    color:var(--ink-soft);
+  }
+  tbody tr:nth-child(even) td{ background:var(--surface-2); }
+  td.rowlabel{ font-weight:600; color:var(--ink); font-variant-numeric:normal; white-space:nowrap; }
+  td.center{ text-align:center; }
+  td.strong{ font-weight:700; color:var(--ink); }
+  td.hi{ background:var(--accent-soft) !important; color:var(--accent-ink); font-weight:700; }
+  td.good{ color:var(--success); font-weight:700; }
+  small.sub{ display:block; font-weight:400; opacity:.8; font-size:10.5px; margin-top:2px; }
+
+  /* ---- callouts ---- */
+  .box{
+    border-radius:10px;
+    padding:14px 16px;
+    margin:14px 0;
+    font-size:13.5px;
+    line-height:1.55;
+    border:1px solid;
+  }
+  .box strong.label{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-weight:700;
+    margin-right:4px;
+  }
+  .box.alert{ background:var(--alert-soft); border-color:var(--alert-border); color:var(--ink); }
+  .box.alert strong.label{ color:var(--alert); }
+  .box.info{ background:var(--accent-soft); border-color:var(--accent-soft-border); color:var(--ink); }
+  .box.info strong.label{ color:var(--accent); }
+  .box.success{ background:var(--success-soft); border-color:var(--success-border); color:var(--ink); }
+  .box.success strong.label{ color:var(--success); }
+  .box.success ul{ margin:8px 0 0 18px; padding:0; }
+  .box.success ul li{ margin-bottom:4px; }
+  .box p{ margin:0; max-width:none; color:var(--ink-soft); }
+
+  /* ---- prize cards ---- */
+  .prizegrid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin:14px 0;
+  }
+  @media (max-width:640px){ .prizegrid{ grid-template-columns:1fr; } }
+  .prizecard{
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:14px;
+    background:var(--surface);
+    box-shadow:var(--shadow);
+  }
+  .prizecard .place{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .prizecard .amt{
+    font-family:'Source Serif 4',serif;
+    font-size:19px;
+    font-weight:700;
+    color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .prizecard .amt.turbo{ color:var(--success); }
+  .prizecard .row{ display:flex; justify-content:space-between; align-items:baseline; padding:6px 0; }
+  .prizecard .row + .row{ border-top:1px dashed var(--border); }
+  .prizecard .rowlbl{ font-size:11.5px; color:var(--muted); }
+
+  footer{
+    margin-top:48px;
+    padding-top:20px;
+    border-top:1px solid var(--border);
+    font-size:11.5px;
+    color:var(--muted);
+    font-family:'IBM Plex Mono',monospace;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span>Regulamento &middot; Vigência Mês Corrente</div>
+    <h1>Regulamento Geral de Performance, Comissionamento e Gestão de Carteira</h1>
+    <div class="partners">
+      <span class="chip f">Assessoria Fácil</span>
+      <span class="chip">Assessoria Decisão</span>
+      <span class="chip">Assessoria Ciclo</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">01</span><h2>Diretrizes Gerais e Rebalanceamento de Carteira</h2></div>
+    <ul class="plain">
+      <li><strong>Indicador principal:</strong> porcentagem de atingimento do Índice de Cobrança Mensal (% ICM Global).</li>
+      <li><strong>Vigência das novas regras:</strong> mês vigente.</li>
+    </ul>
+
+    <h3>1.1 &middot; Arquitetura do portfólio por faixas de atraso</h3>
+    <div class="table-scroll">
+      <table class="wide">
+        <thead>
+          <tr>
+            <th>Bloco de atraso</th>
+            <th class="center">Assessoria Fácil</th>
+            <th class="center">Assessoria Decisão</th>
+            <th class="center">Assessoria Ciclo</th>
+            <th>Diretriz estratégica</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rowlabel">05 a 65 dias</td>
+            <td class="center strong">100%</td>
+            <td class="center">0%</td>
+            <td class="center">0%</td>
+            <td>Não elegível ao Perde e Ganha (foco em internalização).</td>
+          </tr>
+          <tr>
+            <td class="rowlabel">66 a 180 dias</td>
+            <td class="center hi">85%</td>
+            <td class="center strong">15%</td>
+            <td class="center">0%</td>
+            <td>A Fácil detém a liderança; a Decisão assume 15% para teste de tração.</td>
+          </tr>
+          <tr>
+            <td class="rowlabel">&gt; 180 dias (prejuízo)</td>
+            <td class="center hi">80%</td>
+            <td class="center strong">15%</td>
+            <td class="center strong">5%</td>
+            <td>Bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">02</span><h2>Perde e Ganha de Carteira (Trimestral)</h2></div>
+    <ul class="plain">
+      <li><strong>Regra geral:</strong> o 3º colocado cede 15% do seu estoque sob gestão nas faixas elegíveis (&gt; 65D), sendo 10% repassados ao 1º lugar e 5% ao 2º lugar.</li>
+      <li><strong>Trava de segurança da âncora:</strong> se a Fácil ficar em 3º lugar, o repasse de estoque fica limitado ao teto máximo de 5% do share geral das faixas elegíveis, preservando a estabilidade da maior operação.</li>
+    </ul>
+    <div class="box alert">
+      <strong class="label">Amostragem proporcional por aging</strong>
+      <p>A fatia transferida do 3º colocado deve obrigatoriamente conter uma amostra proporcional de todas as faixas de atraso (de D a M) para permitir o trabalho de "segunda perna" na assessoria recebedora.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">03</span><h2>Premiação Financeira em Dinheiro</h2></div>
+
+    <h3>4.1 &middot; Premiação mensal</h3>
+    <div class="prizegrid">
+      <div class="prizecard">
+        <div class="place">1º lugar</div>
+        <div class="row"><span class="rowlbl">Base de ranking</span><span class="amt">R$ 5.000</span></div>
+        <div class="row"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 7.000</span></div>
+      </div>
+      <div class="prizecard">
+        <div class="place">2º lugar</div>
+        <div class="row"><span class="rowlbl">Base de ranking</span><span class="amt">R$ 2.500</span></div>
+        <div class="row"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 4.000</span></div>
+      </div>
+      <div class="prizecard">
+        <div class="place">3º lugar</div>
+        <div class="row"><span class="rowlbl">Base de ranking</span><span class="amt">R$ 0</span></div>
+        <div class="row"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 1.000</span></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);max-width:none;">Base de ranking exige &ge; 90% ICM Geral &middot; Turbinado exige meta de eficiência batida no mês.</p>
+
+    <h3>4.2 &middot; Premiação trimestral</h3>
+    <div class="prizegrid">
+      <div class="prizecard">
+        <div class="place">1º lugar</div>
+        <div class="row"><span class="rowlbl">Base de ranking</span><span class="amt">R$ 10.000</span></div>
+        <div class="row"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 15.000</span></div>
+      </div>
+      <div class="prizecard">
+        <div class="place">2º lugar</div>
+        <div class="row"><span class="rowlbl">Base de ranking</span><span class="amt">R$ 5.000</span></div>
+        <div class="row"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 7.000</span></div>
+      </div>
+      <div class="prizecard">
+        <div class="place">3º lugar</div>
+        <div class="row"><span class="rowlbl">Base de ranking</span><span class="amt">R$ 0</span></div>
+        <div class="row"><span class="rowlbl">Turbinado</span><span class="amt turbo">R$ 3.000</span></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);max-width:none;">Base de ranking exige &ge; 90% ICM acumulado &middot; Turbinado exige meta de eficiência acumulada batida.</p>
+
+    <div class="box success">
+      <strong class="label">&#128640; Bônus extra de prejuízo (mensal)</strong>
+      <p>Além das premiações do ranking acima, se a assessoria <strong>bater a meta geral do mês E atingir a meta do bloco pós-prejuízo (&gt; 180D)</strong>, recebe um bônus adicional acumulativo:</p>
+      <ul>
+        <li><strong>1º lugar</strong> com meta de prejuízo batida &mdash; +R$ 2.000 em dinheiro</li>
+        <li><strong>2º lugar</strong> com meta de prejuízo batida &mdash; +R$ 1.000 em dinheiro</li>
+      </ul>
+    </div>
+
+    <div class="box info">
+      <strong class="label">Trava mínima de elegibilidade</strong>
+      <p>É obrigatório atingir no mínimo <strong>90% de ICM Global</strong> para liberação de qualquer prêmio base de ranking.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="sec-num">04</span><h2>Governança e Repasse à Operação</h2></div>
+    <ul class="plain">
+      <li><strong>Repasse mínimo de 50% para a ponta:</strong> no mínimo metade de qualquer premiação em dinheiro deve ser distribuída diretamente aos operadores, monitores e supervisores da carteira.</li>
+      <li><strong>Prestação de contas:</strong> prazo de até 15 dias após o recebimento dos valores para envio dos comprovantes de repasse à operação.</li>
+    </ul>
+  </section>
+
+  <footer>Regulamento Geral de Performance &middot; Assessorias Fácil, Decisão e Ciclo &middot; Vigência: mês corrente</footer>
+
+</div>
+</body>
+</html>
