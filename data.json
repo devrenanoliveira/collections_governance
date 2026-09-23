@@ -576,6 +576,11 @@
             { "nome": "Decisão", "share": [0, 15, 15] },
             { "nome": "Ciclo", "share": [0, 0, 5] }
           ],
+          "diretrizes": [
+            "Sem mudança prevista — segue fora do escopo do Perde e Ganha, foco em internalização.",
+            "Decisão triplica participação (5% → 15%), reduzindo a concentração da Fácil na faixa.",
+            "Mesmo movimento de equilíbrio no bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo; Ciclo mantém 5%."
+          ],
           "nota": "A tabela acima é uma expectativa, não uma decisão fechada: a ideia é iniciar essa nova rodada de redistribuição no último trimestre de 2026, para equilibrar melhor o portfólio de cobrança terceirizada e evitar a concentração (monopólio) de carteira numa única assessoria. Até lá, vale a tabela vigente."
         },
         "perdeGanha": {

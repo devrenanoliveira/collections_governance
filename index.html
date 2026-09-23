@@ -1298,7 +1298,7 @@ function renderAssessorias(){
 
   const pe = a.portfolioExpectativa;
   document.getElementById('tblPortfolioExpectativaHeader').innerHTML = `<strong>Expectativa a partir do ${pe.vigenciaInicio}${pe.confirmado ? '' : ' — não confirmado'}</strong>`;
-  document.getElementById('tblPortfolioExpectativa').innerHTML = portfolioTableHtml(pe, a.portfolioVigente.faixas, false);
+  document.getElementById('tblPortfolioExpectativa').innerHTML = portfolioTableHtml(pe, a.portfolioVigente.faixas, true);
   document.getElementById('portfolioExpectativaNota').innerHTML = `<span class="callout-label">Ainda em estudo</span><p>${pe.nota}</p>`;
 
   document.getElementById('perdeGanhaRegra').innerHTML = `
