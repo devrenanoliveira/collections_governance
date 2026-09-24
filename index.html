@@ -264,6 +264,10 @@
   <p class="sec-label">Governança de assessorias de cobrança</p>
   <h1 class="sec-title">Comissionamento, metas e regras de share <span class="status-pill em_implantacao" id="assessoriasStatus"></span></h1>
   <p class="sec-subtitle" id="assessoriasObjetivo"></p>
+  <button class="print-btn btn gold" onclick="exportarRelatorioAssessorias()" style="margin:4px 0 8px;padding:6px 12px;font-size:.74rem;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+    Relatório para as assessorias
+  </button>
 
   <div id="assessoriasContent">
     <div class="filter-row" id="assessoriasToggle">
@@ -1329,6 +1333,132 @@ function renderAssessorias(){
   document.getElementById('governancaRepasse').innerHTML = `
     <p><strong>Repasse mínimo de 50% para a ponta:</strong> ${a.governancaRepasse.repasseMinimo}</p>
     <p style="margin-top:8px;"><strong>Prestação de contas:</strong> ${a.governancaRepasse.prestacaoContas}</p>`;
+}
+
+/* ---------- RELATÓRIO PARA AS ASSESSORIAS (PDF) ---------- */
+// Documento único com os 4 tópicos da aba (Metas&Comissão / Share&Redistribuição /
+// Premiação&Bônus / Rituais), pra imprimir/exportar e mandar pras assessorias.
+// Reaproveita os mesmos helpers de tabela do renderAssessorias() — nunca uma
+// segunda cópia de portfolioVigente/perdeGanha, mesmo aviso já registrado no
+// CLAUDE.md sobre duplicar essa informação em outro lugar do dashboard.
+function exportarRelatorioAssessorias(){
+  const p = produto();
+  const a = p.assessorias;
+  if(!a){ alert('Governança de assessorias não cadastrada para este produto.'); return; }
+
+  const comissaoBaseHtml = `
+    <thead><tr><th style="text-align:left">Faixa</th><th style="text-align:left">Intervalo</th><th>Comissão base</th></tr></thead>
+    <tbody>${a.comissaoBase.map(r=>`<tr><td>${r.faixa}</td><td>${r.intervalo}</td><td class="${r.comissao===null?'td-dim':'td-blue'}">${r.comissao===null? (r.obs||'—') : pct(r.comissao,2)}</td></tr>`).join('')}</tbody>`;
+
+  const pe = a.portfolioExpectativa;
+
+  const html = `<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório para as Assessorias — ${p.nome || 'Governança da Cobrança'}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap">
+<style>
+  *{box-sizing:border-box;}
+  body{font-family:'Manrope',-apple-system,sans-serif;color:#1E293B;margin:0;padding:32px;background:#fff;}
+  .rep-head{border-bottom:3px solid #F59E0B;padding-bottom:14px;margin-bottom:22px;}
+  .rep-head .lbl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#3B6FE0;}
+  .rep-head h1{font-size:1.4rem;margin:4px 0;color:#0F2461;}
+  .rep-head .sub{font-size:.82rem;color:#64748B;}
+  section{margin-bottom:26px;page-break-inside:avoid;}
+  section h2{font-size:1rem;color:#0F2461;border-left:4px solid #F59E0B;padding-left:10px;margin:0 0 10px;}
+  table{width:100%;border-collapse:collapse;font-size:.8rem;margin-bottom:10px;}
+  th{background:#0F2461;color:#fff;text-align:right;padding:8px 10px;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;}
+  th:first-child{text-align:left;}
+  td{padding:7px 10px;border-bottom:1px solid #E2E8F0;text-align:right;font-variant-numeric:tabular-nums;}
+  td:first-child{text-align:left;font-weight:500;}
+  tbody tr:nth-child(even){background:#F8FAFC;}
+  .td-blue{color:#3B6FE0;font-weight:700;}
+  .td-dim{color:#94A3B8;}
+  .note{background:#EFF6FF;border-left:4px solid #3B6FE0;border-radius:6px;padding:10px 14px;font-size:.8rem;color:#334155;margin-bottom:10px;}
+  .note b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#3B6FE0;margin-bottom:3px;}
+  .callout{background:#FFFBEB;border-left:4px solid #F59E0B;border-radius:6px;padding:10px 14px;font-size:.8rem;color:#334155;margin-bottom:10px;}
+  .callout-label{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#B45309;margin-bottom:3px;font-weight:700;}
+  .prizegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;}
+  .prizecard{border:1px solid #E2E8F0;border-radius:8px;padding:10px 12px;}
+  .prizecard .place{font-weight:700;color:#0F2461;font-size:.82rem;margin-bottom:4px;}
+  .prizecard .row{display:flex;justify-content:space-between;font-size:.78rem;padding:2px 0;}
+  .prizecard .row.turbo .amt{color:#0F7A5A;font-weight:700;}
+  .criteria-item{font-size:.78rem;color:#334155;margin-bottom:4px;}
+  .criteria-item .tag{display:inline-block;font-size:.66rem;font-weight:700;text-transform:uppercase;padding:1px 7px;border-radius:99px;background:#E2E8F0;color:#334155;margin-right:6px;}
+  .criteria-item.turbo .tag{background:#D1FAE5;color:#0F7A5A;}
+  .rit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .rit-card{border:1px solid #E2E8F0;border-radius:8px;padding:10px 12px;}
+  .rit-card b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#3B6FE0;margin-bottom:4px;}
+  .rit-card span{font-size:.78rem;color:#334155;}
+  .toolbar{margin-bottom:20px;}
+  .toolbar button{font-family:inherit;font-size:.8rem;font-weight:700;padding:8px 16px;border-radius:6px;border:none;background:#F59E0B;color:#fff;cursor:pointer;}
+  @media print{ .toolbar{display:none;} body{padding:0;} }
+</style></head>
+<body>
+  <div class="toolbar"><button onclick="window.print()">🖨️ Imprimir / Salvar PDF</button></div>
+
+  <div class="rep-head">
+    <div class="lbl">Governança de assessorias de cobrança</div>
+    <h1>Comissionamento, metas e regras de share</h1>
+    <div class="sub">${p.nome || ''} · gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
+  </div>
+
+  <section>
+    <h2>1. Metas &amp; Comissão</h2>
+    <div class="note"><b>Estrutura de metas</b>${a.metas}</div>
+    <table>${comissaoBaseHtml}</table>
+    <div class="note"><b>Comissionamento indireto</b>
+      <p>${a.comissaoIndireta.percentual}% pagável: ${a.comissaoIndireta.descricaoPagavel}</p>
+      <p style="margin-top:6px;">0% (zerada): ${a.comissaoIndireta.descricaoZerada}</p>
+      <p style="margin-top:6px;">Acionamento válido: ${a.comissaoIndireta.acionamentoValido}</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Share &amp; Redistribuição</h2>
+    <div class="note"><b>Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)</b>${a.concorrencial.periodoEstabilidade}</div>
+    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Arquitetura do portfólio — vigente</p>
+    <table>${portfolioTableHtml(a.portfolioVigente, a.portfolioVigente.faixas, true)}</table>
+    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Expectativa a partir de ${pe.vigenciaInicio}${pe.confirmado ? '' : ' — não confirmado'}</p>
+    <table>${portfolioTableHtml(pe, a.portfolioVigente.faixas, true)}</table>
+    <div class="callout"><span class="callout-label">Ainda em estudo</span>${pe.nota}</div>
+    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Perde e Ganha de Carteira (Trimestral)</p>
+    <div class="note"><p><strong>Regra geral:</strong> ${a.perdeGanha.regraGeral}</p><p style="margin-top:6px;"><strong>Trava de segurança da âncora:</strong> ${a.perdeGanha.travaAncora}</p></div>
+    <div class="callout"><span class="callout-label">Amostragem proporcional por aging</span>${a.perdeGanha.amostragemProporcional}</div>
+  </section>
+
+  <section>
+    <h2>3. Premiação &amp; Bônus</h2>
+    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:0 0 6px;">Premiação mensal</p>
+    ${prizeCardsHtml(a.premiacao.mensal.lugares)}
+    ${criteriosHtml(a.premiacao.mensal.criterioBase, a.premiacao.mensal.criterioTurbinado)}
+    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Premiação trimestral</p>
+    ${prizeCardsHtml(a.premiacao.trimestral.lugares)}
+    ${criteriosHtml(a.premiacao.trimestral.criterioBase, a.premiacao.trimestral.criterioTurbinado)}
+    <div class="callout" style="margin-top:10px;"><span class="callout-label">🚀 Bônus extra de prejuízo (mensal)</span>
+      <p>${a.premiacao.bonusPrejuizo.descricao}</p>
+      <p style="margin-top:4px;"><strong>1º lugar</strong> — ${brl(a.premiacao.bonusPrejuizo.primeiroLugar)} · <strong>2º lugar</strong> — ${brl(a.premiacao.bonusPrejuizo.segundoLugar)}</p>
+    </div>
+    <div class="note"><b>Trava mínima de elegibilidade</b>${a.premiacao.travaMinima}</div>
+    <div class="note"><b>Forma de pagamento</b>${a.premiacao.formaPagamento}</div>
+    <div class="note"><b>Repasse mínimo de 50% para a ponta</b>${a.governancaRepasse.repasseMinimo}</div>
+    <div class="note"><b>Prestação de contas</b>${a.governancaRepasse.prestacaoContas}</div>
+  </section>
+
+  <section>
+    <h2>4. Rituais de Gestão</h2>
+    <div class="rit-grid">
+      <div class="rit-card"><b>Diário</b><span>${a.rituais.diario}</span></div>
+      <div class="rit-card"><b>Semanal</b><span>${a.rituais.semanal}</span></div>
+      <div class="rit-card"><b>Mensal</b><span>${a.rituais.mensal}</span></div>
+    </div>
+  </section>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  if(!w){ alert('O navegador bloqueou a janela. Libere pop-ups para este site.'); return; }
+  w.document.write(html);
+  w.document.close();
 }
 
 /* ---------- FORNECEDORES ---------- */
