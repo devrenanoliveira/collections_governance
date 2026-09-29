@@ -595,7 +595,7 @@
             "criterioTurbinadoPlus": "exige atingir > 120% do ICM Geral + > 120% do ICM de Prejuízo",
             "lugares": [
               { "posicao": "1º lugar", "base": 5000, "turbinado": 7000, "turbinadoPlus": 10000 },
-              { "posicao": "2º lugar", "base": 2500, "turbinado": 3500, "turbinadoPlus": 7000 },
+              { "posicao": "2º lugar", "base": 2500, "turbinado": 4500, "turbinadoPlus": 7000 },
               { "posicao": "3º lugar", "base": 0, "turbinado": 1000, "turbinadoPlus": 3000 }
             ]
           },
