@@ -91,9 +91,12 @@
   .prizecard .place{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px;}
   .prizecard .row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;font-size:.8rem;color:var(--ink-secondary);}
   .prizecard .row .amt{font-weight:700;color:var(--ink-primary);font-variant-numeric:tabular-nums;}
-  .prizecard .row.turbo{margin:4px -14px -14px;padding:8px 14px;background:#ECFDF5;border-top:1px solid #bbf0cd;border-radius:0 0 7px 7px;}
+  .prizecard .row.turbo{margin:4px -14px 0;padding:8px 14px;background:#ECFDF5;border-top:1px solid #bbf0cd;}
   .prizecard .row.turbo .amt{color:var(--status-good);}
   body.dark .prizecard .row.turbo{background:#0f2d1a;border-top-color:#1f4a2e;}
+  .prizecard .row.plus{margin:0 -14px -14px;padding:8px 14px;background:#FEF3C7;border-top:1px solid #FDE68A;border-radius:0 0 7px 7px;}
+  .prizecard .row.plus .amt{color:var(--brand-gold);}
+  body.dark .prizecard .row.plus{background:#3a2a0a;border-top-color:#5c4413;}
 
   .criteria-legend{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 16px;}
   .criteria-item{flex:1 1 240px;display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:8px;font-size:.8rem;color:var(--ink-secondary);border:1px solid #E2E8F0;background:var(--surface-card);}
@@ -101,9 +104,12 @@
   .criteria-item.base .tag{background:#F1F5F9;color:var(--ink-secondary);border:1px solid #CBD5E1;}
   .criteria-item.turbo{border-color:#bbf0cd;background:#ECFDF5;}
   .criteria-item.turbo .tag{background:var(--status-good);color:#fff;}
+  .criteria-item.plus{border-color:#FDE68A;background:#FEF3C7;}
+  .criteria-item.plus .tag{background:var(--brand-gold);color:#fff;}
   body.dark .criteria-item{border-color:#334155;}
   body.dark .criteria-item.base .tag{background:#1e293b;border-color:#334155;}
   body.dark .criteria-item.turbo{border-color:#1f4a2e;background:#0f2d1a;}
+  body.dark .criteria-item.plus{border-color:#5c4413;background:#3a2a0a;}
 </style>
 </head>
 <body>
@@ -1263,13 +1269,15 @@ function prizeCardsHtml(lugares){
       <div class="place">${l.posicao}</div>
       <div class="row"><span>Base de ranking</span><span class="amt">${brl(l.base)}</span></div>
       <div class="row turbo"><span>Turbinado</span><span class="amt">${brl(l.turbinado)}</span></div>
+      <div class="row plus"><span>Turbinado Plus</span><span class="amt">${brl(l.turbinadoPlus)}</span></div>
     </div>`).join('')}</div>`;
 }
 
-function criteriosHtml(criterioBase, criterioTurbinado){
+function criteriosHtml(criterioBase, criterioTurbinado, criterioTurbinadoPlus){
   return `
     <div class="criteria-item base"><span class="tag">Base de ranking</span> ${criterioBase}</div>
-    <div class="criteria-item turbo"><span class="tag">Turbinado</span> ${criterioTurbinado}</div>`;
+    <div class="criteria-item turbo"><span class="tag">Turbinado</span> ${criterioTurbinado}</div>
+    <div class="criteria-item plus"><span class="tag">Turbinado Plus</span> ${criterioTurbinadoPlus}</div>`;
 }
 
 function renderAssessorias(){
@@ -1328,9 +1336,9 @@ function renderAssessorias(){
 
   const pr = a.premiacao;
   document.getElementById('premiacaoMensalGrid').innerHTML = prizeCardsHtml(pr.mensal.lugares);
-  document.getElementById('premiacaoMensalCriterios').innerHTML = criteriosHtml(pr.mensal.criterioBase, pr.mensal.criterioTurbinado);
+  document.getElementById('premiacaoMensalCriterios').innerHTML = criteriosHtml(pr.mensal.criterioBase, pr.mensal.criterioTurbinado, pr.mensal.criterioTurbinadoPlus);
   document.getElementById('premiacaoTrimestralGrid').innerHTML = prizeCardsHtml(pr.trimestral.lugares);
-  document.getElementById('premiacaoTrimestralCriterios').innerHTML = criteriosHtml(pr.trimestral.criterioBase, pr.trimestral.criterioTurbinado);
+  document.getElementById('premiacaoTrimestralCriterios').innerHTML = criteriosHtml(pr.trimestral.criterioBase, pr.trimestral.criterioTurbinado, pr.trimestral.criterioTurbinadoPlus);
   document.getElementById('premiacaoBonusPrejuizo').innerHTML = `
     <span class="callout-label">🚀 Bônus extra de prejuízo (mensal)</span>
     <p>${pr.bonusPrejuizo.descricao}</p>
@@ -1399,9 +1407,11 @@ function exportarRelatorioAssessorias(){
   .prizecard .place{font-weight:700;color:#0F2461;font-size:.82rem;margin-bottom:4px;}
   .prizecard .row{display:flex;justify-content:space-between;font-size:.78rem;padding:2px 0;}
   .prizecard .row.turbo .amt{color:#0F7A5A;font-weight:700;}
+  .prizecard .row.plus .amt{color:#B45309;font-weight:700;}
   .criteria-item{font-size:.78rem;color:#334155;margin-bottom:4px;}
   .criteria-item .tag{display:inline-block;font-size:.66rem;font-weight:700;text-transform:uppercase;padding:1px 7px;border-radius:99px;background:#E2E8F0;color:#334155;margin-right:6px;}
   .criteria-item.turbo .tag{background:#D1FAE5;color:#0F7A5A;}
+  .criteria-item.plus .tag{background:#FDE68A;color:#B45309;}
   .rit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
   .rit-card{border:1px solid #E2E8F0;border-radius:8px;padding:10px 12px;}
   .rit-card b{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:#3B6FE0;margin-bottom:4px;}
@@ -1447,10 +1457,10 @@ function exportarRelatorioAssessorias(){
     <h2>3. Premiação &amp; Bônus</h2>
     <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:0 0 6px;">Premiação mensal</p>
     ${prizeCardsHtml(a.premiacao.mensal.lugares)}
-    ${criteriosHtml(a.premiacao.mensal.criterioBase, a.premiacao.mensal.criterioTurbinado)}
+    ${criteriosHtml(a.premiacao.mensal.criterioBase, a.premiacao.mensal.criterioTurbinado, a.premiacao.mensal.criterioTurbinadoPlus)}
     <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Premiação trimestral</p>
     ${prizeCardsHtml(a.premiacao.trimestral.lugares)}
-    ${criteriosHtml(a.premiacao.trimestral.criterioBase, a.premiacao.trimestral.criterioTurbinado)}
+    ${criteriosHtml(a.premiacao.trimestral.criterioBase, a.premiacao.trimestral.criterioTurbinado, a.premiacao.trimestral.criterioTurbinadoPlus)}
     <div class="callout" style="margin-top:10px;"><span class="callout-label">🚀 Bônus extra de prejuízo (mensal)</span>
       <p>${a.premiacao.bonusPrejuizo.descricao}</p>
       <p style="margin-top:4px;"><strong>1º lugar</strong> — ${brl(a.premiacao.bonusPrejuizo.primeiroLugar)} · <strong>2º lugar</strong> — ${brl(a.premiacao.bonusPrejuizo.segundoLugar)}</p>

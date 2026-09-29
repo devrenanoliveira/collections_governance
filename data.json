@@ -590,21 +590,23 @@
         },
         "premiacao": {
           "mensal": {
-            "criterioBase": "exige ≥ 90% ICM Geral",
-            "criterioTurbinado": "exige meta de eficiência batida no mês",
+            "criterioBase": "exige atingir 90% do ICM Geral + 90% do ICM de Prejuízo",
+            "criterioTurbinado": "exige atingir > 100% do ICM Geral + > 100% do ICM de Prejuízo",
+            "criterioTurbinadoPlus": "exige atingir > 120% do ICM Geral + > 120% do ICM de Prejuízo",
             "lugares": [
-              { "posicao": "1º lugar", "base": 5000, "turbinado": 7000 },
-              { "posicao": "2º lugar", "base": 2500, "turbinado": 4000 },
-              { "posicao": "3º lugar", "base": 0, "turbinado": 1000 }
+              { "posicao": "1º lugar", "base": 5000, "turbinado": 7000, "turbinadoPlus": 10000 },
+              { "posicao": "2º lugar", "base": 2500, "turbinado": 3500, "turbinadoPlus": 7000 },
+              { "posicao": "3º lugar", "base": 0, "turbinado": 1000, "turbinadoPlus": 3000 }
             ]
           },
           "trimestral": {
-            "criterioBase": "exige ≥ 90% ICM acumulado",
-            "criterioTurbinado": "exige meta de eficiência acumulada batida",
+            "criterioBase": "exige atingir 90% do ICM Geral acumulado + 90% do ICM de Prejuízo acumulado",
+            "criterioTurbinado": "exige atingir > 100% do ICM Geral acumulado + > 100% do ICM de Prejuízo acumulado",
+            "criterioTurbinadoPlus": "exige atingir > 120% do ICM Geral acumulado + > 120% do ICM de Prejuízo acumulado",
             "lugares": [
-              { "posicao": "1º lugar", "base": 10000, "turbinado": 15000 },
-              { "posicao": "2º lugar", "base": 5000, "turbinado": 7000 },
-              { "posicao": "3º lugar", "base": 0, "turbinado": 3000 }
+              { "posicao": "1º lugar", "base": 10000, "turbinado": 15000, "turbinadoPlus": 20000 },
+              { "posicao": "2º lugar", "base": 5000, "turbinado": 7000, "turbinadoPlus": 10000 },
+              { "posicao": "3º lugar", "base": 0, "turbinado": 3000, "turbinadoPlus": 5000 }
             ]
           },
           "bonusPrejuizo": {
