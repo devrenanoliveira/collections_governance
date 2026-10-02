@@ -556,32 +556,18 @@
           "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses."
         },
         "portfolioVigente": {
+          "vigenciaInicio": "01/10/2026",
           "faixas": ["05 a 65 dias", "66 a 180 dias", "Acima de 181 dias (Pós-Prejuízo)"],
-          "assessorias": [
-            { "nome": "Fácil", "share": [100, 95, 90] },
-            { "nome": "Decisão", "share": [0, 5, 5] },
-            { "nome": "Ciclo", "share": [0, 0, 5] }
-          ],
-          "diretrizes": [
-            "Não elegível ao Perde e Ganha (foco em internalização).",
-            "A Fácil detém a liderança; a Decisão em fase de teste de tração.",
-            "Bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo."
-          ]
-        },
-        "portfolioExpectativa": {
-          "confirmado": false,
-          "vigenciaInicio": "último trimestre de 2026 (out–dez)",
           "assessorias": [
             { "nome": "Fácil", "share": [100, 85, 80] },
             { "nome": "Decisão", "share": [0, 15, 15] },
             { "nome": "Ciclo", "share": [0, 0, 5] }
           ],
           "diretrizes": [
-            "Sem mudança prevista — segue fora do escopo do Perde e Ganha, foco em internalização.",
-            "Decisão triplica participação (5% → 15%), reduzindo a concentração da Fácil na faixa.",
-            "Mesmo movimento de equilíbrio no bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo; Ciclo mantém 5%."
-          ],
-          "nota": "A tabela acima é uma expectativa, não uma decisão fechada: a ideia é iniciar essa nova rodada de redistribuição no último trimestre de 2026, para equilibrar melhor o portfólio de cobrança terceirizada e evitar a concentração (monopólio) de carteira numa única assessoria. Até lá, vale a tabela vigente."
+            "Não elegível ao Perde e Ganha (foco em internalização). A Fácil segue com 100% da faixa.",
+            "Decisão triplica participação (5% → 15%), reduzindo a concentração da Fácil (95% → 85%).",
+            "Bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo; Fácil 80% (era 90%), Decisão 15% (era 5%), Ciclo mantém 5%."
+          ]
         },
         "perdeGanha": {
           "regraGeral": "O 3º colocado cede 15% do seu estoque sob gestão nas faixas elegíveis (> 65D), sendo 10% repassados ao 1º lugar e 5% ao 2º lugar.",

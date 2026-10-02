@@ -308,15 +308,9 @@
       </div>
 
       <div class="table-card">
-        <div class="table-card-header"><strong>Arquitetura do portfólio por faixas de atraso — vigente</strong></div>
+        <div class="table-card-header" id="tblPortfolioVigenteHeader"><strong>Arquitetura do portfólio por faixas de atraso — vigente</strong></div>
         <div class="table-scroll"><table id="tblPortfolioVigente" class="table-portfolio"></table></div>
       </div>
-
-      <div class="table-card">
-        <div class="table-card-header" id="tblPortfolioExpectativaHeader"><strong>Expectativa a partir do último trimestre de 2026</strong></div>
-        <div class="table-scroll"><table id="tblPortfolioExpectativa" class="table-portfolio"></table></div>
-      </div>
-      <div class="callout callout-info" id="portfolioExpectativaNota"></div>
 
       <div class="table-card" style="padding:18px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Perde e Ganha de Carteira (Trimestral)</strong></div>
@@ -1324,10 +1318,7 @@ function renderAssessorias(){
 
   document.getElementById('tblPortfolioVigente').innerHTML = portfolioTableHtml(a.portfolioVigente, a.portfolioVigente.faixas, true);
 
-  const pe = a.portfolioExpectativa;
-  document.getElementById('tblPortfolioExpectativaHeader').innerHTML = `<strong>Expectativa a partir do ${pe.vigenciaInicio}${pe.confirmado ? '' : ' — não confirmado'}</strong>`;
-  document.getElementById('tblPortfolioExpectativa').innerHTML = portfolioTableHtml(pe, a.portfolioVigente.faixas, true);
-  document.getElementById('portfolioExpectativaNota').innerHTML = `<span class="callout-label">Ainda em estudo</span><p>${pe.nota}</p>`;
+  document.getElementById('tblPortfolioVigenteHeader').innerHTML = `<strong>Arquitetura do portfólio por faixas de atraso — vigente desde ${a.portfolioVigente.vigenciaInicio}</strong>`;
 
   document.getElementById('perdeGanhaRegra').innerHTML = `
     <p><strong>Regra geral:</strong> ${a.perdeGanha.regraGeral}</p>
@@ -1374,7 +1365,6 @@ function exportarRelatorioAssessorias(){
     <thead><tr><th style="text-align:left">Faixa</th><th style="text-align:left">Intervalo</th><th>Comissão base</th></tr></thead>
     <tbody>${a.comissaoBase.map(r=>`<tr><td>${r.faixa}</td><td>${r.intervalo}</td><td class="${r.comissao===null?'td-dim':'td-blue'}">${r.comissao===null? (r.obs||'—') : pct(r.comissao,2)}</td></tr>`).join('')}</tbody>`;
 
-  const pe = a.portfolioExpectativa;
 
   const html = `<!DOCTYPE html>
 <html lang="pt-BR"><head><meta charset="UTF-8">
@@ -1443,11 +1433,8 @@ function exportarRelatorioAssessorias(){
   <section>
     <h2>2. Share &amp; Redistribuição</h2>
     <div class="note"><b>Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)</b>${a.concorrencial.periodoEstabilidade}</div>
-    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Arquitetura do portfólio — vigente</p>
+    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Arquitetura do portfólio — vigente desde ${a.portfolioVigente.vigenciaInicio}</p>
     <table>${portfolioTableHtml(a.portfolioVigente, a.portfolioVigente.faixas, true)}</table>
-    <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Expectativa a partir de ${pe.vigenciaInicio}${pe.confirmado ? '' : ' — não confirmado'}</p>
-    <table>${portfolioTableHtml(pe, a.portfolioVigente.faixas, true)}</table>
-    <div class="callout"><span class="callout-label">Ainda em estudo</span>${pe.nota}</div>
     <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Perde e Ganha de Carteira (Trimestral)</p>
     <div class="note"><p><strong>Regra geral:</strong> ${a.perdeGanha.regraGeral}</p><p style="margin-top:6px;"><strong>Trava de segurança da âncora:</strong> ${a.perdeGanha.travaAncora}</p></div>
     <div class="callout"><span class="callout-label">Amostragem proporcional por aging</span>${a.perdeGanha.amostragemProporcional}</div>
