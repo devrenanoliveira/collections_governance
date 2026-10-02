@@ -553,7 +553,7 @@
         },
         "concorrencial": {
           "numeroPlayers": 3,
-          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses."
+          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses. O ciclo atual começa em out/2026 (out–dez/2026)."
         },
         "portfolioVigente": {
           "vigenciaInicio": "01/10/2026",
