@@ -978,6 +978,13 @@
           "descricao": "Confronto entre a meta do diretor para recuperação de perdas (Pós-Prejuízo, faixas H–J) e uma projeção construída a partir do histórico real de pagamento (2025–2026), para embasar a meta de PLR de 2027.",
           "arquivo": "estudo-meta-perdas-2027.html",
           "data": "2026-08-25"
+        },
+        {
+          "id": "comissao-assessorias-set26",
+          "titulo": "Comissão das Assessorias · Ago→Set/26",
+          "descricao": "Por que a comissão das assessorias subiu 13% de agosto para setembro (volume, mix de faixas, parcelas de acordo e alíquota) e o paralelo com a internalização a partir da 2ª quinzena de outubro. Artefato Claude, aberto em nova aba: os valores em R$ ficam fora do repositório público.",
+          "url": "https://claude.ai/artifact/8vSG6HEdETn2gSyzPRLbac",
+          "data": "2026-10-02"
         }
       ]
     },

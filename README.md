@@ -39,7 +39,7 @@ Estudos atuais:
 ### Adicionar Novo Estudo
 
 1. Criar o arquivo `estudo-<nome>.html` na raiz do repositório — precisa ser autocontido (CSS/JS inline, sem depender de `index.html`, `data.json` ou `style.css`) para funcionar tanto dentro do iframe quanto aberto sozinho.
-2. No `data.json`, dentro de `produtos.<id>.estudos`, adicionar um item novo: `id` (único), `titulo` (aparece no toggle), `descricao`, `arquivo` (nome do arquivo do passo 1) e `data`.
+2. No `data.json`, dentro de `produtos.<id>.estudos`, adicionar um item novo: `id` (único), `titulo` (aparece no toggle), `descricao`, `arquivo` (nome do arquivo do passo 1) e `data`. Estudo com valores internos em R$ não vai como arquivo (o site é público): usar `url` (artefato Claude) no lugar de `arquivo`, e a aba mostra um cartão com link em vez do iframe.
 3. Publicar os dois arquivos — o estudo aparece automaticamente como um novo toggle na aba.
 
 ## Publicação Inicial
@@ -94,7 +94,7 @@ Cada produto contém:
 - **assessorias**: Metas, comissão base, estrutura concorrencial (só contexto), portfolioVigente (share por assessoria, com `vigenciaInicio`; vigente desde 01/10/2026), perdeGanha (regra de redistribuição trimestral), premiacao (mensal/trimestral + bônus de prejuízo + forma de pagamento + governancaRepasse), rituais. A aba tem 4 toggles — Metas & Comissão / Share & Redistribuição / Premiação & Bônus / Rituais de Gestão — todo renderizado nativamente (não há mais `regulamento.html`/iframe desde 22/09/2026: o conteúdo virou parte do `data.json`/`index.html` pra ganhar dark mode e fonte consistentes com o resto do dashboard)
 - **fornecedores**: Nome, categoria, papel (resumo curto), status (ativo ou em_implantacao), topicos opcional (lista de {label, valor} exibida como bullets no card — quando ausente, o card cai de volta pro texto corrido de "papel")
 - **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
-- **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) e data
+- **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) ou url (estudo externo, abre em nova aba) e data
 
 Novos itens (fornecedores, meses, faixas, produtos, estudos) podem ser adicionados copiando estruturas existentes sem modificar código.
 

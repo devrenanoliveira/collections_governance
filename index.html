@@ -401,6 +401,10 @@
     <div class="chart-card wide" style="margin-bottom:18px;">
       <div class="chart-title" id="estudoTitulo"></div>
       <iframe class="estudo-frame" id="estudoFrame"></iframe>
+      <div class="recurso-card" id="estudoExterno" style="display:none;">
+        <div><strong id="estudoExternoTitulo"></strong><div id="estudoExternoDesc" style="font-size:.8rem;color:var(--ink-muted);margin-top:4px;"></div></div>
+        <a class="recurso-btn" id="estudoExternoLink" target="_blank" rel="noopener">Abrir estudo ↗</a>
+      </div>
     </div>
   </div>
   <div id="estudosEmpty" style="display:none;"></div>
@@ -1596,7 +1600,19 @@ function renderEstudos(){
 
   const atual = lista.find(e=>e.id===estudoAtual);
   document.getElementById('estudoTitulo').textContent = atual.titulo + (atual.data ? ' · ' + atual.data : '');
-  document.getElementById('estudoFrame').src = atual.arquivo;
+  // Estudo externo (`url` no lugar de `arquivo`): cartão com link em vez de iframe — claude.ai
+  // bloqueia ser embutido (frame-ancestors) e os valores em R$ não devem entrar neste repositório público.
+  const externo = !!atual.url;
+  document.getElementById('estudoFrame').style.display = externo ? 'none' : '';
+  document.getElementById('estudoExterno').style.display = externo ? '' : 'none';
+  if(externo){
+    document.getElementById('estudoExternoTitulo').textContent = atual.titulo;
+    document.getElementById('estudoExternoDesc').textContent = atual.descricao || '';
+    document.getElementById('estudoExternoLink').href = atual.url;
+    document.getElementById('estudoFrame').removeAttribute('src');
+  } else {
+    document.getElementById('estudoFrame').src = atual.arquivo;
+  }
 }
 
 /* ---------- ATUALIZAR DADOS ---------- */
