@@ -617,11 +617,11 @@
         {
           "nome": "Decisão",
           "categoria": "Assessoria de cobrança",
-          "papel": "Assessoria de cobrança terceirizada. Iniciou operação oficialmente em 18/08/2026, atuando a partir de 66 dias de atraso, com 5% do share acima de 65 dias (início reduzido para avaliação de resultados; combinado original era 10%, com possível ajuste até o início de setembro/2026).",
+          "papel": "Assessoria de cobrança terceirizada. Iniciou operação oficialmente em 18/08/2026, atuando a partir de 66 dias de atraso. Começou com 5% do share acima de 65 dias (início reduzido para avaliação de resultados) e, a partir de 01/10/2026, passa a ter 15% do share acima de 65 dias.",
           "topicos": [
             { "label": "Início", "valor": "18/08/2026" },
             { "label": "Atuação", "valor": "a partir de 66 dias de atraso" },
-            { "label": "Carteira (share)", "valor": "5% nas faixas 66–180 e acima de 181 dias (combinado original 10%; possível ajuste até início de set/2026)" }
+            { "label": "Carteira (share)", "valor": "15% nas faixas 66–180 e acima de 181 dias, a partir de 01/10/2026 (de 18/08 a 30/09: 5%)" }
           ],
           "status": "ativo"
         },
@@ -631,7 +631,7 @@
           "papel": "Assessoria de cobrança terceirizada.",
           "topicos": [
             { "label": "Atuação", "valor": "desde 05 dias de atraso" },
-            { "label": "Carteira (share)", "valor": "100% na faixa 05–65 dias, 95% na faixa 66–180 dias, 90% acima de 181 dias" }
+            { "label": "Carteira (share)", "valor": "100% na faixa 05–65 dias, 85% na faixa 66–180 dias, 80% acima de 181 dias (a partir de 01/10/2026)" }
           ],
           "status": "ativo"
         },
