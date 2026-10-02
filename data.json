@@ -546,10 +546,12 @@
           }
         ],
         "comissaoIndireta": {
-          "percentual": 30,
-          "descricaoPagavel": "30% da comissão da faixa correspondente, se a assessoria comprovar (via integração de logs de sistema) contato efetivo ou envio de acionamento válido nos últimos 5 dias corridos anteriores à data do pagamento interno do cliente.",
-          "descricaoZerada": "Caso não haja histórico de acionamento válido dentro da janela de retroatividade de 5 dias, a comissão é zerada e o valor recuperado reverte integralmente para o Credor.",
-          "acionamentoValido": "Contato com a Pessoa Certa (CPC), SMS entregue com relatório de recepção, e-mails entregues e interações de WhatsApp. Tentativas frustradas (caixa postal, ocupado, etc.) não geram direito de atribuição."
+          "categorias": [
+            { "nome": "Direto", "regra": "recebe 100% da comissão conforme tabela." },
+            { "nome": "Indireto com CPC (últimos 5 dias)", "regra": "recebe um percentual \"X\" da comissão conforme a tabela." },
+            { "nome": "Indireto sem CPC (últimos 3 dias)", "regra": "recebe um percentual \"Y\" da comissão conforme a tabela." }
+          ],
+          "nota": "Percentuais \"X\" e \"Y\" ainda a definir, quando houver a entrada do Serasa Limpa Nome."
         },
         "concorrencial": {
           "numeroPlayers": 3,
@@ -604,8 +606,9 @@
           "formaPagamento": "Toda premiação em dinheiro (ranking base, turbinado e bônus extra de prejuízo) é paga via a própria Nota Fiscal do comissionamento variável da assessoria, sem lançamento à parte."
         },
         "governancaRepasse": {
-          "repasseMinimo": "No mínimo metade de qualquer premiação em dinheiro deve ser distribuída diretamente aos operadores, monitores e supervisores da carteira.",
-          "prestacaoContas": "Prazo de até 15 dias após o recebimento dos valores para envio dos comprovantes de repasse à operação."
+          "repasseMensal": "Premiação mensal: repasse mínimo de 50% para a equipe responsável pelo resultado da carteira e áreas de apoio (à escolha da assessoria).",
+          "repasseTrimestral": "Premiação trimestral: sem exigência de repasse mínimo para a equipe.",
+          "prestacaoContas": "Prazo de até 15 dias após o recebimento dos valores para envio dos comprovantes de repasse da premiação mensal à operação."
         },
         "rituais": {
           "diario": "Relatório formal matinal até as 10h: funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; visão de vencimentos do dia e sua efetividade; balanço preditivo (realizado dia anterior vs. esperado para o dia vigente).",

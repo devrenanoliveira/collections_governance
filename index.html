@@ -1274,6 +1274,11 @@ function criteriosHtml(criterioBase, criterioTurbinado, criterioTurbinadoPlus){
     <div class="criteria-item plus"><span class="tag">Turbinado Plus</span> ${criterioTurbinadoPlus}</div>`;
 }
 
+function comissaoIndiretaHtml(ci){
+  return `<ul style="margin:0 0 0 18px;padding:0;">${ci.categorias.map(c=>`<li style="margin-bottom:4px;"><strong>${c.nome}:</strong> ${c.regra}</li>`).join('')}</ul>
+    <p style="margin-top:8px;">${ci.nota}</p>`;
+}
+
 function renderAssessorias(){
   const p = produto();
   const content = document.getElementById('assessoriasContent');
@@ -1307,10 +1312,7 @@ function renderAssessorias(){
     assessoriasToggleBound = true;
   }
 
-  document.getElementById('comissaoIndireta').innerHTML = `
-    <p><strong>${a.comissaoIndireta.percentual}% pagável:</strong> ${a.comissaoIndireta.descricaoPagavel}</p>
-    <p style="margin-top:8px;"><strong>0% (zerada):</strong> ${a.comissaoIndireta.descricaoZerada}</p>
-    <p style="margin-top:8px;"><strong>Acionamento válido:</strong> ${a.comissaoIndireta.acionamentoValido}</p>`;
+  document.getElementById('comissaoIndireta').innerHTML = comissaoIndiretaHtml(a.comissaoIndireta);
 
   document.getElementById('concorrencialTitulo').textContent = `Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)`;
   document.getElementById('concorrencial').innerHTML = `
@@ -1346,7 +1348,8 @@ function renderAssessorias(){
     <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Mensal</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.mensal}</p></div>`;
 
   document.getElementById('governancaRepasse').innerHTML = `
-    <p><strong>Repasse mínimo de 50% para a ponta:</strong> ${a.governancaRepasse.repasseMinimo}</p>
+    <p><strong>Repasse à equipe:</strong> ${a.governancaRepasse.repasseMensal}</p>
+    <p style="margin-top:8px;">${a.governancaRepasse.repasseTrimestral}</p>
     <p style="margin-top:8px;"><strong>Prestação de contas:</strong> ${a.governancaRepasse.prestacaoContas}</p>`;
 }
 
@@ -1423,11 +1426,7 @@ function exportarRelatorioAssessorias(){
     <h2>1. Metas &amp; Comissão</h2>
     <div class="note"><b>Estrutura de metas</b>${a.metas}</div>
     <table>${comissaoBaseHtml}</table>
-    <div class="note"><b>Comissionamento indireto</b>
-      <p>${a.comissaoIndireta.percentual}% pagável: ${a.comissaoIndireta.descricaoPagavel}</p>
-      <p style="margin-top:6px;">0% (zerada): ${a.comissaoIndireta.descricaoZerada}</p>
-      <p style="margin-top:6px;">Acionamento válido: ${a.comissaoIndireta.acionamentoValido}</p>
-    </div>
+    <div class="note"><b>Comissionamento indireto</b>${comissaoIndiretaHtml(a.comissaoIndireta)}</div>
   </section>
 
   <section>
@@ -1454,7 +1453,7 @@ function exportarRelatorioAssessorias(){
     </div>
     <div class="note"><b>Trava mínima de elegibilidade</b>${a.premiacao.travaMinima}</div>
     <div class="note"><b>Forma de pagamento</b>${a.premiacao.formaPagamento}</div>
-    <div class="note"><b>Repasse mínimo de 50% para a ponta</b>${a.governancaRepasse.repasseMinimo}</div>
+    <div class="note"><b>Repasse à equipe</b>${a.governancaRepasse.repasseMensal}<br>${a.governancaRepasse.repasseTrimestral}</div>
     <div class="note"><b>Prestação de contas</b>${a.governancaRepasse.prestacaoContas}</div>
   </section>
 
