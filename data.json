@@ -612,7 +612,7 @@
           "prestacaoContas": "Prazo de até 15 dias após o recebimento dos valores para envio dos comprovantes de repasse da premiação mensal à operação."
         },
         "rituais": {
-          "diario": "Relatório matinal com meta de volume e valor de acordos, acordos e valor realizado, e projeção do realizado sobre a meta. Envio de pelo menos 3x ao dia: o primeiro até às 10:00, com as metas; o segundo até às 15:00; e o último ao encerrar o expediente da operação.",
+          "diario": "Relatório matinal com o funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; meta de volume e valor de acordos, acordos e valor realizado, e projeção do realizado sobre a meta. Envio de pelo menos 3x ao dia: o primeiro até às 10:00, com as metas; o segundo até às 15:00; e o último ao encerrar o expediente da operação.",
           "semanal": "Comitê tático às segundas-feiras: visão acumulada do mês (real vs. projeção e GAPs), performance por canal digital (agente virtual, autonegociação, cartas, SMS, WhatsApp), monitoramento da curva de quartis do time interno.",
           "mensal": "Alinhamento estratégico até o 5º dia útil do mês seguinte: visão holística de indicadores e auditoria de repasses de comissão, performance dos negociadores e dos robôs de autosserviço, macrovisão da saúde da carteira, planejamento prospectivo do mês seguinte."
         }
