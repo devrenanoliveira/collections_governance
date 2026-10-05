@@ -316,6 +316,7 @@
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Perde e Ganha de Carteira (Trimestral)</strong></div>
         <div class="destaque-text" id="perdeGanhaRegra"></div>
         <div class="callout callout-alert" id="perdeGanhaAmostragem"></div>
+        <div class="callout callout-info" id="perdeGanhaObservacao" style="margin-top:10px;"></div>
       </div>
     </div>
 
@@ -1330,6 +1331,7 @@ function renderAssessorias(){
     <p><strong>Regra geral:</strong> ${a.perdeGanha.regraGeral}</p>
     <p style="margin-top:8px;"><strong>Trava de segurança da âncora:</strong> ${a.perdeGanha.travaAncora}</p>`;
   document.getElementById('perdeGanhaAmostragem').innerHTML = `<span class="callout-label">Amostragem proporcional por aging</span><p>${a.perdeGanha.amostragemProporcional}</p>`;
+  document.getElementById('perdeGanhaObservacao').innerHTML = `<span class="callout-label">Observação</span><p>${a.perdeGanha.observacao}</p>`;
 
   const pr = a.premiacao;
   document.getElementById('premiacaoMensalGrid').innerHTML = prizeCardsHtml(pr.mensal.lugares);
@@ -1441,6 +1443,7 @@ function exportarRelatorioAssessorias(){
     <p style="font-size:.82rem;font-weight:700;color:#0F2461;margin:14px 0 6px;">Perde e Ganha de Carteira (Trimestral)</p>
     <div class="note"><p><strong>Regra geral:</strong> ${a.perdeGanha.regraGeral}</p><p style="margin-top:6px;"><strong>Trava de segurança da âncora:</strong> ${a.perdeGanha.travaAncora}</p></div>
     <div class="callout"><span class="callout-label">Amostragem proporcional por aging</span>${a.perdeGanha.amostragemProporcional}</div>
+    <div class="note"><b>Observação</b>${a.perdeGanha.observacao}</div>
   </section>
 
   <section>
