@@ -4,11 +4,12 @@
 
 O projeto consiste em cinco arquivos principais, mais um conjunto de estudos avulsos que cresce com o tempo:
 
-- **index.html**: O site com oito abas (Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Estudos e Comparativos, Atualizar Dados)
+- **index.html**: O site com dez abas (Visão Geral, Política de Desconto, Régua de Cobrança, Governança de Assessorias, Fornecedores, Saúde Financeira, Estudos e Comparativos, Projeto Performance - RPE, Atualizar Dados, Mapa da Cobrança)
 - **style.css**: Estilo visual consistente com o dashboard de resultados
 - **data.json**: Fonte única dos dados — toda atualização passa por este arquivo
 - **fluxo-whatsapp.html**: Página com fluxograma detalhado de atendimento via WhatsApp
 - **calculadora-desconto.html**: Versão avulsa da Calculadora de Aprovação de Negociação (ver seção própria abaixo)
+- **projeto-performance-rpe.html**: documento standalone do mapeamento de cobrança respondido ao parceiro (posição de 05/10/2026), exibido em `<iframe>` na aba **"Projeto Performance - RPE"**. É um arquivo único, com o mockup do mini app (WhatsApp Flows) embutido em base64 e botão "Gerar PDF"; não lê o `data.json`, então não se atualiza sozinho — regerar o arquivo e substituí-lo quando o conteúdo mudar
 - **estudo-\*.html** (ex.: `estudo-smartnx-meta.html`, `estudo-salarial-curitiba.html`): estudos e comparativos avulsos, um arquivo por estudo (ver seção "Estudos e Comparativos Gerais" abaixo)
 
 ## Calculadora de Aprovação — Versão Avulsa
