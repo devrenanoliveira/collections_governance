@@ -986,6 +986,13 @@
           "descricao": "Por que a comissão das assessorias subiu 13% de agosto para setembro (volume, mix de faixas, parcelas de acordo e alíquota) e o paralelo com a internalização a partir da 2ª quinzena de outubro. Artefato Claude, aberto em nova aba: os valores em R$ ficam fora do repositório público.",
           "url": "https://claude.ai/artifact/8vSG6HEdETn2gSyzPRLbac",
           "data": "2026-10-02"
+        },
+        {
+          "id": "projeto-performance-rpe",
+          "titulo": "Projeto Performance - RPE",
+          "descricao": "Mapeamento de cobrança respondido ao parceiro (estrutura, réguas e canais, governança de assessorias, funil e inteligência de dados), com o mockup do mini app de negociação no WhatsApp. Posição de 05/10/2026.",
+          "arquivo": "projeto-performance-rpe.html",
+          "data": "2026-10-06"
         }
       ]
     },
