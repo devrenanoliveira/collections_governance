@@ -139,6 +139,10 @@ deste arquivo.
   referenciado no topo do `style.css` continua não existindo em nenhum lugar do
   workspace.
 
+## Datas e "Última atualização"
+
+`produtos.<id>.ultimaAtualizacao` fica em ISO (`AAAA-MM-DD`) no `data.json`; a tela (cabeçalho e calculadora avulsa) mostra `DD/MM/AAAA` via `dataBR()` em `index.html`. Ao publicar qualquer mudança de conteúdo, atualizar esse campo para o dia da publicação — foi esquecido em 09/10/2026 e o cabeçalho ficou em 07/10.
+
 ## Known non-blocking issues
 
 - `desconto.oficial` bands for 1081–1440, 1441–1800, and >1801 days all share `"prioridade": 14` — harmless, since that field isn't used for tie-breaking in the current UI.

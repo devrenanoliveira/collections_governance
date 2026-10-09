@@ -817,7 +817,7 @@ function renderProductNav(){
 function renderAll(){
   const p = produto();
   document.getElementById('headerTitle').textContent = p.nome + ' — Políticas, régua, assessorias, fornecedores e saúde financeira';
-  document.getElementById('lastUpdate').textContent = p.ultimaAtualizacao || '—';
+  document.getElementById('lastUpdate').textContent = dataBR(p.ultimaAtualizacao);
   safe(renderVisaoGeral, 'Visão Geral');
   safe(renderDesconto, 'Política de Desconto');
   safe(renderRegua, 'Régua de Cobrança');
@@ -963,10 +963,16 @@ function renderDesconto(){
   document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao});
 }
 
+// "2026-10-09" -> "09/10/2026"; o data.json guarda ISO, a tela mostra no padrão brasileiro
+function dataBR(iso){
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : (iso || '—');
+}
+
 function buildCalcHtml(oficial, agressiva, meta){
   meta = meta || {};
   const produto = meta.produto || '';
-  const ultimaAtualizacao = meta.ultimaAtualizacao || '—';
+  const ultimaAtualizacao = dataBR(meta.ultimaAtualizacao);
   const titulo = 'Calculadora de Aprovação de Negociação' + (produto ? ' — ' + produto : '');
   const OFICIAL = oficial.map(r=>({min:r.diasDe, max:r.diasAte, pAV:r.vista, pPar:r.parcelado12x, mora:r.mora, multa:r.multa}));
   // garante faixa 0-4 (sem desconto) no início, como no arquivo original
