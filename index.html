@@ -189,6 +189,7 @@
       <button class="filter-btn active" data-vista="calculadora">Calculadora</button>
       <button class="filter-btn" data-vista="oficial">Política Oficial (Piso)</button>
       <button class="filter-btn" data-vista="agressiva">Política Agressiva (Teto)</button>
+      <button class="filter-btn" data-vista="parcelamento" id="descontoBtnParcelamento">Política de Parcelamento</button>
     </div>
 
     <div id="descontoVista-calculadora">
@@ -214,6 +215,23 @@
           <table id="tblAgressiva"></table>
         </div>
       </div>
+    </div>
+
+    <div id="descontoVista-parcelamento" style="display:none;">
+      <div class="callout callout-info" id="parcelamentoDescricao" style="margin-bottom:14px;"></div>
+      <div class="table-card">
+        <div class="table-card-header"><strong id="parcelamentoTitulo">Política de parcelamento vigente</strong></div>
+        <div class="table-scroll">
+          <table id="tblParcelamento"></table>
+        </div>
+      </div>
+      <div class="table-card" style="margin-top:14px;">
+        <div class="table-card-header"><strong>Política anterior (encerrada)</strong></div>
+        <div class="table-scroll">
+          <table id="tblParcelamentoAnterior"></table>
+        </div>
+      </div>
+      <p class="note" id="parcelamentoAnteriorNota" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;"></p>
     </div>
   </div>
   <div id="descontoEmpty" style="display:none;"></div>
@@ -881,7 +899,7 @@ function renderVisaoGeral(){
 
 /* ---------- POLÍTICA DE DESCONTO ---------- */
 let descontoToggleBound = false;
-const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva'];
+const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva', 'parcelamento'];
 
 function descontoMostrarVista(vista){
   document.querySelectorAll('#descontoToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
@@ -926,6 +944,21 @@ function renderDesconto(){
     <tbody>${ag.map(r=>`
       <tr><td>${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}</td>
       <td class="td-gold">${pct(r.principal,2)}</td><td class="td-muted">${pct(r.mora,2)}</td><td class="td-muted">${pct(r.multa,2)}</td></tr>`).join('')}</tbody>`;
+
+  const parc = p.desconto.parcelamento;
+  document.getElementById('descontoBtnParcelamento').style.display = parc ? '' : 'none';
+  if(parc){
+    const linhas = fs => fs.map(r=>`
+      <tr><td>${r.parcelasDe === r.parcelasAte ? r.parcelasDe : r.parcelasDe + ' a ' + r.parcelasAte}</td>
+      <td class="td-blue">${pct(r.taxaMin,2)}</td><td class="td-blue">${pct(r.taxaMax,2)}</td>
+      <td class="td-muted">${pct(r.entradaMin,2)}</td><td class="td-muted">${pct(r.entradaMax,2)}</td><td class="td-gold">${pct(r.entradaPadrao,2)}</td></tr>`).join('');
+    const cab = `<thead><tr><th style="text-align:left">Parcelas</th><th>% Taxa operação (mín.)</th><th>% Taxa operação (máx.)</th><th>% Entrada (mín.)</th><th>% Entrada (máx.)</th><th>% Entrada (padrão)</th></tr></thead>`;
+    document.getElementById('parcelamentoDescricao').innerHTML = `<span class="callout-label">Em vigor desde ${parc.vigenciaInicio}</span><p>${parc.descricao}</p>`;
+    document.getElementById('parcelamentoTitulo').textContent = `Política de parcelamento vigente — desde ${parc.vigenciaInicio}`;
+    document.getElementById('tblParcelamento').innerHTML = cab + `<tbody>${linhas(parc.faixas)}</tbody>`;
+    document.getElementById('tblParcelamentoAnterior').innerHTML = cab + `<tbody>${linhas(parc.anterior.faixas)}</tbody>`;
+    document.getElementById('parcelamentoAnteriorNota').textContent = parc.anterior.descricao;
+  }
 
   document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao});
 }

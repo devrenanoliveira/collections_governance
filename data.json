@@ -251,7 +251,25 @@
             "mora": 100,
             "multa": 100
           }
-        ]
+        ],
+        "parcelamento": {
+          "vigenciaInicio": "09/10/2026",
+          "descricao": "Política de parcelamento por quantidade de parcelas: quanto menos parcelas, maior a taxa de operação e maior a entrada padrão. Valor de tarifa e valor de tarifa por parcela são R$ 0,00 (mínimo e máximo) em todas as faixas. A faixa de 0 parcela segue zerada.",
+          "faixas": [
+            { "parcelasDe": 1, "parcelasAte": 1, "taxaMin": 4.49, "taxaMax": 4.49, "entradaMin": 20, "entradaMax": 80, "entradaPadrao": 50 },
+            { "parcelasDe": 2, "parcelasAte": 2, "taxaMin": 3.99, "taxaMax": 3.99, "entradaMin": 18, "entradaMax": 80, "entradaPadrao": 45 },
+            { "parcelasDe": 3, "parcelasAte": 3, "taxaMin": 3.49, "taxaMax": 3.49, "entradaMin": 16, "entradaMax": 80, "entradaPadrao": 40 },
+            { "parcelasDe": 4, "parcelasAte": 4, "taxaMin": 2.99, "taxaMax": 2.99, "entradaMin": 14, "entradaMax": 80, "entradaPadrao": 35 },
+            { "parcelasDe": 5, "parcelasAte": 5, "taxaMin": 2.49, "taxaMax": 2.49, "entradaMin": 12, "entradaMax": 80, "entradaPadrao": 30 },
+            { "parcelasDe": 6, "parcelasAte": 12, "taxaMin": 1.99, "taxaMax": 1.99, "entradaMin": 10, "entradaMax": 80, "entradaPadrao": 20 }
+          ],
+          "anterior": {
+            "descricao": "Política única até 08/10/2026: taxa de operação fixa de 1,99% para qualquer quantidade de parcelas (1 a 12), entrada mínima de 10%, máxima de 100% e padrão de 20%.",
+            "faixas": [
+              { "parcelasDe": 1, "parcelasAte": 12, "taxaMin": 1.99, "taxaMax": 1.99, "entradaMin": 10, "entradaMax": 100, "entradaPadrao": 20 }
+            ]
+          }
+        }
       },
       "regua": {
         "recursosDigitais": [

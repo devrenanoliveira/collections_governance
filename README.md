@@ -89,7 +89,7 @@ O site detecta automaticamente todos os produtos em `data.json` e exibe um selet
 Cada produto contém:
 
 - **nome**: Identificação no seletor e cabeçalho
-- **desconto**: Processo, tabelas oficial (piso) e agressiva (teto) por dias
+- **desconto**: Processo, tabelas oficial (piso) e agressiva (teto) por dias, e `parcelamento` (política de parcelamento por quantidade de parcelas — taxa de operação e % de entrada —, vigente desde 09/10/2026, com a política anterior em `anterior`; aparece no 4º botão da aba)
 - **regua.recursosDigitais**: Links de referência (fluxogramas, quadros); `url: null` exibe "Em breve"
 - **regua.atual e regua.desejada**: Etapas, dias, ações, responsáveis e ferramentas
 - **assessorias**: Metas, comissão base, estrutura concorrencial (só contexto), portfolioVigente (share por assessoria, com `vigenciaInicio`; vigente desde 01/10/2026), perdeGanha (regra de redistribuição trimestral), premiacao (mensal/trimestral + bônus de prejuízo + forma de pagamento + governancaRepasse), rituais. A aba tem 4 toggles — Metas & Comissão / Share & Redistribuição / Premiação & Bônus / Rituais de Gestão — todo renderizado nativamente (não há mais `regulamento.html`/iframe desde 22/09/2026: o conteúdo virou parte do `data.json`/`index.html` pra ganhar dark mode e fonte consistentes com o resto do dashboard)
