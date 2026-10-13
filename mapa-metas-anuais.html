@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plano de Metas 2027</title>
+<style>
+:root{--bg:#f6f7f9;--surface:#ffffff;--fg:#14202b;--muted:#5a6876;--line:#dfe4ea;--accent:#0b6e8a;--accent-soft:#e3f1f5;--ok:#1a7f4b;--ok-bg:#e1f3e8;--warn:#9a6700;--warn-bg:#fbf0d4;--bad:#b42318;--bad-bg:#fbe4e1;--bar:#0b6e8a;--bar-proj:#8cc3d3;--l25:#8b97a3;--p1:#0b6e8a;--p2:#2f8f83;--p3:#c07a1f;--p4:#6b5aa8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f161d;--surface:#18222c;--fg:#e7edf3;--muted:#9aa8b6;--line:#2a3743;--accent:#5bc0de;--accent-soft:#17323b;--ok:#5fd199;--ok-bg:#173326;--warn:#f0c15a;--warn-bg:#3a2f12;--bad:#ff8f84;--bad-bg:#3d1c19;--bar:#5bc0de;--bar-proj:#2f6475;--l25:#7d8a97;--p1:#2a8fae;--p2:#3aa597;--p3:#d18d33;--p4:#8574c4;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f161d;--surface:#18222c;--fg:#e7edf3;--muted:#9aa8b6;--line:#2a3743;--accent:#5bc0de;--accent-soft:#17323b;--ok:#5fd199;--ok-bg:#173326;--warn:#f0c15a;--warn-bg:#3a2f12;--bad:#ff8f84;--bad-bg:#3d1c19;--bar:#5bc0de;--bar-proj:#2f6475;--l25:#7d8a97;--p1:#2a8fae;--p2:#3aa597;--p3:#d18d33;--p4:#8574c4;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:980px;margin:0 auto;padding:28px 16px 56px}
+header{padding:8px 0 20px;border-bottom:3px solid var(--accent);margin-bottom:26px}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:30px;line-height:1.15;margin:6px 0 6px;text-wrap:balance}
+.sub{color:var(--muted);margin:0}
+h2{font-size:20px;margin:36px 0 6px;text-wrap:balance}
+h2 .k{color:var(--accent)}
+h3{font-size:15px;margin:22px 0 8px;color:var(--fg)}
+p.lead{color:var(--muted);margin:0 0 14px;max-width:70ch}
+section{margin-bottom:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.kpi .t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.kpi .v{font-size:24px;font-weight:700;margin:2px 0;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:13px;color:var(--muted)}
+.pesos{display:flex;gap:3px;border-radius:10px;overflow:hidden;margin:10px 0 6px}
+.seg{padding:12px 12px;color:#fff;min-width:0}
+.seg b{display:block;font-size:22px}
+.seg span{font-size:12.5px;line-height:1.25;display:block}
+.p1{background:var(--p1)}.p2{background:var(--p2)}.p3{background:var(--p3)}.p4{background:var(--p4)}
+.note{font-size:13px;color:var(--muted)}
+.callout{border-left:4px solid var(--warn);background:var(--warn-bg);padding:10px 14px;border-radius:0 8px 8px 0;margin:12px 0;font-size:14px}
+.callout.ok{border-color:var(--ok);background:var(--ok-bg)}
+.callout.bad{border-color:var(--bad);background:var(--bad-bg)}
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+thead th{background:var(--accent-soft);font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--fg)}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+td.tot{font-weight:700}
+tr:last-child th,tr:last-child td{border-bottom:0}
+.chip{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12.5px;font-weight:700}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.warn{background:var(--warn-bg);color:var(--warn)}.chip.bad{background:var(--bad-bg);color:var(--bad)}
+svg{width:100%;height:auto;display:block}
+svg .grid{stroke:var(--line);stroke-width:1}
+svg .ax{fill:var(--muted);font-size:11px}
+svg .lbl{fill:var(--fg);font-size:11px;font-weight:700}
+svg .bar{fill:var(--bar)}svg .bar.proj{fill:var(--bar-proj);stroke:var(--bar);stroke-dasharray:3 2}
+svg .l25{fill:none;stroke:var(--l25);stroke-width:2}
+svg .l26{fill:none;stroke:var(--bar);stroke-width:2.5}
+svg .dot{fill:var(--bar)}
+svg .meta{stroke:var(--bad);stroke-width:2.5}
+svg .metal{fill:none;stroke:var(--bad);stroke-width:2;stroke-dasharray:6 4}
+svg .metad{fill:var(--bad)}
+svg .metat{fill:var(--bad);font-size:11.5px;font-weight:700}
+svg .ref{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 4}
+svg .proj{fill:none;stroke:var(--warn);stroke-width:2;stroke-dasharray:2 4}
+svg .projint{fill:none;stroke:var(--ok);stroke-width:2;stroke-dasharray:2 4}
+table.tri td,table.tri th{padding:8px 10px}
+table.tri td.hl,table.tri th.hl{background:var(--accent-soft);font-weight:700}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+ol.ins{padding-left:0;list-style:none;counter-reset:i;margin:14px 0}
+ol.ins li{counter-increment:i;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px 14px 56px;margin:10px 0;position:relative}
+ol.ins li::before{content:counter(i);position:absolute;left:14px;top:14px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center}
+ol.ins b.h{display:block;font-size:15.5px;margin-bottom:2px}
+ol.ins .s{display:block;margin-top:6px;font-size:13.5px;color:var(--accent);font-weight:600}
+footer{margin-top:34px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+@media print{body{background:#fff}.card,.kpi,ol.ins li{break-inside:avoid}}
+@media (max-width:560px){h1{font-size:25px}.seg b{font-size:18px}.seg span{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="eyebrow">Z-ON Card · Cobrança e Recuperação</div>
+<h1>Plano de Metas 2027</h1>
+<p class="sub">Estrutura de pesos, comparação com o realizado de 2026, meta mensal de prejuízo por dias úteis e teto de custo por trimestre. Posição dos dados: 08/10/2026 (6º dia útil de Out/26).</p>
+</header>
+
+<section>
+<h2>1. Em resumo</h2>
+<div class="grid2">
+<div class="kpi"><div class="t">Recuperação em prejuízo</div><div class="v">R$ 8,4 MM</div><div class="d">Peso 40%. Distribuído por dias úteis, de R$ 620 mil (Jan) a R$ 810 mil (Dez). Ritmo atual: ~R$ 647 mil/mês.</div></div>
+<div class="kpi"><div class="t">Custo sobre recuperação (IEC)</div><div class="v">6,8% a 7,7%</div><div class="d">Peso 30%. Teto por trimestre em vez de 7,5% fixo. IEC de Set/26: 6,55%.</div></div>
+<div class="kpi"><div class="t">Economia da internalização</div><div class="v">30,5%</div><div class="d">Média 2027 · peso 10%. Modelo atual entrega 24,6%.</div></div>
+<div class="kpi"><div class="t">Eficiência por faixa</div><div class="v">9 faixas</div><div class="d">Peso 20% no cabeçalho, 21% na soma das faixas.</div></div>
+</div>
+<div class="callout"><b>Leitura geral.</b> A recuperação em prejuízo (40%) pede só 1,2% de crescimento por mês sobre o ritmo atual. O custo (30%) tem folga curta hoje (0,95 ponto) e tende a subir conforme o prejuízo ganha peso, por isso a proposta é um teto que sobe por trimestre. O risco está nos outros 30%: a eficiência por faixa em Out–Dez/27 pede de 1,8× a 2,2× o realizado de Set/26 nas faixas C, F, G, H e J, e a meta de internalização depende de um teste ainda não feito.</div>
+</section>
+
+<section>
+<h2>2. Estrutura de pesos</h2>
+<p class="lead">Dois terços do bônus dependem de dois números únicos (recuperação em prejuízo e custo). A eficiência por faixa reparte 20% entre nove metas.</p>
+<div class="pesos"><div class="seg p1" style="flex:40"><b>40%</b><span>Recuperação em prejuízo</span></div><div class="seg p2" style="flex:30"><b>30%</b><span>Eficiência de custo</span></div><div class="seg p3" style="flex:10"><b>10%</b><span>Internalização</span></div><div class="seg p4" style="flex:20"><b>20%</b><span>Eficiência por faixa</span></div></div>
+<p class="note">Faixas H, I e J (prejuízo) têm peso 3% cada; B a G têm 2% cada. Somando a recuperação em prejuízo (40%) com a eficiência de H–J (9%), 49% do plano mira a mesma carteira.</p>
+</section>
+
+<section>
+<h2>3. Recuperação em prejuízo — 40%</h2>
+<p class="lead">Faixas H, I e J (acima de 180 dias de atraso). Meta de R$ 8,4 MM no ano, distribuída pelos dias úteis de cada mês em vez de R$ 700 mil fixos.</p>
+<div class="card">
+<svg viewBox="0 0 780 300" role="img" aria-label="Recuperação mensal em prejuízo: 2025, 2026 e meta 2027 sugerida"><line class="grid" x1="62" x2="766" y1="264.0" y2="264.0"/><text class="ax" x="54" y="268.0" text-anchor="end">0 mil</text><line class="grid" x1="62" x2="766" y1="180.7" y2="180.7"/><text class="ax" x="54" y="184.7" text-anchor="end">300 mil</text><line class="grid" x1="62" x2="766" y1="97.3" y2="97.3"/><text class="ax" x="54" y="101.3" text-anchor="end">600 mil</text><line class="grid" x1="62" x2="766" y1="14.0" y2="14.0"/><text class="ax" x="54" y="18.0" text-anchor="end">900 mil</text><rect class="bar" x="76.7" y="190.4" width="29.3" height="73.6" rx="2"/><rect class="bar" x="135.3" y="203.1" width="29.3" height="60.9" rx="2"/><rect class="bar" x="194.0" y="183.7" width="29.3" height="80.3" rx="2"/><rect class="bar" x="252.7" y="189.3" width="29.3" height="74.7" rx="2"/><rect class="bar" x="311.3" y="164.8" width="29.3" height="99.2" rx="2"/><rect class="bar" x="370.0" y="152.9" width="29.3" height="111.1" rx="2"/><rect class="bar" x="428.7" y="133.5" width="29.3" height="130.5" rx="2"/><rect class="bar" x="487.3" y="120.7" width="29.3" height="143.3" rx="2"/><rect class="bar" x="546.0" y="84.1" width="29.3" height="179.9" rx="2"/><rect class="bar proj" x="604.7" y="84.2" width="29.3" height="179.8" rx="2"/><polyline class="l25" points="91.3,229.7 150.0,227.8 208.7,222.9 267.3,227.3 326.0,224.8 384.7,219.6 443.3,207.2 502.0,207.3 560.7,201.5 619.3,197.9 678.0,201.1 736.7,200.5"/><polyline class="metal" points="91.3,91.8 150.0,90.4 208.7,70.9 267.3,76.5 326.0,75.1 384.7,64.0 443.3,61.2 502.0,58.4 560.7,65.4 619.3,72.3 678.0,69.6 736.7,39.0"/><circle class="metad" cx="91.3" cy="91.8" r="3.5"/><text class="metat" x="91.3" y="83.8" text-anchor="middle">620</text><circle class="metad" cx="150.0" cy="90.4" r="3.5"/><text class="metat" x="150.0" y="82.4" text-anchor="middle">625</text><circle class="metad" cx="208.7" cy="70.9" r="3.5"/><text class="metat" x="208.7" y="62.9" text-anchor="middle">695</text><circle class="metad" cx="267.3" cy="76.5" r="3.5"/><text class="metat" x="267.3" y="68.5" text-anchor="middle">675</text><circle class="metad" cx="326.0" cy="75.1" r="3.5"/><text class="metat" x="326.0" y="67.1" text-anchor="middle">680</text><circle class="metad" cx="384.7" cy="64.0" r="3.5"/><text class="metat" x="384.7" y="56.0" text-anchor="middle">720</text><circle class="metad" cx="443.3" cy="61.2" r="3.5"/><text class="metat" x="443.3" y="53.2" text-anchor="middle">730</text><circle class="metad" cx="502.0" cy="58.4" r="3.5"/><text class="metat" x="502.0" y="50.4" text-anchor="middle">740</text><circle class="metad" cx="560.7" cy="65.4" r="3.5"/><text class="metat" x="560.7" y="57.4" text-anchor="middle">715</text><circle class="metad" cx="619.3" cy="72.3" r="3.5"/><text class="metat" x="619.3" y="64.3" text-anchor="middle">690</text><circle class="metad" cx="678.0" cy="69.6" r="3.5"/><text class="metat" x="678.0" y="61.6" text-anchor="middle">700</text><circle class="metad" cx="736.7" cy="39.0" r="3.5"/><text class="metat" x="736.7" y="31.0" text-anchor="middle">810</text><text class="ax" x="91.3" y="286" text-anchor="middle">Jan</text><text class="ax" x="150.0" y="286" text-anchor="middle">Fev</text><text class="ax" x="208.7" y="286" text-anchor="middle">Mar</text><text class="ax" x="267.3" y="286" text-anchor="middle">Abr</text><text class="ax" x="326.0" y="286" text-anchor="middle">Mai</text><text class="ax" x="384.7" y="286" text-anchor="middle">Jun</text><text class="ax" x="443.3" y="286" text-anchor="middle">Jul</text><text class="ax" x="502.0" y="286" text-anchor="middle">Ago</text><text class="ax" x="560.7" y="286" text-anchor="middle">Set</text><text class="ax" x="619.3" y="286" text-anchor="middle">Out</text><text class="ax" x="678.0" y="286" text-anchor="middle">Nov</text><text class="ax" x="736.7" y="286" text-anchor="middle">Dez</text></svg>
+<div class="legend"><span><i style="background:var(--bar)"></i>Realizado 2026</span><span><i style="background:var(--bar-proj)"></i>Out/26 no ritmo atual (R$ 185 mil em 6 de 21 dias úteis)</span><span><i style="background:var(--l25)"></i>Realizado 2025</span><span><i style="background:var(--bad)"></i>Meta 2027 sugerida (R$ mil)</span></div>
+</div>
+<div class="grid2">
+<div class="kpi"><div class="t">2025 (ano)</div><div class="v">R$ 2,16 MM</div><div class="d">Base de comparação.</div></div>
+<div class="kpi"><div class="t">2026 (Jan–Set)</div><div class="v">R$ 3,43 MM</div><div class="d">+134% sobre Jan–Set/25.</div></div>
+<div class="kpi"><div class="t">2026 estimado no ano</div><div class="v">R$ 5,37 MM</div><div class="d">Realizado + 3 meses no ritmo de Out. A meta 2027 é +56%.</div></div>
+</div>
+<h3>Meta mensal sugerida</h3>
+<div class="tblwrap"><table class="tri">
+<thead><tr><th>Mês</th><th class="n">Dias úteis</th><th class="n">Meta sugerida</th><th class="n">vs R$ 700 mil fixos</th></tr></thead>
+<tbody>
+<tr><th scope="row">Janeiro</th><td class="n">20</td><td class="n tot">R$ 620 mil</td><td class="n">−11%</td></tr>
+<tr><th scope="row">Fevereiro</th><td class="n">20</td><td class="n tot">R$ 625 mil</td><td class="n">−11%</td></tr>
+<tr><th scope="row">Março</th><td class="n">22</td><td class="n tot">R$ 695 mil</td><td class="n">−1%</td></tr>
+<tr><th scope="row">Abril</th><td class="n">21</td><td class="n tot">R$ 675 mil</td><td class="n">−4%</td></tr>
+<tr><th scope="row">Maio</th><td class="n">21</td><td class="n tot">R$ 680 mil</td><td class="n">−3%</td></tr>
+<tr><th scope="row">Junho</th><td class="n">22</td><td class="n tot">R$ 720 mil</td><td class="n">+3%</td></tr>
+<tr><th scope="row">Julho</th><td class="n">22</td><td class="n tot">R$ 730 mil</td><td class="n">+4%</td></tr>
+<tr><th scope="row">Agosto</th><td class="n">22</td><td class="n tot">R$ 740 mil</td><td class="n">+6%</td></tr>
+<tr><th scope="row">Setembro</th><td class="n">21</td><td class="n tot">R$ 715 mil</td><td class="n">+2%</td></tr>
+<tr><th scope="row">Outubro</th><td class="n">20</td><td class="n tot">R$ 690 mil</td><td class="n">−1%</td></tr>
+<tr><th scope="row">Novembro</th><td class="n">20</td><td class="n tot">R$ 700 mil</td><td class="n">0%</td></tr>
+<tr><th scope="row">Dezembro</th><td class="n">23</td><td class="n tot">R$ 810 mil</td><td class="n">+16%</td></tr>
+<tr><th scope="row">Ano</th><td class="n tot">254</td><td class="n tot">R$ 8.400 mil</td><td class="n">—</td></tr>
+</tbody></table></div>
+<p class="note">Marcos por trimestre: R$ 1,94 MM (23%), R$ 2,08 MM (25%), R$ 2,19 MM (26%) e R$ 2,20 MM (26%).</p>
+<div class="callout"><b>Como foi construída.</b> O ritmo de partida é de R$ 30,5 mil por dia útil (Out/26: R$ 185 mil em 6 dias úteis), crescendo 1,2% ao mês, que é o que fecha R$ 8,4 MM. O prejuízo é recebido quase só em dias úteis (sábado e domingo somam 0,2% do total), então a meta acompanha o calendário: 254 dias úteis em 2027, de 20 (Jan, Fev, Out, Nov) a 23 (Dez). Carnaval e Corpus Christi contam como dia útil.</div>
+<h3>O que o crescimento mensal entrega no ano</h3>
+<div class="tblwrap" style="max-width:360px"><table class="tri">
+<tbody>
+<tr><th scope="row">0,0% ao mês</th><td class="n">R$ 7,85 MM</td></tr><tr><th scope="row">1,2% ao mês</th><td class="n tot">R$ 8,40 MM</td></tr><tr><th scope="row">2,0% ao mês</th><td class="n">R$ 8,78 MM</td></tr><tr><th scope="row">3,0% ao mês</th><td class="n">R$ 9,30 MM</td></tr>
+</tbody></table></div>
+<div class="callout ok"><b>Leitura.</b> Em 2026 o prejuízo cresceu perto de 12% ao mês de Jan a Set, mas Out/26 está no mesmo nível de Set. A meta pede um crescimento pequeno sobre o ritmo atual. Sem nenhum crescimento o ano fecha em R$ 7,85 MM, 7% abaixo da meta. Se a intenção for desafiar o time, vale subir o total ou usar R$ 7,85 MM como piso.</div>
+</section>
+
+<section>
+<h2>4. Eficiência de custo — 30%</h2>
+<p class="lead">Custo sobre recuperação, quanto menor melhor. Medido pelo IEC da aba Saúde Financeira da Governança: investimento total ÷ recuperação do mês. A proposta troca o 7,5% fixo por um teto que sobe por trimestre, porque recuperar mais prejuízo encarece o IEC por construção.</p>
+<div class="callout"><b>Hoje.</b> O IEC de Set/26 foi 6,55% (R$ 439.385 de investimento sobre R$ 6.710.000 recuperados), a folga até 7,5% é de 0,95 ponto. A média de Jan–Set/26 é 5,99% e o pior mês foi 6,67% (Fev/26). As assessorias respondem por 83% do investimento; o resto (QL, CobranSaaS, negativação) é quase fixo.</div>
+<div class="card">
+<svg viewBox="0 0 780 300" role="img" aria-label="Custo sobre recuperação: realizado 2026 e meta 2027"><line class="grid" x1="52" x2="766" y1="266.0" y2="266.0"/><text class="ax" x="44" y="270.0" text-anchor="end">4%</text><line class="grid" x1="52" x2="766" y1="210.0" y2="210.0"/><text class="ax" x="44" y="214.0" text-anchor="end">5%</text><line class="grid" x1="52" x2="766" y1="154.0" y2="154.0"/><text class="ax" x="44" y="158.0" text-anchor="end">6%</text><line class="grid" x1="52" x2="766" y1="98.0" y2="98.0"/><text class="ax" x="44" y="102.0" text-anchor="end">7%</text><line class="grid" x1="52" x2="766" y1="42.0" y2="42.0"/><text class="ax" x="44" y="46.0" text-anchor="end">8%</text><line class="ref" x1="52" x2="766" y1="70.0" y2="70.0"/><text class="ax" x="56" y="65.0">Plano original: 7,5%</text><line class="meta" x1="55.0" x2="227.5" y1="109.2" y2="109.2"/><text class="metat" x="141.2" y="103.2" text-anchor="middle">6,8%</text><line class="meta" x1="233.5" x2="406.0" y1="98.0" y2="98.0"/><text class="metat" x="319.8" y="92.0" text-anchor="middle">7,0%</text><line class="meta" x1="412.0" x2="584.5" y1="75.6" y2="75.6"/><text class="metat" x="498.2" y="69.6" text-anchor="middle">7,4%</text><line class="meta" x1="590.5" x2="763.0" y1="58.8" y2="58.8"/><text class="metat" x="676.8" y="52.8" text-anchor="middle">7,7%</text><polyline class="proj" points="81.8,123.6 141.2,123.2 200.8,123.4 260.2,122.6 319.8,123.6 379.2,104.6 438.8,106.4 498.2,86.0 557.8,80.7 617.2,73.8 676.8,73.8 736.2,73.8"/><polyline class="projint" points="81.8,195.7 141.2,208.1 200.8,209.4 260.2,215.0 319.8,213.6 379.2,192.3 438.8,196.5 498.2,180.3 557.8,167.7 617.2,163.6 676.8,165.9 736.2,168.2"/><polyline class="l26" points="81.8,160.7 141.2,116.5 200.8,149.0 260.2,188.7 319.8,171.4 379.2,156.2 438.8,169.7 498.2,153.4 557.8,123.2"/><circle class="dot" cx="81.8" cy="160.7" r="3.5"/><circle class="dot" cx="141.2" cy="116.5" r="3.5"/><circle class="dot" cx="200.8" cy="149.0" r="3.5"/><circle class="dot" cx="260.2" cy="188.7" r="3.5"/><circle class="dot" cx="319.8" cy="171.4" r="3.5"/><circle class="dot" cx="379.2" cy="156.2" r="3.5"/><circle class="dot" cx="438.8" cy="169.7" r="3.5"/><circle class="dot" cx="498.2" cy="153.4" r="3.5"/><circle class="dot" cx="557.8" cy="123.2" r="3.5"/><text class="lbl" x="81.8" y="150.7" text-anchor="middle">5,9%</text><text class="lbl" x="557.8" y="113.2" text-anchor="middle">6,5%</text><text class="ax" x="81.8" y="288" text-anchor="middle">Jan</text><text class="ax" x="141.2" y="288" text-anchor="middle">Fev</text><text class="ax" x="200.8" y="288" text-anchor="middle">Mar</text><text class="ax" x="260.2" y="288" text-anchor="middle">Abr</text><text class="ax" x="319.8" y="288" text-anchor="middle">Mai</text><text class="ax" x="379.2" y="288" text-anchor="middle">Jun</text><text class="ax" x="438.8" y="288" text-anchor="middle">Jul</text><text class="ax" x="498.2" y="288" text-anchor="middle">Ago</text><text class="ax" x="557.8" y="288" text-anchor="middle">Set</text><text class="ax" x="617.2" y="288" text-anchor="middle">Out</text><text class="ax" x="676.8" y="288" text-anchor="middle">Nov</text><text class="ax" x="736.2" y="288" text-anchor="middle">Dez</text></svg>
+<div class="legend"><span><i style="background:var(--bar)"></i>IEC realizado 2026</span><span><i style="background:var(--bad)"></i>Teto sugerido por trimestre</span><span><i style="background:var(--warn)"></i>Projeção 2027 sem internalização</span><span><i style="background:var(--ok)"></i>Projeção 2027 com internalização</span></div>
+<p class="note">As linhas de 2027 estão no mesmo eixo de meses do realizado de 2026. A projeção é a média dos dois cenários de eficiência.</p>
+</div>
+<h3>IEC projetado por trimestre de 2027</h3>
+<div class="tblwrap"><table class="tri">
+<thead><tr><th>Cenário</th><th class="n">T1</th><th class="n">T2</th><th class="n">T3</th><th class="n">T4</th></tr></thead>
+<tbody>
+<tr><th scope="row">Prejuízo na distribuição de R$ 8,4 MM, B–G estável · sem internalização</th><td class="n">6,55%</td><td class="n">6,64%</td><td class="n">6,71%</td><td class="n">6,72%</td></tr>
+<tr><th scope="row">Prejuízo cresce pelas eficiências H–J do plano, B–G estável · sem internalização</th><td class="n">6,53%</td><td class="n">6,61%</td><td class="n">7,12%</td><td class="n">7,59%</td></tr>
+<tr><th scope="row">Plano de eficiência completo (nove faixas) · sem internalização</th><td class="n">6,56%</td><td class="n">6,71%</td><td class="n">7,13%</td><td class="n">7,27%</td></tr>
+<tr><th scope="row">Prejuízo na distribuição de R$ 8,4 MM · com internalização</th><td class="n">5,13%</td><td class="n">5,03%</td><td class="n">4,98%</td><td class="n">4,78%</td></tr>
+<tr><th scope="row">Cenários de eficiência (média) · com internalização</th><td class="n">5,10%</td><td class="n">5,05%</td><td class="n">5,51%</td><td class="n">5,79%</td></tr>
+<tr><th scope="row" class=hl>Teto sugerido (média dos dois cenários de eficiência sem internalização + 0,3 ponto)</th><td class="n hl">6,80%</td><td class="n hl">7,00%</td><td class="n hl">7,40%</td><td class="n hl">7,70%</td></tr>
+</tbody></table></div>
+<div class="callout"><b>Por que o custo sobe.</b> O prejuízo custa em média 20,1% de comissão e as faixas B–G, 3,8%. Cada R$ 100 mil a mais recuperados em prejuízo somam cerca de 0,20 ponto ao IEC. Sem internalização, o teto de 7,5% só é rompido se o prejuízo passar de ~R$ 1,15 MM por mês com B–G estável; com a internalização do modelo de 18/09, esse limite sobe para ~R$ 2,0 MM. Esse nível de prejuízo é o que as metas de eficiência H–J implicam, não o da meta de R$ 8,4 MM.</div>
+<div class="callout ok"><b>Proposta.</b> <b>IEC ajustado ao mix:</b> a meta do mês é o IEC esperado com o mix recuperado naquele mês (tabela de comissão por faixa, mais os custos fixos, menos a economia da internalização já realizada), com tolerância de 0,3 ponto. Assim a equipe não é punida por recuperar mais prejuízo, que é a outra meta de 40%. Se for preferível um número fixo, usar o <b>teto por trimestre</b> da última linha da tabela; ele deve cair em ~1,5 ponto a partir de Fev/27, quando a régua cheia da internalização entra.</div>
+</section>
+
+<section>
+<h2>5. Economia da internalização — 10%</h2>
+<p class="lead">Economia de comissão das assessorias pela internalização da cobrança nas faixas abaixo de 65 dias. Meta de 26,2% (Jan) a 32,2% (Dez), média de 30,5%.</p>
+<div class="callout bad"><b>Leitura.</b> O modelo da aba Internalização do #KPI, calculado em 18/09/2026, entrega <b>24,6%</b> (R$ 1,36 MM de economia sobre R$ 5,52 MM de custo atual). A meta de 30% só fecha no cenário de “Pacote dos 30%” (31,6%), que depende de reduzir a frequência de disparo, e o impacto disso na recuperação ainda não foi medido. O teste A/B está previsto para Out–Nov/26. Além disso, o teto de volume do MiniApp estoura em Abr/27 sem uma faixa nova contratada. Na outra ponta, a economia reduz o IEC em cerca de 1,3 ponto (Jan) a 1,7 ponto (Dez) no cenário de eficiência, razão pela qual o teto de custo da seção 4 deve cair quando a régua cheia entrar.</div>
+</section>
+
+<section>
+<h2>6. Eficiência por faixa — 20%</h2>
+<p class="lead">Recuperação do mês ÷ carteira da faixa. A última coluna compara a meta de Dez/27 com o realizado de Set/26 (último mês fechado).</p>
+<div class="tblwrap"><table>
+<thead><tr><th>Faixa</th><th class="n">Peso</th><th class="n">Média 2026 (Jan–Set)</th><th class="n">Set/26</th><th class="n">Meta Jan/27</th><th class="n">Meta média 2027</th><th class="n">Meta Dez/27</th><th class="n">Dez/27 ÷ Set/26</th></tr></thead>
+<tbody>
+<tr><th scope="row">B (05–30d)</th><td class="n">2%</td><td class="n">58,26%</td><td class="n">65,97%</td><td class="n">59,85%</td><td class="n">64,01%</td><td class="n">70,84%</td><td class="n"><span class="chip ok">1,1×</span></td></tr>
+<tr><th scope="row">C (31–65d)</th><td class="n">2%</td><td class="n">13,79%</td><td class="n">20,07%</td><td class="n">18,05%</td><td class="n">29,58%</td><td class="n">41,78%</td><td class="n"><span class="chip bad">2,1×</span></td></tr>
+<tr><th scope="row">D (66–90d)</th><td class="n">2%</td><td class="n">4,17%</td><td class="n">4,84%</td><td class="n">4,47%</td><td class="n">5,21%</td><td class="n">6,10%</td><td class="n"><span class="chip warn">1,3×</span></td></tr>
+<tr><th scope="row">E (91–120d)</th><td class="n">2%</td><td class="n">2,04%</td><td class="n">2,65%</td><td class="n">2,57%</td><td class="n">3,17%</td><td class="n">3,94%</td><td class="n"><span class="chip warn">1,5×</span></td></tr>
+<tr><th scope="row">F (121–150d)</th><td class="n">2%</td><td class="n">1,43%</td><td class="n">2,22%</td><td class="n">2,04%</td><td class="n">2,91%</td><td class="n">4,19%</td><td class="n"><span class="chip bad">1,9×</span></td></tr>
+<tr><th scope="row">G (151–180d)</th><td class="n">2%</td><td class="n">1,01%</td><td class="n">1,53%</td><td class="n">1,43%</td><td class="n">2,01%</td><td class="n">2,82%</td><td class="n"><span class="chip bad">1,8×</span></td></tr>
+<tr><th scope="row">H (181–360d)</th><td class="n">3%</td><td class="n">0,80%</td><td class="n">1,31%</td><td class="n">1,24%</td><td class="n">1,79%</td><td class="n">2,66%</td><td class="n"><span class="chip bad">2,0×</span></td></tr>
+<tr><th scope="row">I (361–720d)</th><td class="n">3%</td><td class="n">0,40%</td><td class="n">0,52%</td><td class="n">0,48%</td><td class="n">0,61%</td><td class="n">0,76%</td><td class="n"><span class="chip warn">1,5×</span></td></tr>
+<tr><th scope="row">J (720d+)</th><td class="n">3%</td><td class="n">0,29%</td><td class="n">0,45%</td><td class="n">0,43%</td><td class="n">0,68%</td><td class="n">0,99%</td><td class="n"><span class="chip bad">2,2×</span></td></tr>
+</tbody></table></div>
+<p class="note">Cores: verde até 1,10× o realizado de Set/26; amarelo até 1,50×; vermelho acima. Out–Dez/27 repetem o mesmo valor em todas as faixas.</p>
+<div class="callout"><b>Leitura.</b> O plano começa abaixo do patamar de hoje (a meta de Jan/27 é menor que o realizado de Set/26 em todas as nove faixas) e termina muito acima dele em várias. Jan–Mar/27 ficam no patamar de hoje ou abaixo; Out–Dez/27 concentram o esforço. A faixa C, em 41,78%, é a mais distante: o melhor mês de 2026 foi 20,07%.</div>
+</section>
+
+<section>
+<h2>7. Quadro completo do plano</h2>
+<div class="tblwrap"><table>
+<thead><tr><th>KPI</th><th class="n">Peso</th><th class="n">Jan/27</th><th class="n">Fev/27</th><th class="n">Mar/27</th><th class="n">Abr/27</th><th class="n">Mai/27</th><th class="n">Jun/27</th><th class="n">Jul/27</th><th class="n">Ago/27</th><th class="n">Set/27</th><th class="n">Out/27</th><th class="n">Nov/27</th><th class="n">Dez/27</th><th class="n">Total</th></tr></thead>
+<tbody>
+<tr><th scope="row">Recuperação em prejuízo (&gt;181d) <sup>1</sup></th><td class="n">40%</td><td class="n">620 mil</td><td class="n">625 mil</td><td class="n">695 mil</td><td class="n">675 mil</td><td class="n">680 mil</td><td class="n">720 mil</td><td class="n">730 mil</td><td class="n">740 mil</td><td class="n">715 mil</td><td class="n">690 mil</td><td class="n">700 mil</td><td class="n">810 mil</td><td class="n tot">R$ 8.400.000</td></tr>
+<tr><th scope="row">Eficiência de custo (IEC), teto <sup>2</sup></th><td class="n">30%</td><td class="n">6,8%</td><td class="n">6,8%</td><td class="n">6,8%</td><td class="n">7,0%</td><td class="n">7,0%</td><td class="n">7,0%</td><td class="n">7,4%</td><td class="n">7,4%</td><td class="n">7,4%</td><td class="n">7,7%</td><td class="n">7,7%</td><td class="n">7,7%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Economia da internalização</th><td class="n">10%</td><td class="n">26,2%</td><td class="n">30,2%</td><td class="n">30,4%</td><td class="n">30,6%</td><td class="n">30,8%</td><td class="n">31,0%</td><td class="n">30,1%</td><td class="n">30,3%</td><td class="n">30,6%</td><td class="n">31,8%</td><td class="n">32,0%</td><td class="n">32,2%</td><td class="n tot">30,5%</td></tr>
+<tr><th scope="row">Eficiência B (05–30d)</th><td class="n">2%</td><td class="n">59,85%</td><td class="n">61,43%</td><td class="n">63,00%</td><td class="n">54,83%</td><td class="n">62,83%</td><td class="n">62,92%</td><td class="n">63,37%</td><td class="n">59,04%</td><td class="n">68,36%</td><td class="n">70,84%</td><td class="n">70,84%</td><td class="n">70,84%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência C (31–65d)</th><td class="n">2%</td><td class="n">18,05%</td><td class="n">18,53%</td><td class="n">19,00%</td><td class="n">24,80%</td><td class="n">22,18%</td><td class="n">32,52%</td><td class="n">30,91%</td><td class="n">25,52%</td><td class="n">38,17%</td><td class="n">41,78%</td><td class="n">41,78%</td><td class="n">41,78%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência D (66–90d)</th><td class="n">2%</td><td class="n">4,47%</td><td class="n">4,58%</td><td class="n">4,70%</td><td class="n">5,63%</td><td class="n">6,10%</td><td class="n">3,58%</td><td class="n">5,16%</td><td class="n">4,43%</td><td class="n">5,53%</td><td class="n">6,10%</td><td class="n">6,10%</td><td class="n">6,10%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência E (91–120d)</th><td class="n">2%</td><td class="n">2,57%</td><td class="n">2,63%</td><td class="n">2,70%</td><td class="n">2,27%</td><td class="n">2,54%</td><td class="n">3,61%</td><td class="n">3,35%</td><td class="n">2,97%</td><td class="n">3,60%</td><td class="n">3,94%</td><td class="n">3,94%</td><td class="n">3,94%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência F (121–150d)</th><td class="n">2%</td><td class="n">2,04%</td><td class="n">2,10%</td><td class="n">2,15%</td><td class="n">2,07%</td><td class="n">2,23%</td><td class="n">2,04%</td><td class="n">2,84%</td><td class="n">3,27%</td><td class="n">3,64%</td><td class="n">4,19%</td><td class="n">4,19%</td><td class="n">4,19%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência G (151–180d)</th><td class="n">2%</td><td class="n">1,43%</td><td class="n">1,46%</td><td class="n">1,50%</td><td class="n">1,38%</td><td class="n">1,43%</td><td class="n">1,83%</td><td class="n">1,82%</td><td class="n">2,25%</td><td class="n">2,55%</td><td class="n">2,82%</td><td class="n">2,82%</td><td class="n">2,82%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência H (181–360d)</th><td class="n">3%</td><td class="n">1,24%</td><td class="n">1,27%</td><td class="n">1,30%</td><td class="n">1,14%</td><td class="n">1,19%</td><td class="n">1,55%</td><td class="n">1,59%</td><td class="n">1,90%</td><td class="n">2,37%</td><td class="n">2,66%</td><td class="n">2,66%</td><td class="n">2,66%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência I (361–720d)</th><td class="n">3%</td><td class="n">0,48%</td><td class="n">0,50%</td><td class="n">0,51%</td><td class="n">0,44%</td><td class="n">0,57%</td><td class="n">0,60%</td><td class="n">0,57%</td><td class="n">0,65%</td><td class="n">0,74%</td><td class="n">0,76%</td><td class="n">0,76%</td><td class="n">0,76%</td><td class="n tot">—</td></tr>
+<tr><th scope="row">Eficiência J (720d+)</th><td class="n">3%</td><td class="n">0,43%</td><td class="n">0,44%</td><td class="n">0,45%</td><td class="n">0,39%</td><td class="n">0,39%</td><td class="n">0,76%</td><td class="n">0,68%</td><td class="n">0,76%</td><td class="n">0,88%</td><td class="n">0,99%</td><td class="n">0,99%</td><td class="n">0,99%</td><td class="n tot">—</td></tr>
+</tbody></table></div>
+<p class="note"><sup>1</sup> Meta ajustada: R$ 8,4 MM distribuídos por dias úteis (o plano original tinha R$ 700 mil em todos os meses). <sup>2</sup> Teto ajustado: por trimestre, em vez de 7,5% fixo; alternativa: IEC ajustado ao mix (seção 4). As demais linhas seguem o plano original.</p>
+</section>
+
+<footer>
+<p><b>Fontes e limites.</b> Realizado 2026: data.json do #KPI publicado em 08/10/2026 (recuperação por faixa, eficiência por faixa) e IEC da aba Saúde Financeira da Governança (investimento total e recuperação informados lá; Set/26 usa R$ 6,71 MM, contra R$ 6,707 MM no #KPI). Realizado 2025: Recuperação 2025.csv, só pagamentos com mais de 180 dias de atraso. Plano 2027: transcrito do quadro de metas enviado; conferir os valores contra a planilha de origem antes do envio. Out/26 é parcial (6 de 21 dias úteis); o ritmo é uma projeção linear simples. A estimativa de 2026 no ano supõe Nov e Dez no ritmo de Out. A eficiência implícita usa a carteira acumulada projetada de Out/26, mantida parada ao longo de 2027. O modelo de internalização é o de 18/09/2026 e não foi recalculado.</p>
+<p><b>Projeções de 09/10/2026.</b> Modelo de IEC calibrado para reproduzir 6,55% em Set/26: comissão por faixa (B 2,5%, C 6,5%, D 9,5%, E 12%, F 13,5%, G 16%, H 18%, I 22,2%, J 25%) e R$ 80 mil por mês de outros custos fixos. Carteira por faixa, tiers de comissão e outros custos ficam parados em 2027 (o QL subiu de R$ 31 mil para R$ 42 mil em 2026). A economia da internalização é a do modelo de 18/09, de R$ 84 mil (Jan) a R$ 135 mil (Dez). O ritmo de partida do prejuízo usa só 6 dias úteis de Out/26; vale reancorar com Nov e Dez.</p>
+</footer>
+</div>
+</body>
+</html>

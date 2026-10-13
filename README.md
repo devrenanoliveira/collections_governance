@@ -36,6 +36,7 @@ Estudos atuais:
 - **SmartNX × Novo Modelo Meta** (`estudo-smartnx-meta.html`): comparativo de custo de Atendimento e Cobrança diante do novo tarifário da Meta e da proposta da SmartNX.
 - **Estudo Salarial — Curitiba** (`estudo-salarial-curitiba.html`): bases salariais de referência para Operador de Call Center e Operador de Cobrança, jornadas de 6h e 8h.
 - **Meta de Recuperação de Perdas 2027** (`estudo-meta-perdas-2027.html`): confronto entre a meta do diretor para recuperação de perdas (Pós-Prejuízo, faixas H–J) e a projeção construída a partir do histórico real de pagamento, para embasar a meta de PLR de 2027.
+- **Mapa de Metas Anuais — RASCUNHO** (`mapa-metas-anuais.html`): plano de metas 2027 da cobrança (pesos, meta mensal de prejuízo, teto de IEC por trimestre, internalização, eficiência por faixa). Cópia estática de `Plano_Metas_2027_Cobranca.html`, gerado por `gerar_plano_metas_2027.py` na pasta do Motor (fonte única; regerar e recopiar). Dados de 2026 na posição de 08/10/2026. Publicado com valores em R$ no repositório público por decisão do usuário (13/10/2026); custo = IEC da aba Saúde Financeira
 
 ### Adicionar Novo Estudo
 
