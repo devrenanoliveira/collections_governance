@@ -952,7 +952,7 @@ function renderDesconto(){
       <tr><td>${r.parcelasDe === r.parcelasAte ? r.parcelasDe : r.parcelasDe + ' a ' + r.parcelasAte}</td>
       <td class="td-blue">${pct(r.taxaMin,2)}</td><td class="td-blue">${pct(r.taxaMax,2)}</td>
       <td class="td-muted">${pct(r.entradaMin,2)}</td><td class="td-muted">${pct(r.entradaMax,2)}</td><td class="td-gold">${pct(r.entradaPadrao,2)}</td></tr>`).join('');
-    const cab = `<thead><tr><th style="text-align:left">Parcelas</th><th>% Taxa operação (mín.)</th><th>% Taxa operação (máx.)</th><th>% Entrada (mín.)</th><th>% Entrada (máx.)</th><th>% Entrada (padrão)</th></tr></thead>`;
+    const cab = `<thead><tr><th style="text-align:left">Parcelas</th><th>% Taxa de parcelamento a.m. (mín.)</th><th>% Taxa de parcelamento a.m. (máx.)</th><th>% Entrada (mín.)</th><th>% Entrada (máx.)</th><th>% Entrada (padrão)</th></tr></thead>`;
     document.getElementById('parcelamentoDescricao').innerHTML = `<span class="callout-label">Em vigor desde ${parc.vigenciaInicio}</span><p>${parc.descricao}</p>`;
     document.getElementById('parcelamentoTitulo').textContent = `Política de parcelamento vigente — desde ${parc.vigenciaInicio}`;
     document.getElementById('tblParcelamento').innerHTML = cab + `<tbody>${linhas(parc.faixas)}</tbody>`;
