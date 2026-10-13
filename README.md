@@ -96,7 +96,7 @@ Cada produto contém:
 - **assessorias**: Metas, comissão base, estrutura concorrencial (só contexto), portfolioVigente (share por assessoria, com `vigenciaInicio`; vigente desde 01/10/2026), perdeGanha (regra de redistribuição trimestral), premiacao (mensal/trimestral + bônus de prejuízo + forma de pagamento + governancaRepasse), rituais. A aba tem 4 toggles — Metas & Comissão / Share & Redistribuição / Premiação & Bônus / Rituais de Gestão — todo renderizado nativamente (não há mais `regulamento.html`/iframe desde 22/09/2026: o conteúdo virou parte do `data.json`/`index.html` pra ganhar dark mode e fonte consistentes com o resto do dashboard)
 - **fornecedores**: Nome, categoria, papel (resumo curto), status (ativo ou em_implantacao), topicos opcional (lista de {label, valor} exibida como bullets no card — quando ausente, o card cai de volta pro texto corrido de "papel")
 - **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
-- **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) ou url (estudo externo, abre em nova aba) e data
+- **estudos**: Lista de estudos avulsos — id, titulo, descricao, arquivo (o HTML standalone) ou url (estudo externo, abre em nova aba) e data; `destaque: true` (opcional) pinta o botão em âmbar com ★ — a ordem do toggle é a da lista
 
 Novos itens (fornecedores, meses, faixas, produtos, estudos) podem ser adicionados copiando estruturas existentes sem modificar código.
 

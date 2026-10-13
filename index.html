@@ -1630,7 +1630,7 @@ function renderEstudos(){
   if(!estudoAtual || !lista.find(e=>e.id===estudoAtual)) estudoAtual = lista[0].id;
 
   document.getElementById('estudosToggle').innerHTML = lista.map(e=>
-    `<button class="filter-btn ${e.id===estudoAtual?'active':''}" data-estudo="${e.id}">${e.titulo}</button>`
+    `<button class="filter-btn ${e.id===estudoAtual?'active':''}${e.destaque?' destaque':''}" data-estudo="${e.id}">${e.destaque?'★ ':''}${e.titulo}</button>`
   ).join('');
   document.querySelectorAll('#estudosToggle .filter-btn').forEach(btn=>{
     btn.addEventListener('click', ()=>{
