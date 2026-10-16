@@ -649,7 +649,7 @@
           { "nome": "Fácil", "tipo": "Assessoria", "cor": "#0F2461", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias." },
           { "nome": "Decisão", "tipo": "Assessoria", "cor": "#1BAF7A", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias." },
           { "nome": "Ciclo", "tipo": "Assessoria", "cor": "#EB6834", "inicial": [4, 4], "expansao": null, "obs": "Atua acima de 180 dias." },
-          { "nome": "Serasa Limpa Nome", "tipo": "Plataforma de renegociação", "cor": "#D97706", "inicial": [4, 4], "expansao": [1, 3], "obs": "Inicialmente acima de 180 dias; pode expandir para toda a carteira por ser a maior vitrine de renegociação do país." }
+          { "nome": "Serasa Limpa Nome", "tipo": "Plataforma de renegociação", "cor": "#D97706", "inicial": [4, 4], "expansao": [3, 3], "obs": "Inicialmente acima de 180 dias; pode expandir até 65 dias (não abaixo disso) por ser a maior vitrine de renegociação do país." }
         ]
       },
       "fornecedores": [
