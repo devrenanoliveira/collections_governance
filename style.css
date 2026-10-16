@@ -69,7 +69,6 @@ body {
 .futuro-barra { height: 38px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: .74rem; font-weight: 700; color: #fff; background: var(--cor); z-index: 1; }
 .futuro-barra.expansao { background: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--cor) 18%, transparent) 6px 12px); border: 2px dashed var(--cor); color: var(--cor); }
 .futuro-faixa b { display: block; font-size: 1.15rem; color: var(--brand-blue); margin-top: 2px; }
-.futuro-faixa em { display: block; font-size: .66rem; font-style: normal; font-weight: 700; color: var(--ink-secondary); margin-top: 3px; }
 .futuro-faixa i { display: block; font-size: .62rem; font-style: normal; font-weight: 600; color: var(--ink-muted); }
 .futuro-nota { margin-top: 16px; font-size: .72rem; color: var(--ink-muted); border-top: 1px solid var(--gridline); padding-top: 10px; }
 .futuro-obs { list-style: none; margin-top: 18px; display: grid; gap: 6px; font-size: .78rem; color: var(--ink-secondary); }
