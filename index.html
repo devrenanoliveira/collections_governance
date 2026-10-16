@@ -381,7 +381,12 @@
   <p class="sec-label">Fornecedores</p>
   <h1 class="sec-title">Parceiros do processo de cobrança</h1>
   <p class="sec-subtitle">Assessorias, plataformas, bureaus e ferramentas usados na operação.</p>
+  <div class="filter-row" id="fornecedoresToggle">
+    <button class="filter-btn active" data-vista="parceiros">Parceiros atuais</button>
+    <button class="filter-btn" data-vista="futuro" id="fornecedoresBtnFuturo">Desenho futuro</button>
+  </div>
   <div class="provider-grid" id="fornecedoresGrid"></div>
+  <div id="fornecedoresFuturo" style="display:none;"></div>
   <div id="fornecedoresEmpty" style="display:none;"></div>
 </div>
 
@@ -1544,6 +1549,33 @@ function exportarRelatorioAssessorias(){
 /* ---------- FORNECEDORES ---------- */
 function renderFornecedores(){
   const fornecedores = produto().fornecedores || [];
+  const futuro = produto().desenhoFuturo;
+  const mostrar = v => {
+    document.querySelectorAll('#fornecedoresToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === v));
+    document.getElementById('fornecedoresGrid').style.display = v === 'futuro' ? 'none' : '';
+    document.getElementById('fornecedoresFuturo').style.display = v === 'futuro' ? '' : 'none';
+  };
+  document.querySelectorAll('#fornecedoresToggle .filter-btn').forEach(b=>{ b.onclick = ()=>mostrar(b.dataset.vista); });
+  document.getElementById('fornecedoresBtnFuturo').style.display = futuro ? '' : 'none';
+  mostrar('parceiros');
+  if(futuro){
+    const n = futuro.faixas.length;
+    const col = (ini, fim) => `grid-column:${ini + 1} / ${fim + 2};`;
+    document.getElementById('fornecedoresFuturo').innerHTML = `
+      <div class="futuro-card">
+        <div class="futuro-titulo">${futuro.titulo}</div>
+        <div class="futuro-desc">${futuro.descricao}</div>
+        <div class="futuro-grid" style="grid-template-columns:190px repeat(${n}, 1fr);">
+          <div style="grid-row:1;"></div>${futuro.faixas.map((f, c)=>`<div class="futuro-faixa" style="grid-column:${c + 2};grid-row:1;">${f}</div>`).join('')}
+          ${futuro.atores.map((a, i)=>`
+            <div class="futuro-ator" style="grid-row:${i + 2};"><strong>${a.nome}</strong><span>${a.tipo}</span></div>
+            ${Array.from({length:n}, (_, c)=>`<div class="futuro-cel" style="grid-column:${c + 2};grid-row:${i + 2};"></div>`).join('')}
+            ${a.expansao ? `<div class="futuro-barra expansao" style="${col(a.expansao[0], a.expansao[1])}grid-row:${i + 2};--cor:${a.cor};">expansão possível</div>` : ''}
+            <div class="futuro-barra" style="${col(a.inicial[0], a.inicial[1])}grid-row:${i + 2};--cor:${a.cor};">atuação</div>`).join('')}
+        </div>
+        <ul class="futuro-obs">${futuro.atores.map(a=>`<li><span class="futuro-dot" style="background:${a.cor};"></span><strong>${a.nome}:</strong> ${a.obs}</li>`).join('')}</ul>
+      </div>`;
+  }
   document.getElementById('fornecedoresGrid').innerHTML = fornecedores.length ? fornecedores.map(f=>`
     <div class="provider-card">
       <div class="provider-name">${f.nome}</div>

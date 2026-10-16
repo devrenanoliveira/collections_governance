@@ -640,6 +640,18 @@
           "mensal": "Alinhamento estratégico até o 5º dia útil do mês seguinte: visão holística de indicadores e auditoria de repasses de comissão, performance dos negociadores e dos robôs de autosserviço, macrovisão da saúde da carteira, planejamento prospectivo do mês seguinte."
         }
       },
+      "desenhoFuturo": {
+        "titulo": "Desenho futuro da cobrança por faixa de atraso",
+        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão possível.",
+        "faixas": ["05 a 30 dias", "31 a 65 dias", "66 a 180 dias", "Acima de 181 dias"],
+        "atores": [
+          { "nome": "Cobrança interna", "tipo": "Time Z-ON", "cor": "#2563EB", "inicial": [1, 1], "expansao": [2, 2], "obs": "Inicialmente na faixa de 05 a 30 dias, podendo chegar a 65 dias." },
+          { "nome": "Fácil", "tipo": "Assessoria", "cor": "#0F2461", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias." },
+          { "nome": "Decisão", "tipo": "Assessoria", "cor": "#1BAF7A", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias." },
+          { "nome": "Ciclo", "tipo": "Assessoria", "cor": "#EB6834", "inicial": [4, 4], "expansao": null, "obs": "Atua acima de 180 dias." },
+          { "nome": "Serasa Limpa Nome", "tipo": "Plataforma de renegociação", "cor": "#D97706", "inicial": [4, 4], "expansao": [1, 3], "obs": "Inicialmente acima de 180 dias; pode expandir para toda a carteira por ser a maior vitrine de renegociação do país." }
+        ]
+      },
       "fornecedores": [
         {
           "nome": "Decisão",
