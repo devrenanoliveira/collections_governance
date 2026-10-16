@@ -1566,7 +1566,7 @@ function renderFornecedores(){
         <div class="futuro-titulo">${futuro.titulo}</div>
         <div class="futuro-desc">${futuro.descricao}</div>
         <div class="futuro-grid" style="grid-template-columns:190px repeat(${n}, 1fr);">
-          <div style="grid-row:1;"></div>${futuro.faixas.map((f, c)=>`<div class="futuro-faixa" style="grid-column:${c + 2};grid-row:1;">${f}${futuro.resultadoPorFaixa ? `<b>${futuro.resultadoPorFaixa[c].toFixed(2).replace('.', ',')}%</b><i>eficiência da faixa</i>` : ''}</div>`).join('')}
+          <div style="grid-row:1;"></div>${futuro.faixas.map((f, c)=>`<div class="futuro-faixa" style="grid-column:${c + 2};grid-row:1;">${f}${futuro.shareRecuperacao ? `<b>${futuro.shareRecuperacao[c].toFixed(1).replace('.', ',')}%</b><i>share da recuperação</i>${futuro.recuperacaoMediaMensal ? `<i>R$ ${(futuro.recuperacaoMediaMensal[c] / 1e6).toFixed(2).replace('.', ',')} MM/mês</i>` : ''}` : ''}${futuro.resultadoPorFaixa ? `<em>${futuro.resultadoPorFaixa[c].toFixed(2).replace('.', ',')}% de eficiência</em>` : ''}</div>`).join('')}
           ${futuro.atores.map((a, i)=>`
             <div class="futuro-ator" style="grid-row:${i + 2};"><strong>${a.nome}</strong><span>${a.tipo}</span></div>
             ${Array.from({length:n}, (_, c)=>`<div class="futuro-cel" style="grid-column:${c + 2};grid-row:${i + 2};"></div>`).join('')}

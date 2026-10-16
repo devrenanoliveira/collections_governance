@@ -642,9 +642,11 @@
       },
       "desenhoFuturo": {
         "titulo": "Desenho futuro da cobrança por faixa de atraso",
-        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão possível. O percentual no topo de cada coluna é o resultado (eficiência) da faixa, independente de quem atua nela.",
+        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão possível. No topo de cada coluna: o share de recuperação (quanto da recuperação total vem da faixa) e a eficiência da faixa, independente de quem atua nela.",
         "resultadoPorFaixa": [61.47, 16.74, 2.59, 0.72],
-        "notaResultado": "Resultado da faixa = eficiência (recuperado ÷ carteira da faixa), média dos meses fechados Ago e Set/26 da carteira inteira (#KPI, matriz de eficiência). As colunas 66–180 (D a G) e acima de 181 (H a J) agrupam as faixas ponderadas pela carteira. É o resultado da faixa, não de um fornecedor específico.",
+        "shareRecuperacao": [72.5, 11.18, 7.45, 8.86],
+        "recuperacaoMediaMensal": [4746216, 732206, 488222, 581678],
+        "notaResultado": "Resultado da faixa = eficiência (recuperado ÷ carteira da faixa), média dos meses fechados Ago e Set/26 da carteira inteira (#KPI, matriz de eficiência). As colunas 66–180 (D a G) e acima de 181 (H a J) agrupam as faixas ponderadas pela carteira. É o resultado da faixa, não de um fornecedor específico. Share de recuperação = parte de cada coluna no total recuperado (R$ 6,55 MM/mês em média, Ago e Set/26), média simples dos dois meses.",
         "faixas": ["05 a 30 dias", "31 a 65 dias", "66 a 180 dias", "Acima de 181 dias"],
         "atores": [
           { "nome": "Cobrança interna", "tipo": "Time Z-ON", "cor": "#2563EB", "inicial": [1, 1], "expansao": [2, 2], "obs": "Inicialmente na faixa de 05 a 30 dias, podendo chegar a 65 dias." },
