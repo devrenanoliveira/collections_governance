@@ -299,6 +299,7 @@
       <button class="filter-btn" data-vista="share">Share &amp; Redistribuição</button>
       <button class="filter-btn" data-vista="premiacao">Premiação &amp; Bônus</button>
       <button class="filter-btn" data-vista="rituais">Rituais de Gestão</button>
+      <button class="filter-btn" data-vista="contatos" id="assessoriasBtnContatos">Contatos</button>
     </div>
 
     <div id="assessoriasVista-metas">
@@ -362,6 +363,13 @@
       <div class="table-card" style="padding:18px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Rituais de gestão</strong></div>
         <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:0;" id="rituaisGrid"></div>
+      </div>
+    </div>
+
+    <div id="assessoriasVista-contatos" style="display:none;">
+      <div class="table-card">
+        <div class="table-card-header"><strong>Contatos das assessorias</strong></div>
+        <div class="table-scroll"><table id="tblContatos"></table></div>
       </div>
     </div>
   </div>
@@ -1285,7 +1293,7 @@ document.querySelectorAll('#tab-regua .filter-btn').forEach(btn=>{
 
 /* ---------- ASSESSORIAS ---------- */
 let assessoriasToggleBound = false;
-const ASSESSORIAS_VISTAS = ['metas', 'share', 'premiacao', 'rituais'];
+const ASSESSORIAS_VISTAS = ['metas', 'share', 'premiacao', 'rituais', 'contatos'];
 
 function assessoriasMostrarVista(vista){
   document.querySelectorAll('#assessoriasToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
@@ -1385,6 +1393,21 @@ function renderAssessorias(){
     </ul>`;
   document.getElementById('premiacaoTravaMinima').innerHTML = `<span class="callout-label">Trava mínima de elegibilidade</span><p>${pr.travaMinima}</p>`;
   document.getElementById('premiacaoFormaPagamento').innerHTML = `<span class="callout-label">Forma de pagamento</span><p>${pr.formaPagamento}</p>`;
+
+  // contatos: aba some do toggle se o produto não cadastrar (chave "contatos")
+  const contatos = a.contatos || [];
+  document.getElementById('assessoriasBtnContatos').style.display = contatos.length ? '' : 'none';
+  const dig = t => t.replace(/[^\d+]/g,'');
+  const link = (href, txt) => `<a href="${href}" target="_blank" rel="noopener">${txt}</a>`;
+  document.getElementById('tblContatos').innerHTML = `
+    <thead><tr><th style="text-align:left">Assessoria</th><th style="text-align:left">Voz</th><th style="text-align:left">WhatsApp</th><th style="text-align:left">E-mail</th><th style="text-align:left">Portal</th></tr></thead>
+    <tbody>${contatos.map(c=>`<tr style="font-variant-numeric:normal;">
+      <td style="text-align:left"><strong>${c.nome}</strong></td>
+      <td style="text-align:left">${c.voz ? link('tel:'+dig(c.voz), c.voz) : `<span class="td-dim">${c.vozNota || '—'}</span>`}</td>
+      <td style="text-align:left">${(c.whatsapp||[]).map(w=>`${w.rotulo ? w.rotulo + ': ' : ''}${link('https://wa.me/' + (dig(w.numero).startsWith('+') ? dig(w.numero).slice(1) : '55' + dig(w.numero)), w.numero)}`).join('<br>') || '—'}</td>
+      <td style="text-align:left">${c.email ? link('mailto:'+c.email, c.email) : '<span class="td-dim">Não possui</span>'}</td>
+      <td style="text-align:left">${c.portal ? link(c.portal.url, c.portal.url.replace(/^https?:\/\//,'').replace(/\/$/,'')) + (c.portal.nota ? ` <span class="td-dim">(${c.portal.nota})</span>` : '') : '—'}</td>
+    </tr>`).join('')}</tbody>`;
 
   document.getElementById('rituaisGrid').innerHTML = `
     <div class="table-card" style="padding:14px 16px;box-shadow:none;"><strong style="font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--brand-blue);">Diário</strong><p style="font-size:.78rem;margin-top:6px;color:var(--ink-secondary);">${a.rituais.diario}</p></div>

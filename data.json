@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-10-13",
+      "ultimaAtualizacao": "2026-10-16",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso da política oficial e o teto da política agressiva, para o número de dias em atraso informado.",
         "legendas": {
@@ -629,6 +629,11 @@
           "repasseTrimestral": "Premiação trimestral: sem exigência de repasse mínimo para a equipe.",
           "prestacaoContas": "Prazo de até 15 dias após o recebimento dos valores para envio dos comprovantes de repasse da premiação mensal à operação."
         },
+        "contatos": [
+          { "nome": "Fácil", "voz": "0800 291 2213", "whatsapp": [{ "numero": "+55 47 9783-7582" }], "email": "contato@facilresultado.com.br", "portal": { "url": "https://facilquitar.com.br/zoncard" } },
+          { "nome": "Decisão", "voz": "0800 941 8068", "whatsapp": [{ "numero": "(41) 9596-7870" }], "email": "atendimento@decisao.com", "portal": { "url": "https://z-on.pegueipaguei.com/" } },
+          { "nome": "Ciclo", "voz": null, "vozNota": "Ainda não há 0800 para esta carteira", "whatsapp": [{ "rotulo": "Humano", "numero": "(41) 98435-5317" }, { "rotulo": "AD", "numero": "(41) 98400-9383" }], "email": null, "portal": { "url": "https://condor.negociemais.com/", "nota": "fora de uso" } }
+        ],
         "rituais": {
           "diario": "Relatório matinal com o funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; meta de volume e valor de acordos, acordos e valor realizado, e projeção do realizado sobre a meta. Envio de pelo menos 3x ao dia: o primeiro até às 10:00, com as metas; o segundo até às 15:00; e o último ao encerrar o expediente da operação.",
           "semanal": "Comitê tático às segundas-feiras: visão acumulada do mês (real vs. projeção e GAPs), performance por canal digital (agente virtual, autonegociação, cartas, SMS, WhatsApp), monitoramento da curva de quartis do time interno.",
