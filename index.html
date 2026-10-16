@@ -1570,7 +1570,7 @@ function renderFornecedores(){
           ${futuro.atores.map((a, i)=>`
             <div class="futuro-ator" style="grid-row:${i + 2};"><strong>${a.nome}</strong><span>${a.tipo}</span></div>
             ${Array.from({length:n}, (_, c)=>`<div class="futuro-cel" style="grid-column:${c + 2};grid-row:${i + 2};"></div>`).join('')}
-            ${a.expansao ? `<div class="futuro-barra expansao" style="${col(a.expansao[0], a.expansao[1])}grid-row:${i + 2};--cor:${a.cor};">expansão possível</div>` : ''}
+            ${a.expansao ? `<div class="futuro-barra expansao" style="${col(a.expansao[0], a.expansao[1])}grid-row:${i + 2};--cor:${a.cor};">Expansão - fase 2</div>` : ''}
             <div class="futuro-barra" style="${col(a.inicial[0], a.inicial[1])}grid-row:${i + 2};--cor:${a.cor};">atuação</div>`).join('')}
         </div>
         ${futuro.notaResultado ? `<div class="futuro-nota">${futuro.notaResultado}</div>` : ''}

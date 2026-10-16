@@ -642,7 +642,7 @@
       },
       "desenhoFuturo": {
         "titulo": "Desenho futuro da cobrança por faixa de atraso",
-        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão possível. No topo de cada coluna: o share de recuperação, ou seja, quanto da recuperação total vem da faixa, independente de quem atua nela.",
+        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão (fase 2). No topo de cada coluna: o share de recuperação, ou seja, quanto da recuperação total vem da faixa, independente de quem atua nela.",
         "shareRecuperacao": [72.5, 11.18, 7.45, 8.86],
         "recuperacaoMediaMensal": [4746216, 732206, 488222, 581678],
         "notaResultado": "Share de recuperação = recuperado da faixa ÷ recuperado total, média simples dos meses fechados Ago e Set/26 (#KPI). Média de R$ 6,55 MM/mês no total. As colunas 66–180 (D a G) e acima de 181 (H a J) agrupam as faixas. É o resultado da faixa, não de um fornecedor específico.",
