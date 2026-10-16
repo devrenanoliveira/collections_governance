@@ -642,15 +642,16 @@
       },
       "desenhoFuturo": {
         "titulo": "Desenho futuro da cobrança por faixa de atraso",
-        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão possível. O percentual em cada barra é o resultado (eficiência) que o player entrega hoje na faixa.",
-        "notaResultado": "Resultado = eficiência (recuperado ÷ carteira da faixa), com as faixas agrupadas por coluna e ponderadas pela carteira. Fácil, Decisão e Ciclo: Set/26, único mês fechado com carteira por assessoria e faixa (Out/26 está parcial). Cobrança interna: referência da carteira atual nas faixas B e C (média Ago–Set/26, ainda sem histórico próprio). Serasa Limpa Nome: sem histórico, a medir.",
+        "descricao": "Quem atua em cada faixa no modelo-alvo. Barra cheia = atuação inicial; barra tracejada = expansão possível. O percentual no topo de cada coluna é o resultado (eficiência) da faixa, independente de quem atua nela.",
+        "resultadoPorFaixa": [61.47, 16.74, 2.59, 0.72],
+        "notaResultado": "Resultado da faixa = eficiência (recuperado ÷ carteira da faixa), média dos meses fechados Ago e Set/26 da carteira inteira (#KPI, matriz de eficiência). As colunas 66–180 (D a G) e acima de 181 (H a J) agrupam as faixas ponderadas pela carteira. É o resultado da faixa, não de um fornecedor específico.",
         "faixas": ["05 a 30 dias", "31 a 65 dias", "66 a 180 dias", "Acima de 181 dias"],
         "atores": [
-          { "nome": "Cobrança interna", "tipo": "Time Z-ON", "cor": "#2563EB", "inicial": [1, 1], "expansao": [2, 2], "resultado": { "1": 61.47, "2": 16.75 }, "resultadoRef": true, "obs": "Inicialmente na faixa de 05 a 30 dias, podendo chegar a 65 dias." },
-          { "nome": "Fácil", "tipo": "Assessoria", "cor": "#0F2461", "inicial": [3, 4], "expansao": null, "resultado": { "3": 2.72, "4": 0.76 }, "obs": "Atua acima de 65 dias." },
-          { "nome": "Decisão", "tipo": "Assessoria", "cor": "#1BAF7A", "inicial": [3, 4], "expansao": null, "resultado": { "3": 3.15, "4": 1.08 }, "obs": "Atua acima de 65 dias." },
-          { "nome": "Ciclo", "tipo": "Assessoria", "cor": "#EB6834", "inicial": [4, 4], "expansao": null, "resultado": { "4": 0.61 }, "obs": "Atua acima de 180 dias." },
-          { "nome": "Serasa Limpa Nome", "tipo": "Plataforma de renegociação", "cor": "#D97706", "inicial": [3, 4], "expansao": null, "resultado": {}, "obs": "Atua acima de 65 dias, por ser a maior vitrine de renegociação do país. Sem histórico próprio ainda: resultado a medir." }
+          { "nome": "Cobrança interna", "tipo": "Time Z-ON", "cor": "#2563EB", "inicial": [1, 1], "expansao": [2, 2], "obs": "Inicialmente na faixa de 05 a 30 dias, podendo chegar a 65 dias." },
+          { "nome": "Fácil", "tipo": "Assessoria", "cor": "#0F2461", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias." },
+          { "nome": "Decisão", "tipo": "Assessoria", "cor": "#1BAF7A", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias." },
+          { "nome": "Ciclo", "tipo": "Assessoria", "cor": "#EB6834", "inicial": [4, 4], "expansao": null, "obs": "Atua acima de 180 dias." },
+          { "nome": "Serasa Limpa Nome", "tipo": "Plataforma de renegociação", "cor": "#D97706", "inicial": [3, 4], "expansao": null, "obs": "Atua acima de 65 dias, por ser a maior vitrine de renegociação do país. Sem histórico próprio ainda: resultado a medir." }
         ]
       },
       "fornecedores": [

@@ -1561,22 +1561,17 @@ function renderFornecedores(){
   if(futuro){
     const n = futuro.faixas.length;
     const col = (ini, fim) => `grid-column:${ini + 1} / ${fim + 2};`;
-    // um % por coluna dentro da barra (mesmo gap da grade externa, pra alinhar com as faixas)
-    const resultados = (a, [ini, fim], tracejada) => {
-      const cel = c => { const v = (a.resultado || {})[c]; return `<span>${v == null ? (tracejada ? 'expansão' : 'a medir') : `<b>${v.toFixed(2).replace('.', ',')}%</b>${a.resultadoRef ? '<i>ref.</i>' : ''}`}</span>`; };
-      return `<div class="futuro-pcts" style="grid-template-columns:repeat(${fim - ini + 1}, 1fr);">${Array.from({length: fim - ini + 1}, (_, k)=>cel(ini + k)).join('')}</div>`;
-    };
     document.getElementById('fornecedoresFuturo').innerHTML = `
       <div class="futuro-card">
         <div class="futuro-titulo">${futuro.titulo}</div>
         <div class="futuro-desc">${futuro.descricao}</div>
         <div class="futuro-grid" style="grid-template-columns:190px repeat(${n}, 1fr);">
-          <div style="grid-row:1;"></div>${futuro.faixas.map((f, c)=>`<div class="futuro-faixa" style="grid-column:${c + 2};grid-row:1;">${f}</div>`).join('')}
+          <div style="grid-row:1;"></div>${futuro.faixas.map((f, c)=>`<div class="futuro-faixa" style="grid-column:${c + 2};grid-row:1;">${f}${futuro.resultadoPorFaixa ? `<b>${futuro.resultadoPorFaixa[c].toFixed(2).replace('.', ',')}%</b><i>eficiência da faixa</i>` : ''}</div>`).join('')}
           ${futuro.atores.map((a, i)=>`
             <div class="futuro-ator" style="grid-row:${i + 2};"><strong>${a.nome}</strong><span>${a.tipo}</span></div>
             ${Array.from({length:n}, (_, c)=>`<div class="futuro-cel" style="grid-column:${c + 2};grid-row:${i + 2};"></div>`).join('')}
-            ${a.expansao ? `<div class="futuro-barra expansao" style="${col(a.expansao[0], a.expansao[1])}grid-row:${i + 2};--cor:${a.cor};">${resultados(a, a.expansao, true)}</div>` : ''}
-            <div class="futuro-barra" style="${col(a.inicial[0], a.inicial[1])}grid-row:${i + 2};--cor:${a.cor};">${resultados(a, a.inicial, false)}</div>`).join('')}
+            ${a.expansao ? `<div class="futuro-barra expansao" style="${col(a.expansao[0], a.expansao[1])}grid-row:${i + 2};--cor:${a.cor};">expansão possível</div>` : ''}
+            <div class="futuro-barra" style="${col(a.inicial[0], a.inicial[1])}grid-row:${i + 2};--cor:${a.cor};">atuação</div>`).join('')}
         </div>
         ${futuro.notaResultado ? `<div class="futuro-nota">${futuro.notaResultado}</div>` : ''}
         <ul class="futuro-obs">${futuro.atores.map(a=>`<li><span class="futuro-dot" style="background:${a.cor};"></span><strong>${a.nome}:</strong> ${a.obs}</li>`).join('')}</ul>
