@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-10-16",
+      "ultimaAtualizacao": "2026-10-20",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso da política oficial e o teto da política agressiva, para o número de dias em atraso informado.",
         "legendas": {
@@ -252,6 +252,12 @@
             "multa": 100
           }
         ],
+        "quebraAcordo": {
+          "vigenciaInicio": "21/10/2026",
+          "descricao": "Política de quebra de acordo: o que acontece com o cliente que paga o acordo após o vencimento. A partir de 21/10/2026 deixa de existir a tolerância sem juros: o pagamento em atraso passa a ter juros de 1% ao dia e multa de 2%, e o prazo para pagar cai de 10 para 5 dias.",
+          "nova": { "prazoDias": 5, "jurosDiaPct": 1, "multaPct": 2, "condicao": "Com juros e multa" },
+          "anterior": { "prazoDias": 10, "jurosDiaPct": 0, "multaPct": 0, "condicao": "Sem juros e sem multa", "descricao": "Política anterior (até 20/10/2026): após o vencimento, o cliente podia pagar sem juros em até 10 dias." }
+        },
         "parcelamento": {
           "vigenciaInicio": "09/10/2026",
           "descricao": "Política de parcelamento por quantidade de parcelas: quanto menos parcelas, maior a taxa de parcelamento (ao mês) e maior a entrada padrão. Valor de tarifa e valor de tarifa por parcela são R$ 0,00 (mínimo e máximo) em todas as faixas. A faixa de 0 parcela segue zerada.",

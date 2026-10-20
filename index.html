@@ -190,6 +190,7 @@
       <button class="filter-btn" data-vista="oficial">Política Oficial (Piso)</button>
       <button class="filter-btn" data-vista="agressiva">Política Agressiva (Teto)</button>
       <button class="filter-btn" data-vista="parcelamento" id="descontoBtnParcelamento">Política de Parcelamento</button>
+      <button class="filter-btn" data-vista="quebra" id="descontoBtnQuebra">Quebra de Acordo</button>
     </div>
 
     <div id="descontoVista-calculadora">
@@ -232,6 +233,15 @@
         </div>
       </div>
       <p class="note" id="parcelamentoAnteriorNota" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;"></p>
+    </div>
+
+    <div id="descontoVista-quebra" style="display:none;">
+      <div class="callout callout-info" id="quebraDescricao" style="margin-bottom:14px;"></div>
+      <div class="table-card">
+        <div class="table-card-header"><strong>Quebra de acordo — antes e depois</strong></div>
+        <div class="table-scroll"><table id="tblQuebra"></table></div>
+      </div>
+      <p class="note" id="quebraAnteriorNota" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;"></p>
     </div>
   </div>
   <div id="descontoEmpty" style="display:none;"></div>
@@ -912,7 +922,7 @@ function renderVisaoGeral(){
 
 /* ---------- POLÍTICA DE DESCONTO ---------- */
 let descontoToggleBound = false;
-const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva', 'parcelamento'];
+const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva', 'parcelamento', 'quebra'];
 
 function descontoMostrarVista(vista){
   document.querySelectorAll('#descontoToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
@@ -971,6 +981,19 @@ function renderDesconto(){
     document.getElementById('tblParcelamento').innerHTML = cab + `<tbody>${linhas(parc.faixas)}</tbody>`;
     document.getElementById('tblParcelamentoAnterior').innerHTML = cab + `<tbody>${linhas(parc.anterior.faixas)}</tbody>`;
     document.getElementById('parcelamentoAnteriorNota').textContent = parc.anterior.descricao;
+  }
+
+  const qb = p.desconto.quebraAcordo;
+  document.getElementById('descontoBtnQuebra').style.display = qb ? '' : 'none';
+  if(qb){
+    // vigência no futuro: "Vigente a partir de"; depois da data: "Em vigor desde"
+    const [d, m, a] = qb.vigenciaInicio.split('/').map(Number);
+    const hoje = new Date(); hoje.setHours(0,0,0,0);
+    const rotulo = new Date(a, m - 1, d) <= hoje ? 'Em vigor desde' : 'Vigente a partir de';
+    const linha = (nome, f, cls) => `<tr><td style="text-align:left"><strong>${nome}</strong></td><td class="${cls}">${f.prazoDias} dias</td><td class="${cls}">${f.jurosDiaPct ? pct(f.jurosDiaPct,2) + ' ao dia' : 'Sem juros'}</td><td class="${cls}">${f.multaPct ? pct(f.multaPct,2) : 'Sem multa'}</td></tr>`;
+    document.getElementById('quebraDescricao').innerHTML = `<span class="callout-label">${rotulo} ${qb.vigenciaInicio}</span><p>${qb.descricao}</p>`;
+    document.getElementById('tblQuebra').innerHTML = `<thead><tr><th style="text-align:left">Política</th><th>Prazo após o vencimento</th><th>Juros</th><th>Multa</th></tr></thead><tbody>${linha('Anterior', qb.anterior, 'td-muted')}${linha('Nova (a partir de ' + qb.vigenciaInicio + ')', qb.nova, 'td-gold')}</tbody>`;
+    document.getElementById('quebraAnteriorNota').textContent = qb.anterior.descricao;
   }
 
   document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao});
