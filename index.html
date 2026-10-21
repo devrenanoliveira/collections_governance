@@ -191,6 +191,7 @@
       <button class="filter-btn" data-vista="agressiva">Política Agressiva (Teto)</button>
       <button class="filter-btn" data-vista="parcelamento" id="descontoBtnParcelamento">Política de Parcelamento</button>
       <button class="filter-btn" data-vista="quebra" id="descontoBtnQuebra">Quebra de Acordo</button>
+      <button class="filter-btn" data-vista="campanhas" id="descontoBtnCampanhas">Campanhas</button>
     </div>
 
     <div id="descontoVista-calculadora">
@@ -243,6 +244,8 @@
       </div>
       <p class="note" id="quebraAnteriorNota" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;"></p>
     </div>
+
+    <div id="descontoVista-campanhas" style="display:none;"></div>
   </div>
   <div id="descontoEmpty" style="display:none;"></div>
 </div>
@@ -922,7 +925,7 @@ function renderVisaoGeral(){
 
 /* ---------- POLÍTICA DE DESCONTO ---------- */
 let descontoToggleBound = false;
-const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva', 'parcelamento', 'quebra'];
+const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva', 'parcelamento', 'quebra', 'campanhas'];
 
 function descontoMostrarVista(vista){
   document.querySelectorAll('#descontoToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
@@ -995,6 +998,30 @@ function renderDesconto(){
     document.getElementById('tblQuebra').innerHTML = `<thead><tr><th style="text-align:left">Política</th><th>Prazo após o vencimento</th><th>Juros</th><th>Multa</th></tr></thead><tbody>${linha('Anterior', qb.anterior, 'td-muted')}${linha('Nova (a partir de ' + qb.vigenciaInicio + ')', qb.nova, 'td-gold')}</tbody>`;
     document.getElementById('quebraAnteriorNota').textContent = qb.anterior.descricao;
   }
+
+  const camps = p.desconto.campanhas || [];
+  document.getElementById('descontoBtnCampanhas').style.display = camps.length ? '' : 'none';
+  const pc = v => String(v).replace('.', ',') + '%';
+  const dt = br => { const [d, m, a] = br.split('/').map(Number); return new Date(a, m - 1, d); };
+  const hojeC = new Date(); hojeC.setHours(0,0,0,0);
+  document.getElementById('descontoVista-campanhas').innerHTML = camps.map(c=>{
+    const status = hojeC < dt(c.vigenciaInicio) ? 'Agendada' : hojeC <= dt(c.vigenciaFim) ? 'Em andamento' : 'Encerrada';
+    return `
+      <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">${c.nome} · ${status} · ${c.vigenciaInicio} a ${c.vigenciaFim}</span><p>${c.descricao}</p></div>
+      <div class="table-card">
+        <div class="table-card-header"><strong>Desconto pré-aprovado por faixa de atraso (campanha × política de hoje)</strong></div>
+        <div class="table-scroll"><table>
+          <thead><tr><th style="text-align:left">Faixa</th><th>À vista (campanha)</th><th>Parcelado único (campanha)</th><th>À vista (hoje)</th><th>Parcelado (hoje)</th></tr></thead>
+          <tbody>${c.tabela.map(r=>`<tr><td>${r.faixa}</td><td class="td-gold">${pc(r.avista)}</td><td class="td-gold">${pc(r.parcelado)}</td><td class="td-muted">${pc(r.vigenteAvista)}</td><td class="td-muted">${pc(r.vigenteParcelado)}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+      <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin:8px 0 14px;">Política de hoje: nas faixas com mais de uma banda (181–360 e 361–720 dias) aparece a média das bandas.</p>
+      <div class="table-card" style="padding:18px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Regras da campanha</strong></div>
+        <ul style="margin:0;padding-left:18px;font-size:.85rem;line-height:1.7;">${c.regras.map(r=>`<li>${r}</li>`).join('')}</ul>
+      </div>
+      <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">${c.resultado || 'Resultado a divulgar após o encerramento da campanha.'}</p>`;
+  }).join('<hr style="margin:22px 0;border:none;border-top:1px solid var(--gridline);">');
 
   document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao});
 }
