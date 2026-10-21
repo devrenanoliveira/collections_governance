@@ -1068,9 +1068,9 @@
         {
           "id": "portal-proprio-x-fornecedor",
           "titulo": "Portal próprio × Fornecedor",
-          "descricao": "Comparativo entre manter o portal de autonegociação desenvolvido internamente e contratar a plataforma Acordo Online: custo em 3 anos (cenários mínimo e máximo), prazo para entrar no ar, prós e contras, escopo entregue hoje e perguntas para decidir. Artefato Claude, aberto em nova aba: os valores em R$ e a proposta comercial do fornecedor ficam fora do repositório público.",
-          "url": "https://claude.ai/artifact/6Bo9Dq3icj4QCyqpQk1SHR",
-          "data": "2026-10-20"
+          "descricao": "Comparativo entre manter o portal de autonegociação desenvolvido internamente e contratar a plataforma Acordo Online: custo em 3 anos (cenários mínimo e máximo), prazo para entrar no ar, prós e contras, escopo entregue hoje e perguntas para decidir.",
+          "arquivo": "estudo-portal-proprio-x-fornecedor.html",
+          "data": "2026-10-21"
         },
         {
           "id": "mapa-metas-anuais",

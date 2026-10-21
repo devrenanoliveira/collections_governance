@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portal próprio ou fornecedor</title>
+<style>
+/* Layout: relatório de decisão em coluna única; o número que decide (custo em 3 anos) abre a página, o resto sustenta. */
+:root {
+  --bg: #f4f6fa; --card: #ffffff; --ink: #1d2433; --muted: #566075; --line: #dde3ee;
+  --own: #0046cd; --own-soft: #e3ecff;
+  --ven: #a64b00; --ven-soft: #fdeedd;
+  --good: #0b6b32; --good-soft: #e5f5ea; --bad: #a82a1d; --bad-soft: #fdeceb; --warn-soft: #fff4d6; --warn: #6b4500;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1522; --card: #172034; --ink: #e8edf8; --muted: #a2aec6; --line: #2a3855;
+    --own: #8db4ff; --own-soft: #1b2e57; --ven: #f0a35c; --ven-soft: #3a2713;
+    --good: #6fd196; --good-soft: #123222; --bad: #ff9a8f; --bad-soft: #3b1a17; --warn-soft: #3a2f0f; --warn: #f3d283;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1522; --card: #172034; --ink: #e8edf8; --muted: #a2aec6; --line: #2a3855;
+  --own: #8db4ff; --own-soft: #1b2e57; --ven: #f0a35c; --ven-soft: #3a2713;
+  --good: #6fd196; --good-soft: #123222; --bad: #ff9a8f; --bad-soft: #3b1a17; --warn-soft: #3a2f0f; --warn: #f3d283;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.55;
+  padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.pagina { max-width: 1040px; margin-inline: auto; display: grid; gap: 40px; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); line-height: 1.15; margin: 0; letter-spacing: -0.015em; text-wrap: balance; }
+h2 { font-size: 1.3rem; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+h3 { font-size: 1rem; margin: 0; }
+p { margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.sub { color: var(--muted); max-width: 70ch; }
+.secao { display: grid; gap: 16px; min-width: 0; }
+.cabeca { display: grid; gap: 10px; }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 11px; }
+.tag.own { background: var(--own-soft); color: var(--own); }
+.tag.ven { background: var(--ven-soft); color: var(--ven); }
+
+/* custo em 3 anos */
+.decisor { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 18px; }
+.decisor .num { display: flex; flex-wrap: wrap; gap: 14px 40px; }
+.decisor .num > div { display: grid; gap: 2px; min-width: 0; }
+.big { font-size: clamp(1.5rem, 3.6vw, 2.1rem); font-weight: 800; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.big.own { color: var(--own); } .big.ven { color: var(--ven); }
+.rot { font-size: 13px; color: var(--muted); }
+.escala { display: grid; gap: 10px; }
+.linha-esc { display: grid; grid-template-columns: 90px 1fr; gap: 12px; align-items: center; }
+.linha-esc b { font-size: 13px; }
+.trilho { position: relative; height: 34px; background: repeating-linear-gradient(90deg, transparent 0 calc(16.666% - 1px), var(--line) calc(16.666% - 1px) 16.666%); border-bottom: 1px solid var(--line); }
+.faixa { position: absolute; top: 5px; height: 24px; border-radius: 6px; }
+.faixa.own { background: var(--own); } .faixa.ven { background: var(--ven); }
+.rotulo-faixa { position: absolute; top: 7px; font-size: 12px; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.eixo { display: grid; grid-template-columns: 90px 1fr; gap: 12px; font-size: 11px; color: var(--muted); }
+.eixo div { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
+
+.cenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.par { display: flex; flex-wrap: wrap; gap: 12px 36px; }
+.par > div { display: grid; gap: 4px; justify-items: start; min-width: 0; }
+.trilho .faixa { left: 0; } .trilho-dias { background: repeating-linear-gradient(90deg, transparent 0 calc(16.666% - 1px), var(--line) calc(16.666% - 1px) 16.666%); }
+.grupo + .linha-esc { margin-top: 0; }
+/* tabelas */
+.rolagem { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: color-mix(in srgb, var(--line) 35%, transparent); }
+tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+tr.tot td { font-weight: 800; background: color-mix(in srgb, var(--line) 30%, transparent); }
+.dev { color: var(--own); font-weight: 700; } .sim { color: var(--good); font-weight: 700; } .nao { color: var(--bad); font-weight: 700; } .parc { color: var(--warn); font-weight: 700; }
+
+/* prós e contras */
+.duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.col { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.col.own { border-top: 4px solid var(--own); } .col.ven { border-top: 4px solid var(--ven); }
+.col h3 { font-size: 1.1rem; }
+.lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+.lista li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+.lista i { font-style: normal; font-weight: 800; text-align: center; border-radius: 6px; height: 20px; line-height: 20px; font-size: 14px; }
+.lista .p i { background: var(--good-soft); color: var(--good); }
+.lista .c i { background: var(--bad-soft); color: var(--bad); }
+.grupo { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+
+.aviso { background: var(--warn-soft); color: var(--warn); border-radius: 12px; padding: 14px 16px; display: grid; gap: 6px; font-size: 14px; }
+.aviso b { font-size: 14px; }
+.aviso ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.perguntas { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; max-width: 78ch; }
+.perguntas li::marker { font-weight: 700; color: var(--muted); }
+.rodape { font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; max-width: 80ch; }
+@media (max-width: 520px) { .linha-esc, .eixo { grid-template-columns: 1fr; gap: 4px; } .eixo > span { display: none; } }
+@media print { body { padding-block: 0; } .secao, .col, .decisor { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<main class="pagina">
+
+  <header class="cabeca">
+    <div class="eyebrow">Z-ON · Autonegociação digital · 20/10/2026</div>
+    <h1>Portal próprio ou portal de fornecedor?</h1>
+    <p class="sub">Comparativo entre manter o portal desenvolvido internamente e contratar a plataforma Acordo Online, conforme a proposta comercial recebida. Valores em reais, em dois cenários: o mínimo e o máximo.</p>
+  </header>
+
+  <section class="secao" aria-labelledby="t-custo">
+    <h2 id="t-custo">Quanto custa em 3 anos</h2>
+    <p class="sub">Dois cenários: o mínimo (menor consumo e menor custo) e o máximo (maior consumo e todos os custos adicionais previstos).</p>
+
+    <div class="cenarios">
+      <div class="decisor">
+        <div class="eyebrow">Cenário mínimo</div>
+        <div class="par">
+          <div><span class="tag ven">Fornecedor</span><span class="big ven">R$ 305 mil</span></div>
+          <div><span class="tag own">Portal próprio</span><span class="big own">R$ 55 mil</span></div>
+        </div>
+        <p class="rot">Economia de <b>R$ 250 mil</b> em 36 meses com o portal próprio (custo 82% menor).</p>
+      </div>
+      <div class="decisor">
+        <div class="eyebrow">Cenário máximo</div>
+        <div class="par">
+          <div><span class="tag ven">Fornecedor</span><span class="big ven">R$ 575 mil</span></div>
+          <div><span class="tag own">Portal próprio</span><span class="big own">R$ 101 mil</span></div>
+        </div>
+        <p class="rot">Economia de <b>R$ 474 mil</b> em 36 meses com o portal próprio (custo 82% menor).</p>
+      </div>
+    </div>
+
+    <div class="decisor">
+      <div class="escala" role="img" aria-label="Custo em 3 anos. Mínimo: fornecedor 305 mil, próprio 55 mil. Máximo: fornecedor 575 mil, próprio 101 mil.">
+        <div class="grupo">Mínimo</div>
+        <div class="linha-esc"><b>Fornecedor</b><div class="trilho"><div class="faixa ven" style="width:50.8%"></div><span class="rotulo-faixa" style="left:calc(50.8% + 8px);color:var(--ven)">R$ 305 mil</span></div></div>
+        <div class="linha-esc"><b>Próprio</b><div class="trilho"><div class="faixa own" style="width:9.2%"></div><span class="rotulo-faixa" style="left:calc(9.2% + 8px);color:var(--own)">R$ 55 mil</span></div></div>
+        <div class="grupo">Máximo</div>
+        <div class="linha-esc"><b>Fornecedor</b><div class="trilho"><div class="faixa ven" style="width:95.8%"></div><span class="rotulo-faixa" style="right:calc(4.2% + 8px);color:#fff">R$ 575 mil</span></div></div>
+        <div class="linha-esc"><b>Próprio</b><div class="trilho"><div class="faixa own" style="width:16.8%"></div><span class="rotulo-faixa" style="left:calc(16.8% + 8px);color:var(--own)">R$ 101 mil</span></div></div>
+        <div class="eixo"><span></span><div><span>0</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500</span><span>R$ 600 mil</span></div></div>
+      </div>
+    </div>
+
+    <div class="rolagem">
+      <table>
+        <thead>
+          <tr><th rowspan="2">Item</th><th class="n" colspan="2">Fornecedor</th><th class="n" colspan="2">Portal próprio</th></tr>
+          <tr><th class="n">Mínimo</th><th class="n">Máximo</th><th class="n">Mínimo</th><th class="n">Máximo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Mensalidade (por mês)</td><td class="n">R$ 7,5 mil</td><td class="n">R$ 15 mil</td><td class="n">R$ 1 mil</td><td class="n">R$ 2 mil</td></tr>
+          <tr><td>Mensalidade em 12 meses</td><td class="n">R$ 90 mil</td><td class="n">R$ 180 mil</td><td class="n">R$ 12 mil</td><td class="n">R$ 24 mil</td></tr>
+          <tr><td>Infraestrutura (por ano)</td><td class="n">incluída</td><td class="n">incluída</td><td class="n">R$ 3,4 mil</td><td class="n">R$ 6,5 mil</td></tr>
+          <tr><td>Segurança adicional (teste de invasão pontual, monitoramento de erros)</td><td class="n">incluída na licença</td><td class="n">incluída na licença</td><td class="n">só ações gratuitas</td><td class="n">a cotar</td></tr>
+          <tr><td>Integração com o CRM (pagamento único; fornecedor em 5 parcelas de R$ 4 mil)</td><td class="n">R$ 20 mil</td><td class="n">R$ 20 mil</td><td class="n">sem custo</td><td class="n">sem custo</td></tr>
+          <tr><td>Integração com a RPE (pagamento único, cobrado pela RPE)</td><td class="n">R$ 15 mil</td><td class="n">R$ 15 mil</td><td class="n">R$ 9 mil (em até 3x)</td><td class="n">R$ 9 mil (em até 3x)</td></tr>
+          <tr class="tot"><td>Total no 1º ano</td><td class="n">R$ 125 mil</td><td class="n">R$ 215 mil</td><td class="n">R$ 24,4 mil</td><td class="n">R$ 39,5 mil</td></tr>
+          <tr><td>Cada ano seguinte</td><td class="n">R$ 90 mil</td><td class="n">R$ 180 mil</td><td class="n">R$ 15,4 mil</td><td class="n">R$ 30,5 mil</td></tr>
+          <tr class="tot"><td>Total em 3 anos</td><td class="n">R$ 305 mil</td><td class="n">R$ 575 mil</td><td class="n">R$ 55 mil</td><td class="n">R$ 101 mil</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="aviso">
+      <b>O que define cada cenário</b>
+      <ul>
+        <li><b>Fornecedor:</b> o mínimo usa a mensalidade de R$ 7,5 mil e o máximo a de R$ 15 mil, conforme o aumento de consumo do portal. As integrações (R$ 20 mil no CRM e R$ 15 mil na RPE) são únicas e entram nos dois.</li>
+        <li><b>Portal próprio, mínimo:</b> R$ 1 mil/mês de manutenção; infraestrutura só com os planos necessários (Vercel Pro, Supabase Pro e servidor do proxy, US$ 51/mês, câmbio R$ 5,50); integração com a RPE por R$ 9 mil, pagos em até 3x.</li>
+        <li><b>Portal próprio, segurança:</b> o mínimo usa apenas ações gratuitas (limite de acessos por IP, proteção na frente do portal, verificação em duas etapas e alertas de queda). O máximo prevê também um teste de invasão pontual e monitoramento de erros; o valor ainda será cotado e <b>não está somado nos totais</b>.</li>
+        <li><b>Portal próprio, máximo:</b> R$ 2 mil/mês; infraestrutura de cerca de R$ 540/mês (acesso de 3 pessoas na Vercel, backup, IOF sobre a cobrança em dólar e domínio); integração com a RPE por R$ 9 mil, pagos em até 3x.</li>
+      </ul>
+    </div>
+
+    <div class="aviso">
+      <b>Não entram na conta</b>
+      <ul>
+        <li><b>Fornecedor:</b> a proposta lista a Plataforma a R$ 15.000/mês e o módulo Autto•AI a R$ 7.500/mês; se os dois forem contratados, o mensal sobe para R$ 22,5 mil. Disparos de SMS, e-mail, RCS e WhatsApp são cobrados por mensagem (ex.: SMS R$ 0,06; WhatsApp marketing R$ 0,30), e o app embarcado (TPA) custa mais R$ 3.000/mês.</li>
+        <li><b>Portal próprio:</b> mudanças grandes fora do escopo de manutenção e o custo de eventual WhatsApp oficial.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="t-prazo">
+    <h2 id="t-prazo">Quanto tempo leva para entrar no ar</h2>
+    <div class="decisor">
+      <div class="par">
+        <div><span class="tag ven">Fornecedor</span><span class="big ven">45 a 60 dias</span><span class="rot">média estimada para a integração</span></div>
+        <div><span class="tag own">Portal próprio</span><span class="big own">30 dias</span><span class="rot">estimativa da equipe</span></div>
+      </div>
+      <div class="escala" role="img" aria-label="Prazo para entrar no ar: fornecedor de 45 a 60 dias, portal próprio 30 dias">
+        <div class="linha-esc"><b>Fornecedor</b><div class="trilho trilho-dias"><div class="faixa ven" style="width:75%"></div><div class="faixa ven" style="left:75%;width:25%;opacity:.45"></div><span class="rotulo-faixa" style="right:calc(25% + 8px);color:#fff">45</span><span class="rotulo-faixa" style="right:8px;color:var(--ven)">60 dias</span></div></div>
+        <div class="linha-esc"><b>Próprio</b><div class="trilho trilho-dias"><div class="faixa own" style="width:50%"></div><span class="rotulo-faixa" style="left:calc(50% + 8px);color:var(--own)">30 dias</span></div></div>
+        <div class="eixo"><span></span><div><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60 dias</span></div></div>
+      </div>
+      <p class="rot">O portal próprio entra no ar de <b>15 a 30 dias antes</b>. Cada semana a mais sem o canal digital é um período sem acordos fechados por ele.</p>
+    </div>
+    <div class="aviso">
+      <b>Ao ler os prazos</b>
+      <ul>
+        <li>O prazo do portal próprio depende da liberação da RPE (credencial e respostas do chamado) e de fechar os itens de pré-lançamento, como domínio e segurança.</li>
+        <li>O prazo do fornecedor depende da agenda dele e da integração com o CRM e com a RPE.</li>
+        <li>Pela proposta, a mensalidade do fornecedor só começa depois da homologação da primeira carteira em produção. A taxa de integração (R$ 20 mil) é separada.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="t-pc">
+    <h2 id="t-pc">Prós e contras</h2>
+    <div class="duas">
+      <article class="col own">
+        <div><span class="tag own">Portal próprio</span></div>
+        <div class="grupo">Prós</div>
+        <ul class="lista">
+          <li class="p"><i>+</i><span><b>Custo mais de 80% menor em 3 anos</b> e sem taxa de integração com o CRM.</span></li>
+          <li class="p"><i>+</i><span><b>Personalização total, sem fila.</b> Ajuste de fluxo, texto, regra de desconto e painel feito por quem conhece a operação, sem chamado nem priorização do fornecedor.</span></li>
+          <li class="p"><i>+</i><span><b>Entra no ar em cerca de 30 dias</b>, de 15 a 30 dias antes do fornecedor.</span></li>
+          <li class="p"><i>+</i><span><b>Suporte direto</b> com o desenvolvedor e o time (Eduarda e Léo).</span></li>
+          <li class="p"><i>+</i><span><b>Código e dados da Z-ON.</b> Repositório, banco e documentação ficam sob controle da empresa; sem dependência de contrato para continuar.</span></li>
+          <li class="p"><i>+</i><span><b>Já integrado ao Cobransaas e com painel</b> de funil, jornada, acessos e comparação de períodos.</span></li>
+          <li class="p"><i>+</i><span><b>Sem custo por mensagem ou por consulta</b> no portal.</span></li>
+          <li class="p"><i>+</i><span><b>Liberdade para escolher o meio de pagamento.</b> Cartão de crédito pode entrar integrando uma plataforma de pagamento (ex.: Cappta, Quita+), usando a página de pagamento da própria plataforma para não tratar dados de cartão no portal. Viabilidade e taxas a avaliar com cada plataforma.</span></li>
+        </ul>
+        <div class="grupo">Contras</div>
+        <ul class="lista">
+          <li class="c"><i>−</i><span><b>Dependência de poucas pessoas.</b> A mitigação existe (código no GitHub e documentação do projeto), mas não é um contrato com SLA.</span></li>
+          <li class="c"><i>−</i><span><b>Escopo menor hoje:</b> cobre consulta, acordo e pagamento. Acionamento multicanal, estratégia com IA e app embarcado ainda não existem, mas podem ser desenvolvidos conforme a necessidade, cada um com prazo e esforço próprios.</span></li>
+          <li class="c"><i>−</i><span><b>Sem histórico em escala.</b> Ainda em fase final de pré-lançamento (domínio, segurança e planos pagos de infraestrutura pendentes).</span></li>
+          <li class="c"><i>−</i><span><b>Responsabilidade própria</b> por segurança, LGPD, disponibilidade e limites das APIs (Cobransaas, RPE, Meta).</span></li>
+          <li class="c"><i>−</i><span><b>Manutenção ainda não formalizada</b> por escrito (escopo, prazo de resposta, emergência).</span></li>
+        </ul>
+      </article>
+
+      <article class="col ven">
+        <div><span class="tag ven">Fornecedor (Acordo Online)</span></div>
+        <div class="grupo">Prós</div>
+        <ul class="lista">
+          <li class="p"><i>+</i><span><b>Plataforma completa pronta:</b> acionamento multicanal (SMS, e-mail, RCS, WhatsApp), estratégia com IA, B.I., landing pages, app embarcado e CRM.</span></li>
+          <li class="p"><i>+</i><span><b>Histórico em escala:</b> 10 anos de atuação, mais de 70 milhões de acordos e cases de operadoras de cartão private label.</span></li>
+          <li class="p"><i>+</i><span><b>Suporte estruturado</b> por chamado, com atendimento de emergência por WhatsApp.</span></li>
+          <li class="p"><i>+</i><span><b>Infraestrutura, SSL, melhorias e segurança</b> dentro da licença.</span></li>
+          <li class="p"><i>+</i><span><b>Mensalidade só começa após a homologação</b> da primeira carteira em produção.</span></li>
+          <li class="p"><i>+</i><span><b>Menos dependência de pessoas</b> da casa para manter o canal no ar.</span></li>
+          <li class="p"><i>+</i><span><b>Integra o CobranSaaS</b>, que consta na lista de integrações da proposta.</span></li>
+        </ul>
+        <div class="grupo">Contras</div>
+        <ul class="lista">
+          <li class="c"><i>−</i><span><b>Custo cerca de 6 vezes maior</b> e crescente com o consumo; mensalidade fixa desde o 1º dia de operação.</span></li>
+          <li class="c"><i>−</i><span><b>Integração leva de 45 a 60 dias</b> até entrar no ar.</span></li>
+          <li class="c"><i>−</i><span><b>Taxa de integração de R$ 20 mil</b> para duas integrações, paga em 5 parcelas.</span></li>
+          <li class="c"><i>−</i><span><b>Customização por chamado e fila.</b> Mudanças específicas da Z-ON dependem da agenda e da priorização do fornecedor.</span></li>
+          <li class="c"><i>−</i><span><b>Dependência contratual e de preço</b> (troca de plataforma depois exige nova integração e migração).</span></li>
+          <li class="c"><i>−</i><span><b>Muitos módulos que talvez não sejam usados</b>, mas que entram no preço.</span></li>
+          <li class="c"><i>−</i><span><b>Custos variáveis</b> por mensagem e módulos extras que a operação ainda não dimensionou.</span></li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="t-esc">
+    <h2 id="t-esc">O que cada opção entrega hoje</h2>
+    <div class="rolagem">
+      <table>
+        <thead><tr><th>Funcionalidade</th><th>Fornecedor</th><th>Portal próprio</th></tr></thead>
+        <tbody>
+          <tr><td>Consulta por CPF, simulação e acordo</td><td class="sim">Sim</td><td class="sim">Sim</td></tr>
+          <tr><td>Pagamento por Pix e boleto</td><td class="sim">Sim</td><td class="sim">Sim</td></tr>
+          <tr><td>Pagamento por cartão de crédito</td><td class="sim">Sim, pelo gateway de pagamento da Z-ON</td><td class="dev">Pode ser desenvolvido, integrando uma plataforma de pagamento por cartão (ex.: Cappta, Quita+)</td></tr>
+          <tr><td>Painel com funil, jornada e acessos</td><td class="sim">Sim (B.I. completo)</td><td class="sim">Sim</td></tr>
+          <tr><td>Parcelamento de fatura de cartão (RPE, menos de 65 dias)</td><td class="parc">Via integração RPE (R$ 15 mil)</td><td class="parc">Em desenho; aguarda resposta da RPE</td></tr>
+          <tr><td>Acionamento por SMS, e-mail, RCS e WhatsApp</td><td class="sim">Sim, cobrado por mensagem</td><td class="dev">Hoje feito por outras ferramentas; pode ser desenvolvido (custo por mensagem das operadoras e da Meta)</td></tr>
+          <tr><td>Estratégia e régua com IA (Autto•AI)</td><td class="sim">Sim (módulo à parte)</td><td class="dev">Pode ser desenvolvido (projeto maior)</td></tr>
+          <tr><td>App embarcado (TPA), landing pages sazonais, integração Meta e Google Ads</td><td class="sim">Sim</td><td class="dev">Pode ser desenvolvido (o app embarcado depende do dono do app)</td></tr>
+          <tr><td>Regras de negociação sob medida</td><td class="parc">Customizável, por chamado</td><td class="sim">Direto no código, sem fila</td></tr>
+          <tr><td>Suporte e emergência</td><td class="sim">Chamado e WhatsApp</td><td class="parc">Desenvolvedor e time, sem SLA formal</td></tr>
+        </tbody>
+      </table>
+    </div>
+  <p class="rot">Em azul: ainda não existe no portal próprio, mas pode ser desenvolvido. Cada item exigiria prazo e esforço próprios, que precisam ser estimados antes de qualquer compromisso.</p>
+  </section>
+
+  <section class="secao" aria-labelledby="t-dec">
+    <h2 id="t-dec">Como decidir</h2>
+    <p class="sub">O comparativo de custo favorece o portal próprio. O que pode inverter a decisão é o escopo: a proposta do fornecedor vai além do portal de negociação.</p>
+    <ol class="perguntas">
+      <li><b>Precisamos de acionamento multicanal e estratégia com IA já, no mesmo fornecedor?</b> Se sim, o fornecedor entrega pronto. Se o acionamento continua nas ferramentas atuais, o portal próprio cobre o resto e esses itens podem ser desenvolvidos depois, se fizerem sentido.</li>
+      <li><b>Aceitamos depender de um time pequeno?</b> Formalizar escopo, prazo de resposta e atendimento de emergência por escrito reduz o risco.</li>
+      <li><b>O volume vai exigir mais do que o portal próprio sustenta?</b> Hoje a estimativa é de cerca de 6,5 mil acordos por mês, em todos os canais.</li>
+      <li><b>Qual é o custo de errar?</b> Começar pelo portal próprio custa pouco e não impede contratar o fornecedor depois, e o caminho inverso é mais caro por causa da integração e da mensalidade.</li>
+    </ol>
+  </section>
+
+  <p class="rodape">Fontes: proposta comercial do Acordo Online (condição especial Z-ON, válida até 20/07/2026; os valores precisam ser reconfirmados) e custos informados pela área. Infraestrutura estimada com Vercel Pro, Supabase Pro e servidor do proxy; câmbio de R$ 5,50. Este comparativo foi preparado pelo desenvolvedor do portal próprio.</p>
+</main>
+</body>
+</html>
