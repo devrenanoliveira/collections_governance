@@ -194,6 +194,8 @@
       <button class="filter-btn" data-vista="campanhas" id="descontoBtnCampanhas">Campanhas</button>
     </div>
 
+    <div id="descontoSimples" style="display:none;"></div>
+
     <div id="descontoVista-calculadora">
       <div class="chart-card wide" style="margin-bottom:0;">
         <div class="chart-title">Calculadora de Aprovação de Negociação</div>
@@ -257,17 +259,17 @@
 <div class="tab-panel" id="tab-regua">
   <p class="sec-label">Régua de cobrança</p>
   <h1 class="sec-title">Sequência de ações por dias de atraso</h1>
-  <p class="sec-subtitle">Atual (em produção) e Desejada (futuro próximo) lado a lado — linhas em âmbar marcam um marco (bloqueio, negativação, cancelamento, prejuízo).</p>
+  <p class="sec-subtitle" id="reguaSubtitle">Atual (em produção) e Desejada (futuro próximo) lado a lado — linhas em âmbar marcam um marco (bloqueio, negativação, cancelamento, prejuízo).</p>
 
   <div id="reguaContent">
     <div class="seg-tables-grid" id="reguaComparativo"></div>
 
-    <div class="seg-tables-grid">
+    <div class="seg-tables-grid" id="reguaFerrGrid">
       <div class="table-card" style="padding:16px 18px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Atual — ferramentas e assessorias</strong></div>
         <div id="reguaFerramentasAtual"></div>
       </div>
-      <div class="table-card" style="padding:16px 18px;">
+      <div class="table-card" style="padding:16px 18px;" id="reguaFerrDesejadaCard">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Desejada — ferramentas e assessorias</strong></div>
         <div id="reguaFerramentasDesejada"></div>
       </div>
@@ -285,12 +287,12 @@
       <button class="filter-btn" data-filtro="acoes">Somente ações de cobrança</button>
     </div>
 
-    <div class="seg-tables-grid">
+    <div class="seg-tables-grid" id="reguaTabGrid">
       <div class="table-card">
         <div class="table-card-header"><strong>Régua Estrutural — Atual</strong></div>
         <div class="table-scroll"><table id="tblReguaAtual"></table></div>
       </div>
-      <div class="table-card">
+      <div class="table-card" id="reguaTabDesejadaCard">
         <div class="table-card-header"><strong>Régua Estrutural — Desejada</strong></div>
         <div class="table-scroll"><table id="tblReguaDesejada"></table></div>
       </div>
@@ -304,10 +306,12 @@
   <p class="sec-label">Governança de assessorias de cobrança</p>
   <h1 class="sec-title">Comissionamento, metas e regras de share <span class="status-pill em_implantacao" id="assessoriasStatus"></span></h1>
   <p class="sec-subtitle" id="assessoriasObjetivo"></p>
-  <button class="print-btn btn gold" onclick="exportarRelatorioAssessorias()" style="margin:4px 0 8px;padding:6px 12px;font-size:.74rem;">
+  <button class="print-btn btn gold" id="assessoriasPrintBtn" onclick="exportarRelatorioAssessorias()" style="margin:4px 0 8px;padding:6px 12px;font-size:.74rem;">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
     Relatório para as assessorias
   </button>
+
+  <div id="assessoriasSimples" style="display:none;"></div>
 
   <div id="assessoriasContent">
     <div class="filter-row" id="assessoriasToggle">
@@ -870,14 +874,14 @@ function renderVisaoGeral(){
   const implantacao = fornecedores.filter(f=>f.status==='em_implantacao').length;
   const recupAcumulada = meses.reduce((s,m)=>s+m.recuperacao, 0);
   const investAcumulado = meses.reduce((s,m)=>s+m.investimentoTotal, 0);
-  const assessoriasDesejada = (p.regua && p.regua.desejada && p.regua.desejada.assessoriasAtivas) || [];
+  const assessoriasDesejada = (p.regua && (p.regua.desejada || p.regua.atual || {}).assessoriasAtivas) || [];
 
   const kpis = [
     temSaude
       ? {label:'IEC último mês', value: pct(ultimo.iec), sub: ultimo.mes + (deltaIec!==null ? ` · ${deltaIec<=0?'▼':'▲'} ${Math.abs(deltaIec).toFixed(2).replace('.',',')} p.p. vs mês anterior` : ''), cls: ultimo.iec <= p.saudeFinanceira.metaIec ? 'green' : 'red'}
       : {label:'IEC último mês', value:'—', sub:'Saúde financeira ainda não configurada', cls:'red'},
     {label:'Recuperado no período', value: temSaude ? brl(recupAcumulada) : '—', sub: temSaude ? (meses.length + ' meses · investimento total de ' + brl(investAcumulado)) : '—', cls:'navy'},
-    {label:'Assessorias na régua desejada', value: assessoriasDesejada.length || '—', sub: assessoriasDesejada.join(', ') || 'Régua ainda não configurada', cls:'blue'},
+    {label: p.regua && !p.regua.desejada ? 'Assessorias na régua atual' : 'Assessorias na régua desejada', value: assessoriasDesejada.length || '—', sub: assessoriasDesejada.join(', ') || 'Régua ainda não configurada', cls:'blue'},
     {label:'Fornecedores mapeados', value: fornecedores.length, sub: fornecedores.length ? (ativos + ' ativos · ' + implantacao + ' em implantação') : 'Nenhum fornecedor cadastrado ainda', cls:'gold'},
   ];
   document.getElementById('visaoKpis').innerHTML = kpis.map(k=>`
@@ -904,7 +908,7 @@ function renderVisaoGeral(){
   if(p.assessorias && p.assessorias.status && /proposta|implanta/i.test(p.assessorias.status)){
     pendencias.push(`<strong>Governança de Assessorias</strong> — ${p.assessorias.status}, ainda não é a regra vigente.`);
   }
-  if(p.regua){
+  if(p.regua && p.regua.desejada){
     pendencias.push(`<strong>Régua desejada</strong> — ainda não é a régua em produção; veja o comparativo na aba "Régua de Cobrança".`);
   }
   document.getElementById('visaoImplantacao').innerHTML = pendencias.length ? `
@@ -940,6 +944,8 @@ function renderDesconto(){
   const content = document.getElementById('descontoContent');
   const empty = document.getElementById('descontoEmpty');
   descontoMostrarVista('calculadora');
+  document.getElementById('descontoSimples').style.display = 'none';
+  document.getElementById('descontoToggle').style.display = '';
   if(!p.desconto){
     content.style.display = 'none';
     empty.style.display = '';
@@ -958,6 +964,25 @@ function renderDesconto(){
   }
 
   document.getElementById('descontoFluxo').textContent = p.desconto.descricaoFluxo;
+
+  // produto de tabela única (ex.: Condor PJ): só a tabela, sem toggles nem calculadora
+  const tu = p.desconto.tabelaUnica;
+  if(tu){
+    document.getElementById('descontoToggle').style.display = 'none';
+    DESCONTO_VISTAS.forEach(v=>{ document.getElementById('descontoVista-' + v).style.display = 'none'; });
+    const sd = document.getElementById('descontoSimples');
+    sd.style.display = '';
+    sd.innerHTML = `
+      <div class="callout callout-info" style="margin-bottom:14px;">${tu.vigenciaInicio ? `<span class="callout-label">Em vigor desde ${tu.vigenciaInicio}</span>` : ''}<p>${tu.descricao}</p></div>
+      <div class="table-card">
+        <div class="table-card-header"><strong>${tu.titulo}</strong></div>
+        <div class="table-scroll"><table>
+          <thead><tr><th style="text-align:left">Dias de atraso</th><th>${tu.colunaRotulo}</th></tr></thead>
+          <tbody>${tu.faixas.map(r=>`<tr><td>${r.diasDe}${r.diasAte===99999999 ? '+' : '–' + r.diasAte}</td><td class="td-blue">${pct(r.desconto,2)}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>`;
+    return;
+  }
 
   const oficial = p.desconto.oficial;
   document.getElementById('tblOficial').innerHTML = `
@@ -1423,6 +1448,23 @@ function renderRegua(){
 
   const atual = p.regua.atual, desejada = p.regua.desejada;
 
+  // produto só com régua atual (ex.: Condor PJ): esconde tudo que é da desejada
+  ['reguaFerrDesejadaCard', 'reguaTabDesejadaCard'].forEach(id=>{ document.getElementById(id).style.display = desejada ? '' : 'none'; });
+  ['reguaComparativo', 'reguaFerrGrid', 'reguaTabGrid'].forEach(id=>{ document.getElementById(id).style.gridTemplateColumns = desejada ? '' : '1fr'; });
+  document.getElementById('reguaSubtitle').textContent = desejada
+    ? 'Atual (em produção) e Desejada (futuro próximo) lado a lado — linhas em âmbar marcam um marco (bloqueio, negativação, cancelamento, prejuízo).'
+    : 'Régua em produção — linhas em âmbar marcam um marco (bloqueio, negativação, protesto, prejuízo).';
+  if(!desejada){
+    document.getElementById('reguaComparativo').innerHTML = `
+      <div class="destaque-block" style="margin-bottom:0;">
+        <div class="destaque-title">Atual</div>
+        <div class="destaque-text">Fase interna cobre até <strong>${atual.internaAte} dia(s)</strong>; a partir daí a cobrança é conduzida por <strong>${atual.assessoriasAtivas.join(', ')}</strong>.</div>
+      </div>`;
+    document.getElementById('reguaFerramentasAtual').innerHTML = reguaFerramentasHtml(atual);
+    document.getElementById('tblReguaAtual').innerHTML = reguaTable(atual);
+    return;
+  }
+
   document.getElementById('reguaComparativo').innerHTML = `
     <div class="destaque-block" style="margin-bottom:0;">
       <div class="destaque-title">Atual</div>
@@ -1447,7 +1489,7 @@ document.querySelectorAll('#tab-regua .filter-btn').forEach(btn=>{
     btn.classList.add('active');
     reguaFiltro = btn.dataset.filtro;
     document.getElementById('tblReguaAtual').innerHTML = reguaTable(p.regua.atual);
-    document.getElementById('tblReguaDesejada').innerHTML = reguaTable(p.regua.desejada);
+    if(p.regua.desejada) document.getElementById('tblReguaDesejada').innerHTML = reguaTable(p.regua.desejada);
   });
 });
 
@@ -1502,6 +1544,31 @@ function renderAssessorias(){
     empty.innerHTML = emptyState('Cadastre a governança de assessorias (chave "assessorias") deste produto no data.json para habilitar esta aba.');
     document.getElementById('assessoriasStatus').textContent = '';
     document.getElementById('assessoriasObjetivo').textContent = '';
+    return;
+  }
+  // produto de assessoria única (ex.: Condor PJ): painel simples, sem as 5 vistas da Z-ON
+  const sm = p.assessorias.simples;
+  document.getElementById('assessoriasPrintBtn').style.display = sm ? 'none' : '';
+  document.getElementById('assessoriasSimples').style.display = sm ? '' : 'none';
+  if(sm){
+    content.style.display = 'none';
+    empty.style.display = 'none';
+    document.getElementById('assessoriasStatus').textContent = sm.status;
+    document.getElementById('assessoriasObjetivo').textContent = sm.objetivo;
+    document.getElementById('assessoriasSimples').innerHTML = `
+      <div class="table-card" style="padding:18px;margin-bottom:14px;">
+        <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Comissionamento</strong></div>
+        <p style="font-size:.85rem;line-height:1.6;margin-bottom:12px;">${sm.modelo}</p>
+        <div class="table-scroll"><table>
+          <thead><tr><th style="text-align:left">Idade da dívida</th><th>Comissão</th></tr></thead>
+          <tbody>${sm.comissao.map(c=>`<tr><td>${c.idade}</td><td class="td-blue">${pct(c.pct,0)}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+      <div class="two-col" style="grid-template-columns:1fr 1fr 1fr;">
+        <div class="table-card" style="padding:18px;"><div class="table-card-header" style="padding:0 0 8px;border:none;"><strong>Share</strong></div><p style="font-size:.85rem;line-height:1.6;">${sm.share}</p></div>
+        <div class="table-card" style="padding:18px;"><div class="table-card-header" style="padding:0 0 8px;border:none;"><strong>Premiação</strong></div><p style="font-size:.85rem;line-height:1.6;">${sm.premiacao}</p></div>
+        <div class="table-card" style="padding:18px;"><div class="table-card-header" style="padding:0 0 8px;border:none;"><strong>Rituais de gestão</strong></div><p style="font-size:.85rem;line-height:1.6;">${sm.rituais}</p></div>
+      </div>`;
     return;
   }
   content.style.display = '';

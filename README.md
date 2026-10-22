@@ -76,6 +76,8 @@ Acessar `http://localhost:8000`. Após publicação no GitHub Pages, funciona no
 
 O site detecta automaticamente todos os produtos em `data.json` e exibe um seletor. Cada produto tem as mesmas oito abas e governança independente.
 
+O segundo produto do seletor é o **Condor PJ** (carteira PJ, cobrada pelo Serasa Limpa Nome), com política de desconto em tabela única, só a régua atual e uma assessoria única; os formatos simplificados estão descritos no CLAUDE.md.
+
 ### Adicionar Novo Produto
 
 1. Abrir `data.json` e localizar a chave `"produtos"`
