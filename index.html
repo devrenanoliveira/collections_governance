@@ -1026,14 +1026,14 @@ function renderDesconto(){
       <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">${c.resultado || 'Resultado a divulgar após o encerramento da campanha.'}</p>`;
   }).join('<hr style="margin:22px 0;border:none;border-top:1px solid var(--gridline);">');
 
-  // política nova: proposta aguardando aprovação; a vigente (piso e teto acima) segue valendo até a vigência
+  // política nova aprovada, vigora em pn.vigenciaInicio; a vigente (piso e teto acima) segue valendo até lá (em 02/11: promover politicaNova a oficial)
   const pn = p.desconto.politicaNova;
   document.getElementById('oficialSecaoAtual').style.display = pn ? '' : 'none';
   if(pn){
     document.getElementById('oficialSecaoAtual').innerHTML = `<span class="callout-label">Política atual · vigente</span><p>Vale até a nova política entrar em vigor (${dataBR(pn.vigenciaInicio)}).</p>`;
     const dias = r => `${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}`;
     document.getElementById('oficialNova').innerHTML = `
-      <div class="callout callout-alert" style="margin-bottom:14px;"><span class="callout-label">Política nova · aprovada · vigora a partir de ${dataBR(pn.vigenciaInicio)}</span><p>${pn.descricao}</p><p style="margin-top:6px;">Até a vigência, a política atual (a tabela acima e a Política Agressiva) segue valendo. Em aberto: a faixa de 91–120 dias (opção A × B); os valores abaixo seguem a opção B.</p></div>
+      <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">Política nova · aprovada · vigora a partir de ${dataBR(pn.vigenciaInicio)}</span><p>${pn.descricao}</p><p style="margin-top:6px;">Até a vigência, a política atual (a tabela acima e a Política Agressiva) segue valendo.</p></div>
       <div class="table-card">
         <div class="table-card-header"><strong>Política nova — piso (aprovação automática), por faixa de atraso e nº de parcelas</strong></div>
         <div class="table-scroll"><table>
