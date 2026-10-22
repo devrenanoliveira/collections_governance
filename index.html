@@ -1026,14 +1026,14 @@ function renderDesconto(){
       <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">${c.resultado || 'Resultado a divulgar após o encerramento da campanha.'}</p>`;
   }).join('<hr style="margin:22px 0;border:none;border-top:1px solid var(--gridline);">');
 
-  // política nova (piloto): proposta aguardando aprovação; a vigente (piso e teto acima) segue valendo até a vigência
+  // política nova: proposta aguardando aprovação; a vigente (piso e teto acima) segue valendo até a vigência
   const pn = p.desconto.politicaNova;
   document.getElementById('oficialSecaoAtual').style.display = pn ? '' : 'none';
   if(pn){
     document.getElementById('oficialSecaoAtual').innerHTML = `<span class="callout-label">Política atual · vigente</span><p>Vale até a nova política entrar em vigor (${dataBR(pn.vigenciaInicio)}).</p>`;
     const dias = r => `${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}`;
     document.getElementById('oficialNova').innerHTML = `
-      <div class="callout callout-alert" style="margin-bottom:14px;"><span class="callout-label">Política nova · proposta / piloto — aguardando aprovação · para vigorar em ${dataBR(pn.vigenciaInicio)}</span><p>${pn.descricao}</p><p style="margin-top:6px;">Até a vigência, a política atual (a tabela acima e a Política Agressiva) segue valendo. Em aberto: a faixa de 91–120 dias (opção A × B); os valores abaixo seguem a opção B.</p></div>
+      <div class="callout callout-alert" style="margin-bottom:14px;"><span class="callout-label">Política nova · aprovada · vigora a partir de ${dataBR(pn.vigenciaInicio)}</span><p>${pn.descricao}</p><p style="margin-top:6px;">Até a vigência, a política atual (a tabela acima e a Política Agressiva) segue valendo. Em aberto: a faixa de 91–120 dias (opção A × B); os valores abaixo seguem a opção B.</p></div>
       <div class="table-card">
         <div class="table-card-header"><strong>Política nova — piso (aprovação automática), por faixa de atraso e nº de parcelas</strong></div>
         <div class="table-scroll"><table>
@@ -1276,7 +1276,7 @@ function limNova(dias, n, margem, aperto){
   const floorP = n <= 1 ? b.pisoVista : b.pisoParc[n-2];
   const ceilP = n <= 1 ? b.excVista : Math.max(floorP, b.excVista * (margem / 100) * (1 - (aperto / 100) * ((n - 2) / 10)));
   return {floorP, ceilP, moraLo:b.mora, moraHi:b.moraExc, mulLo:b.multa, mulHi:b.multaExc,
-    label:'<b>política nova (piloto)</b> &middot; faixa <b>'+b.diasDe+'&ndash;'+(b.diasAte>=99999999?'&infin;':b.diasAte)+' dias</b>', nome:'política nova (piloto)'};
+    label:'<b>política nova</b> &middot; faixa <b>'+b.diasDe+'&ndash;'+(b.diasAte>=99999999?'&infin;':b.diasAte)+' dias</b>', nome:'política nova'};
 }
 function veredito(proposed, floorP, ceilP, dias, nome){
   if(ceilP === 0 && floorP === 0){
@@ -1325,7 +1325,7 @@ function update(){
     // mesma proposta nas duas políticas, lado a lado: é o que permite acompanhar o efeito da mudança
     const O = (modo === 'nova') ? lAtual : lNova, Vo = veredito(proposed, O.floorP, O.ceilP, dias, O.nome);
     const cmp = document.getElementById('compare'); cmp.style.display = '';
-    cmp.innerHTML = 'Mesma proposta na <b>'+(modo==='nova'?'política atual':'política nova (piloto)')+'</b>: piso '+O.floorP.toFixed(1)+'% &middot; teto '+O.ceilP.toFixed(1)+'% &rarr; <b>'+Vo.title+'</b>';
+    cmp.innerHTML = 'Mesma proposta na <b>'+(modo==='nova'?'política atual':'política nova')+'</b>: piso '+O.floorP.toFixed(1)+'% &middot; teto '+O.ceilP.toFixed(1)+'% &rarr; <b>'+Vo.title+'</b>';
     document.getElementById('advNovaHint').style.display = modo === 'nova' ? '' : 'none';
     const info = document.getElementById('modoInfo'); info.style.display = modo === 'nova' ? '' : 'none';
     info.textContent = modo === 'nova' ? NOVA.descricao : '';
