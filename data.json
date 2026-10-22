@@ -391,7 +391,8 @@
         },
         "desejada": {
           "titulo": "Régua Estrutural — Desejada (futuro próximo)",
-          "internaAte": 64,
+          "internaAte": 65,
+          "internaNota": "A cobrança interna começa de 05 a 15 dias, avança até 30 e vai subindo até 65 dias.",
           "ferramentasInternas": [
             "Portal de autonegociação — Acordo Online",
             "Bot de texto via WhatsApp — SmartNX",

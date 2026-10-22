@@ -1476,7 +1476,7 @@ function renderRegua(){
     </div>
     <div class="padrao-block" style="margin-bottom:0;">
       <div class="padrao-title">Desejada</div>
-      <div class="padrao-text">Fase interna se estende até <strong>${desejada.internaAte} dia(s)</strong>, com ${desejada.ferramentasInternas.length} ferramenta(s) digital(is); a partir daí, <strong>${desejada.assessoriasAtivas.join(', ')}</strong>.</div>
+      <div class="padrao-text">Fase interna se estende até <strong>${desejada.internaAte} dia(s)</strong>, com ${desejada.ferramentasInternas.length} ferramenta(s) digital(is); a partir daí, <strong>${desejada.assessoriasAtivas.join(', ')}</strong>.${desejada.internaNota ? ' ' + desejada.internaNota : ''}</div>
     </div>`;
 
   document.getElementById('reguaFerramentasAtual').innerHTML = reguaFerramentasHtml(atual);
