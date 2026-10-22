@@ -298,7 +298,9 @@
           "internaAte": 4,
           "ferramentasInternas": [],
           "assessoriasAtivas": [
-            "Fácil"
+            "Fácil",
+            "Decisão",
+            "Ciclo"
           ],
           "etapas": [
             {
@@ -329,8 +331,14 @@
             },
             {
               "dias": "31 dias",
-              "acao": "Negativação (SPC + Boa Vista/Equifax)",
-              "responsavel": "SPC / Boa Vista",
+              "acao": "Negativação (Boa Vista)",
+              "responsavel": "Boa Vista",
+              "marco": true
+            },
+            {
+              "dias": "41 dias",
+              "acao": "Negativação (SPC)",
+              "responsavel": "SPC",
               "marco": true
             },
             {
@@ -347,37 +355,37 @@
             {
               "dias": "65 a 90",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão"
             },
             {
               "dias": "91 a 120",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão"
             },
             {
               "dias": "121 a 150",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão"
             },
             {
               "dias": "151 a 180",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão"
             },
             {
               "dias": "181 a 360",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão / Ciclo"
             },
             {
               "dias": "361 a 720",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão / Ciclo"
             },
             {
               "dias": ">721",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil"
+              "responsavel": "Fácil / Decisão / Ciclo"
             }
           ]
         },
@@ -393,7 +401,8 @@
           "assessoriasAtivas": [
             "Decisão",
             "Fácil",
-            "Ciclo"
+            "Ciclo",
+            "Serasa Limpa Nome"
           ],
           "etapas": [
             {
@@ -430,14 +439,14 @@
             },
             {
               "dias": "31 dias",
-              "acao": "Negativação (SPC) — 10 dias para negativa, já disparado pelo Fácil",
-              "responsavel": "SPC",
+              "acao": "Negativação (Boa Vista)",
+              "responsavel": "Boa Vista",
               "marco": true
             },
             {
               "dias": "41 dias",
-              "acao": "Negativação (Boa Vista/Quod)",
-              "responsavel": "Boa Vista",
+              "acao": "Negativação (SPC)",
+              "responsavel": "SPC",
               "marco": true
             },
             {
@@ -459,22 +468,22 @@
             {
               "dias": "65 a 90",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / Serasa Limpa Nome"
             },
             {
               "dias": "91 a 120",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / Serasa Limpa Nome"
             },
             {
               "dias": "121 a 150",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / Serasa Limpa Nome"
             },
             {
               "dias": "151 a 180",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil"
+              "responsavel": "Decisão / Fácil / Serasa Limpa Nome"
             },
             {
               "dias": "181 dias",
@@ -485,17 +494,17 @@
             {
               "dias": "181 a 360",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil / Ciclo"
+              "responsavel": "Decisão / Fácil / Ciclo / Serasa Limpa Nome"
             },
             {
               "dias": "361 a 720",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil / Ciclo"
+              "responsavel": "Decisão / Fácil / Ciclo / Serasa Limpa Nome"
             },
             {
               "dias": ">721",
               "acao": "Comunicação via assessoria de cobrança",
-              "responsavel": "Decisão / Fácil / Ciclo"
+              "responsavel": "Decisão / Fácil / Ciclo / Serasa Limpa Nome"
             }
           ]
         }
