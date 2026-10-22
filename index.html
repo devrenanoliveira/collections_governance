@@ -980,7 +980,11 @@ function renderDesconto(){
           <thead><tr><th style="text-align:left">Dias de atraso</th><th>${tu.colunaRotulo}</th></tr></thead>
           <tbody>${tu.faixas.map(r=>`<tr><td>${r.diasDe}${r.diasAte===99999999 ? '+' : '–' + r.diasAte}</td><td class="td-blue">${pct(r.desconto,2)}</td></tr>`).join('')}</tbody>
         </table></div>
-      </div>`;
+      </div>
+      ${tu.parametros ? `<div class="table-card" style="margin-top:14px;">
+        <div class="table-card-header"><strong>${tu.parametros.titulo}</strong></div>
+        <div class="table-scroll"><table><tbody>${tu.parametros.itens.map(it=>`<tr><td style="text-align:left;white-space:nowrap;"><strong>${it.label}</strong></td><td style="text-align:left;font-variant-numeric:normal;">${it.valor}</td></tr>`).join('')}</tbody></table></div>
+      </div>` : ''}`;
     return;
   }
 

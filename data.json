@@ -1165,7 +1165,44 @@
               "desconto": 85
             }
           ],
-          "vigenciaInicio": "22/10/2026"
+          "vigenciaInicio": "22/10/2026",
+          "parametros": {
+            "titulo": "Parâmetros da carteira no Serasa Limpa Nome",
+            "itens": [
+              {
+                "label": "Nome da carteira",
+                "valor": "Carteira PJ Condor"
+              },
+              {
+                "label": "Usada para calcular dívidas negativadas pela Serasa",
+                "valor": "Não"
+              },
+              {
+                "label": "Tipo de juros",
+                "valor": "Composto, a 12% ao ano a partir da dívida (o cálculo começa no primeiro dia de atraso)"
+              },
+              {
+                "label": "Multa da dívida",
+                "valor": "Com multa de 2%, aplicada sobre o valor original da dívida, uma única vez, sem considerar o tempo de atraso"
+              },
+              {
+                "label": "Pagamento pós-vencimento",
+                "valor": "Aceito, com no máximo 5 dias de atraso, juros de 0,033% e multa de 2%. Alterações nessas regras não afetam parcelas já geradas"
+              },
+              {
+                "label": "Número de parcelas",
+                "valor": "1 (somente à vista)"
+              },
+              {
+                "label": "Valor mínimo por parcela",
+                "valor": "R$ 150,00"
+              },
+              {
+                "label": "Prazo para o primeiro vencimento",
+                "valor": "Até 5 dias úteis"
+              }
+            ]
+          }
         }
       },
       "regua": {
