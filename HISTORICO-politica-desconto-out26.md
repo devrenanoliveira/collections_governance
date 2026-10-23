@@ -40,5 +40,6 @@ Registro de handoff (22/10/2026): o que foi decidido, por quê, o que está no r
 ## 5. Onde está cada coisa
 
 - Dado: `data.json` → `desconto.politicaNova`, `desconto.campanhas[]`.
+- Tela: a política nova aparece dentro do botão "Política Oficial (Piso)" (sob "Política atual · vigente" e "Política nova"); não há botão próprio. Ao promover em 02/11, retirar a seção "Política atual".
 - Código: `index.html` (`buildCalcHtml`, `limNova`, `campanhaParaCalculadora`); `calculadora-desconto.html` é gerado (regenerar ao mudar dado).
 - Convenções de edição: `CLAUDE.md`.

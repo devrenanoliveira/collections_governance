@@ -22,7 +22,7 @@ Ela tem duas abas: **Calculadora** (uso do dia a dia — dias em atraso, parcela
 
 ```js
 const p = DATA.produtos.zon;
-buildCalcHtml(p.desconto.oficial, p.desconto.agressiva, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao});
+buildCalcHtml(p.desconto.oficial, p.desconto.agressiva, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao}, p.desconto.politicaNova, campanhaParaCalculadora(p.desconto.campanhas));
 ```
 
 O retorno é o HTML completo do arquivo — salve como `calculadora-desconto.html`.
@@ -36,6 +36,7 @@ Estudos atuais:
 - **SmartNX × Novo Modelo Meta** (`estudo-smartnx-meta.html`): comparativo de custo de Atendimento e Cobrança diante do novo tarifário da Meta e da proposta da SmartNX.
 - **Estudo Salarial — Curitiba** (`estudo-salarial-curitiba.html`): bases salariais de referência para Operador de Call Center e Operador de Cobrança, jornadas de 6h e 8h.
 - **Meta de Recuperação de Perdas 2027** (`estudo-meta-perdas-2027.html`): confronto entre a meta do diretor para recuperação de perdas (Pós-Prejuízo, faixas H–J) e a projeção construída a partir do histórico real de pagamento, para embasar a meta de PLR de 2027.
+- **Portal próprio × Fornecedor** (`estudo-portal-proprio-x-fornecedor.html`, 21/10/2026): comparativo de custo (3 anos), prazo e escopo entre manter o portal de autonegociação interno e contratar o Acordo Online. Está no repositório público com valores em R$ por autorização explícita do Renan; fonte em `Portal de Autonegociação - RGOSoluções/docs/comparativo-portal-proprio-x-fornecedor.html` (recopiar ao mudar lá). Decisão do portal pendente: Acordo Online em stand-by.
 - **Mapa de Metas Anuais — RASCUNHO** (`mapa-metas-anuais.html`): plano de metas 2027 da cobrança (pesos, meta mensal de prejuízo, teto de IEC por trimestre, internalização, eficiência por faixa). Cópia estática de `Plano_Metas_2027_Cobranca.html`, gerado por `gerar_plano_metas_2027.py` na pasta do Motor (fonte única; regerar e recopiar). Dados de 2026 na posição de 08/10/2026. Publicado com valores em R$ no repositório público por decisão do usuário (13/10/2026); custo = IEC da aba Saúde Financeira
 
 ### Adicionar Novo Estudo
@@ -74,7 +75,7 @@ Acessar `http://localhost:8000`. Após publicação no GitHub Pages, funciona no
 
 ## Suporte a Múltiplos Produtos
 
-O site detecta automaticamente todos os produtos em `data.json` e exibe um seletor. Cada produto tem as mesmas oito abas e governança independente.
+O site detecta automaticamente todos os produtos em `data.json` e exibe um seletor. Cada produto tem as mesmas nove abas e governança independente.
 
 O segundo produto do seletor é o **Condor PJ** (carteira PJ, cobrada pelo Serasa Limpa Nome), com política de desconto em tabela única, só a régua atual e uma assessoria única; os formatos simplificados estão descritos no CLAUDE.md.
 
@@ -92,10 +93,11 @@ O segundo produto do seletor é o **Condor PJ** (carteira PJ, cobrada pelo Seras
 Cada produto contém:
 
 - **nome**: Identificação no seletor e cabeçalho
-- **desconto**: Processo, tabelas oficial (piso) e agressiva (teto) por dias, e `campanhas` (campanhas pontuais de desconto com vigência, tabela e regras; 6º botão da aba), `quebraAcordo` (política de quebra de acordo: prazo, juros ao dia e multa após o vencimento, antes e depois da vigência de 21/10/2026; 5º botão da aba) e `parcelamento` (política de parcelamento por quantidade de parcelas — taxa de operação e % de entrada —, vigente desde 09/10/2026, com a política anterior em `anterior`; aparece no 4º botão da aba)
+- **desconto**: Processo, tabelas oficial (piso) e agressiva (teto) por dias, e `campanhas` (campanhas pontuais de desconto com vigência, tabela e regras; 6º botão da aba), `quebraAcordo` (política de quebra de acordo: prazo, juros ao dia e multa após o vencimento, antes e depois da vigência de 21/10/2026; 5º botão da aba) e `parcelamento` (política de parcelamento por quantidade de parcelas — taxa de operação e % de entrada —, vigente desde 09/10/2026, com a política anterior em `anterior`; aparece no 4º botão da aba), `politicaNova` (política aprovada em 22/10/2026, vigora em 02/11/2026: piso e exceção por faixa; exibida dentro do botão "Política Oficial (Piso)" sob "Política atual · vigente" e "Política nova"; em 02/11 promover a `oficial` e retirar a seção "Política atual" — histórico em `HISTORICO-politica-desconto-out26.md`) e `tabelaUnica` (formato simplificado do Condor PJ: desconto só à vista numa única tabela, `vigenciaInicio`, `colunaRotulo`, `faixas[]` e `parametros{titulo,itens[]}` da carteira no Serasa; some os toggles e a calculadora)
 - **regua.recursosDigitais**: Links de referência (fluxogramas, quadros); `url: null` exibe "Em breve"
-- **regua.atual e regua.desejada**: Etapas, dias, ações, responsáveis e ferramentas
+- **regua.atual e regua.desejada**: Etapas, dias, ações, responsáveis e ferramentas; a desejada tem `internaAte`/`internaNota` (fase interna 05 a 65 dias) e `situacao` (frase do banner "Em implantação" da Visão Geral); `desejada: null` mostra só a atual (Condor PJ)
 - **assessorias**: Metas, comissão base, estrutura concorrencial (só contexto), portfolioVigente (share por assessoria, com `vigenciaInicio`; vigente desde 01/10/2026), perdeGanha (regra de redistribuição trimestral), premiacao (mensal/trimestral + bônus de prejuízo + forma de pagamento + governancaRepasse), rituais, contatos (lista de `{nome, voz, vozNota, whatsapp[{rotulo,numero}], email, portal{url,nota}}` por assessoria; voz/e-mail `null` mostram "sem 0800"/"Não possui"; o botão some se a chave não existir). A aba tem 5 toggles — Metas & Comissão / Share & Redistribuição / Premiação & Bônus / Rituais de Gestão / Contatos — todo renderizado nativamente (não há mais `regulamento.html`/iframe desde 22/09/2026: o conteúdo virou parte do `data.json`/`index.html` pra ganhar dark mode e fonte consistentes com o resto do dashboard)
+- **assessorias.pendente** (opcional, texto): o que falta para a Governança de Assessorias ficar completa; aparece no banner "Em implantação" da Visão Geral e torna o selo da aba verde ("no ar") — remover a chave quando concluir (hoje: política de comissionamento indireto, após o Serasa Limpa Nome). **assessorias.simples** (Condor PJ): `status`, `objetivo`, `modelo`, `comissao[]`, `share`, `premiacao`, `rituais` no lugar das 5 vistas.
 - **fornecedores**: Nome, categoria, papel (resumo curto), status (ativo, em_implantacao ou stand_by), topicos opcional (lista de {label, valor} exibida como bullets no card — quando ausente, o card cai de volta pro texto corrido de "papel")
 - **saudeFinanceira**: Meta IEC, linhas de investimento, meses com investimento, recuperação e IEC
 - **desenhoFuturo**: modelo-alvo de quem atua em cada faixa (`titulo`, `descricao`, `faixas[]`, `atores[]` de `{nome, tipo, cor, inicial:[colIni,colFim], expansao:[colIni,colFim]|null, obs}`, colunas 1-based sobre `faixas`; `shareRecuperacao[]` (% do total recuperado por coluna) e `recuperacaoMediaMensal[]` (R$) (uma por coluna, mostrados no cabeçalho; são da FAIXA, não atribuídos ao fornecedor), com base e data em `notaResultado`; valores copiados do #KPI, não se atualizam sozinhos). Aparece no toggle "Desenho futuro" da aba Fornecedores (some se a chave não existir): barra cheia = atuação inicial, tracejada = expansão (fase 2)
