@@ -712,10 +712,10 @@
         {
           "nome": "SmartNX",
           "categoria": "Plataforma digital",
-          "papel": "Futura plataforma de gerenciamento da régua digital de acionamento de cobrança via WhatsApp (Meta Flows). Kick off do projeto em 27/08/2026, com projeção de término ao final de setembro/2026.",
+          "papel": "Futura plataforma de gerenciamento da régua digital de acionamento de cobrança via WhatsApp (Meta Flows). Kick off do projeto em 27/08/2026, com entrada prevista para novembro/2026.",
           "topicos": [
             { "label": "Início do projeto", "valor": "27/08/2026" },
-            { "label": "Previsão de conclusão", "valor": "final de setembro/2026" },
+            { "label": "Previsão de conclusão", "valor": "novembro/2026" },
             { "label": "Tecnologia", "valor": "Meta Flows (mini app dentro do WhatsApp)" },
             { "label": "Status", "valor": "em processo de implantação" }
           ],
