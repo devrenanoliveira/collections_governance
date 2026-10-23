@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-10-22",
+      "ultimaAtualizacao": "2026-10-23",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso da política oficial e o teto da política agressiva, para o número de dias em atraso informado.",
         "legendas": {
@@ -390,6 +390,7 @@
           ]
         },
         "desejada": {
+          "situacao": "praticamente finalizada, aguardando apenas o início da internalização da cobrança",
           "titulo": "Régua Estrutural — Desejada (futuro próximo)",
           "internaAte": 65,
           "internaNota": "A cobrança interna começa de 05 a 15 dias, avança até 30 e vai subindo até 65 dias.",
@@ -511,7 +512,8 @@
         }
       },
       "assessorias": {
-        "status": "Versão 7.0 — Proposta de Implantação",
+        "status": "Versão 7.0 — no ar",
+        "pendente": "a política de comissionamento indireto (após a entrada do Serasa Limpa Nome)",
         "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 3 players, os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
         "metas": "14 Índices de Eficiência individuais (um por faixa de aging) geram, de forma ponderada, uma Meta Geral de Eficiência. Os índices percentuais são convertidos em valores nominais de recuperação esperados (R$) por faixa, cujo somatório define o 'Valor X de Recuperação Total' — a obrigação final de entrega da assessoria no trimestre.",
         "comissaoBase": [
@@ -722,12 +724,12 @@
         {
           "nome": "Acordo Online",
           "categoria": "Portal de autonegociação",
-          "papel": "Portal de autonegociação para o cliente. Previsão de entrada em operação: setembro/2026.",
+          "papel": "Portal de autonegociação para o cliente. Em stand-by: estamos estudando iniciar com um portal próprio.",
           "topicos": [
             { "label": "Função", "valor": "portal de autonegociação para o cliente" },
-            { "label": "Previsão de entrada em operação", "valor": "setembro/2026" }
+            { "label": "Status", "valor": "em stand-by, pois estudamos iniciar com um portal próprio" }
           ],
-          "status": "em_implantacao"
+          "status": "stand_by"
         },
         {
           "nome": "SPC",
@@ -744,12 +746,11 @@
         {
           "nome": "Serasa Limpa Nome",
           "categoria": "Portal de autonegociação",
-          "papel": "Portal de autonegociação via Serasa, funciona por fee de sucesso, com foco na carteira acima de 65 dias. Previsão de entrada em operação: meados de setembro/2026.",
+          "papel": "Portal de autonegociação via Serasa, funciona por fee de sucesso, com foco na carteira acima de 65 dias. Em processo de integração com o CobranSaaS.",
           "topicos": [
             { "label": "Função", "valor": "portal de autonegociação via Serasa (fee de sucesso)" },
             { "label": "Foco", "valor": "carteira acima de 65 dias de atraso" },
-            { "label": "Previsão de entrada", "valor": "meados de setembro/2026" },
-            { "label": "Status", "valor": "em implantação" }
+            { "label": "Status", "valor": "em processo de integração com o CobranSaaS" }
           ],
           "status": "em_implantacao"
         },
