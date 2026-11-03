@@ -201,7 +201,9 @@
 
     <div id="descontoVista-calculadora">
       <div class="chart-card wide" style="margin-bottom:0;">
-        <div class="chart-title">Calculadora de Aprovação de Negociação</div>
+        <div class="chart-title" style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">Calculadora de Aprovação de Negociação
+          <button type="button" class="btn" id="calcDownloadBtn" title="Baixa o arquivo HTML autônomo, com a política vigente de hoje">⬇ Baixar calculadora (HTML)</button>
+        </div>
         <iframe class="calc-frame" id="calcFrame"></iframe>
       </div>
     </div>
@@ -1096,7 +1098,15 @@ function renderDesconto(){
   }
 
   if(pn) document.getElementById('oficialComparar').innerHTML = comparaPoliticas(pn, ant);
-  document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao}, p.desconto.politicaVigente, campanhaParaCalculadora(p.desconto.campanhas));
+  const calcHtml = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao}, p.desconto.politicaVigente, campanhaParaCalculadora(p.desconto.campanhas));
+  document.getElementById('calcFrame').srcdoc = calcHtml;
+  // download do mesmo HTML que alimenta o iframe (sempre igual ao data.json de hoje; autônomo, abre sem internet)
+  document.getElementById('calcDownloadBtn').onclick = () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([calcHtml], {type:'text/html;charset=utf-8'}));
+    a.download = 'calculadora-desconto.html';
+    a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
 }
 
 // Comparar: política vigente × anterior, uma linha por faixa da vigente. O piso da anterior tem as mesmas faixas; o teto (agressiva) tinha cortes
