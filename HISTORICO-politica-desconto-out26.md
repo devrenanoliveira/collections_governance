@@ -40,6 +40,6 @@ Registro de handoff (22/10/2026): o que foi decidido, por quê, o que está no r
 ## 5. Onde está cada coisa
 
 - Dado: `data.json` → `desconto.politicaVigente`, `desconto.anterior`, `desconto.campanhas[]`.
-- Tela: o botão "Política Oficial" mostra a política vigente (piso e exceção) e, abaixo, "Política anterior (histórico)" com as tabelas antigas de piso e teto. O botão "Política Agressiva (Teto)" foi removido. A calculadora abre na política vigente; o botão "Anterior" compara.
+- Tela: o botão "Política Oficial" mostra a política vigente (piso e exceção) e, abaixo, "Política anterior (histórico)" com as tabelas antigas de piso e teto. O botão "Política Agressiva (Teto)" foi removido. Sub-seletor Vigente | Anterior | Comparar (comparação por faixa com diferença em p.p.). A calculadora abre na política vigente; o botão "Anterior" compara.
 - Código: `index.html` (`buildCalcHtml`, `limNova`, `campanhaParaCalculadora`); `calculadora-desconto.html` é gerado (regenerar ao mudar dado).
 - Convenções de edição: `CLAUDE.md`.

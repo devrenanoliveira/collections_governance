@@ -38,6 +38,7 @@
   .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
   .status-pill.ativo{background:#ECFDF5;color:#065F46;}
   .status-pill.em_implantacao{background:#FFFBEB;color:#92400E;}
+  .delta-up{color:#15803D;font-weight:700;} .delta-down{color:#B91C1C;font-weight:700;} body.dark .delta-up{color:#4ADE80;} body.dark .delta-down{color:#F87171;}
   .status-pill.stand_by{background:#F1F5F9;color:#475569;}
   body.dark .status-pill.ativo{background:#0f2d1a;color:#6ee7b7;}
   body.dark .status-pill.em_implantacao{background:#2d2008;color:#F59E0B;}
@@ -206,8 +207,14 @@
     </div>
 
     <div id="descontoVista-oficial" style="display:none;">
+      <div class="filter-row" id="oficialSub" style="margin-bottom:14px;">
+        <button class="filter-btn active" data-sub="nova">Vigente (desde 02/11)</button>
+        <button class="filter-btn" data-sub="anterior">Anterior (histórico)</button>
+        <button class="filter-btn" data-sub="comparar">Comparar</button>
+      </div>
       <div id="oficialNova"></div>
-      <div id="oficialAnterior" style="margin-top:34px;">
+      <div id="oficialComparar" style="display:none;"></div>
+      <div id="oficialAnterior" style="display:none;">
         <div class="callout callout-info" id="anteriorCallout" style="margin-bottom:14px;"></div>
         <div class="table-card">
           <div class="table-card-header"><strong>Política anterior (histórico) — piso por fase de aging</strong></div>
@@ -936,6 +943,12 @@ function renderVisaoGeral(){
 let descontoToggleBound = false;
 const DESCONTO_VISTAS = ['calculadora', 'oficial', 'parcelamento', 'quebra', 'campanhas'];
 
+function oficialSubVista(v){
+  document.querySelectorAll('#oficialSub .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.sub === v));
+  ['nova','comparar','anterior'].forEach(k=>{ document.getElementById({nova:'oficialNova',comparar:'oficialComparar',anterior:'oficialAnterior'}[k]).style.display = (k === v) ? '' : 'none'; });
+}
+document.querySelectorAll('#oficialSub .filter-btn').forEach(b=>b.addEventListener('click', ()=>oficialSubVista(b.dataset.sub)));
+
 function descontoMostrarVista(vista){
   document.querySelectorAll('#descontoToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
   DESCONTO_VISTAS.forEach(v=>{ document.getElementById('descontoVista-' + v).style.display = (v === vista) ? '' : 'none'; });
@@ -1082,7 +1095,58 @@ function renderDesconto(){
       <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">No parcelado, a exceção é calculada na Calculadora de Aprovação: desconto à vista da exceção × margem × aperto (parâmetros avançados). Mora e multa mostram o desconto máximo sobre cada encargo.</p>`;
   }
 
+  if(pn) document.getElementById('oficialComparar').innerHTML = comparaPoliticas(pn, ant);
   document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao}, p.desconto.politicaVigente, campanhaParaCalculadora(p.desconto.campanhas));
+}
+
+// Comparar: política vigente × anterior, uma linha por faixa da vigente. O piso da anterior tem as mesmas faixas; o teto (agressiva) tinha cortes
+// diferentes, então quando a anterior varia dentro da faixa mostra o intervalo (min–max) e não calcula a diferença.
+function comparaPoliticas(pn, ant){
+  const nf = (v,d=1) => String(Number(v.toFixed(d))).replace('.', ',');
+  const faixa = r => `${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}`;
+  const vals = (tab, r, f) => [...new Set(tab.filter(x => x.diasDe <= r.diasAte && x.diasAte >= r.diasDe).map(x => f(x)))];
+  const delta = (a, v) => { const d = v - a; return Math.abs(d) < 0.005 ? '<td class="td-muted">—</td>' : `<td class="${d>0?'delta-up':'delta-down'}">${d>0?'+':'−'}${nf(Math.abs(d))} p.p.</td>`; };
+  const trio = (tab, r, fa, v) => {
+    const a = vals(tab, r, fa);
+    if(a.length > 1) return `<td class="td-muted" title="A anterior variava dentro desta faixa">${nf(Math.min(...a))}–${nf(Math.max(...a))}%*</td><td class="td-blue">${nf(v)}%</td><td class="td-muted">*</td>`;
+    return `<td class="td-muted">${nf(a[0])}%</td><td class="td-blue">${nf(v)}%</td>${delta(a[0], v)}`;
+  };
+  const par = (tab, r, fa, v) => { const a = vals(tab, r, fa); return `<td class="td-muted">${nf(a[0])}%</td><td class="td-blue">${nf(v)}%</td>${delta(a[0], v)}`; };
+  const sub3 = t => `<th colspan="3" style="text-align:center;border-left:1px solid var(--gridline);">${t}</th>`;
+  const sub2 = t => `<th colspan="2" style="text-align:center;border-left:1px solid var(--gridline);">${t}</th>`;
+  const h3 = '<th style="border-left:1px solid var(--gridline);">Anterior</th><th>Vigente</th><th>Dif.</th>';
+  const h2 = '<th style="border-left:1px solid var(--gridline);">Anterior</th><th>Vigente</th>';
+  const two = (a, v) => `<td class="td-muted" style="border-left:1px solid var(--gridline);">${nf(a)}%</td><td class="td-blue">${nf(v)}%</td>`;
+  const piso = pn.bandas.map(r => `<tr><td>${faixa(r)}</td>`
+    + trio(ant.oficial, r, x=>x.vista, r.pisoVista).replace('<td','<td style="border-left:1px solid var(--gridline);"')
+    + par(ant.oficial, r, x=>x.parcelado12x, r.pisoParc[0]).replace('<td','<td style="border-left:1px solid var(--gridline);"')
+    + par(ant.oficial, r, x=>x.parcelado12x, r.pisoParc[5]).replace('<td','<td style="border-left:1px solid var(--gridline);"') + '</tr>').join('');
+  const enc = pn.bandas.map(r => {
+    const m = f => vals(ant.oficial, r, f)[0], t = f => vals(ant.agressiva, r, f);
+    const tt = f => { const a = t(f); return a.length > 1 ? `${nf(Math.min(...a))}–${nf(Math.max(...a))}%*` : nf(a[0]) + '%'; };
+    return `<tr><td>${faixa(r)}</td>`
+      + trio(ant.agressiva, r, x=>x.principal, r.excVista).replace('<td','<td style="border-left:1px solid var(--gridline);"')
+      + two(m(x=>x.mora), r.mora) + two(m(x=>x.multa), r.multa)
+      + `<td class="td-muted" style="border-left:1px solid var(--gridline);">${tt(x=>x.mora)}</td><td class="td-gold">${nf(r.moraExc)}%</td>`
+      + `<td class="td-muted" style="border-left:1px solid var(--gridline);">${tt(x=>x.multa)}</td><td class="td-gold">${nf(r.multaExc)}%</td></tr>`;
+  }).join('');
+  return `
+    <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">Comparação · anterior (até ${dataBR(ant.vigenciaFim)}) × vigente (desde ${dataBR(pn.vigenciaInicio)})</span><p>Uma linha por faixa. <b style="color:#15803D;">Verde</b> = a política vigente dá mais desconto; <b style="color:#B91C1C;">vermelho</b> = dá menos. Dif. em pontos percentuais.</p></div>
+    <div class="table-card">
+      <div class="table-card-header"><strong>Piso (aprovação automática)</strong></div>
+      <div class="table-scroll"><table>
+        <thead><tr><th rowspan="2" style="text-align:left">Dias</th>${sub3('À vista')}${sub3('Parcelado 2x a 6x')}${sub3('Parcelado 7x a 12x')}</tr><tr>${h3}${h3}${h3}</tr></thead>
+        <tbody>${piso}</tbody>
+      </table></div>
+    </div>
+    <div class="table-card" style="margin-top:14px;">
+      <div class="table-card-header"><strong>Teto (exceção) à vista e desconto em encargos</strong></div>
+      <div class="table-scroll"><table>
+        <thead><tr><th rowspan="2" style="text-align:left">Dias</th>${sub3('Teto à vista')}${sub2('Mora (piso)')}${sub2('Multa (piso)')}${sub2('Mora (teto)')}${sub2('Multa (teto)')}</tr><tr>${h3}${h2}${h2}${h2}${h2}</tr></thead>
+        <tbody>${enc}</tbody>
+      </table></div>
+    </div>
+    <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">Parcelado: a política anterior tinha um valor único (padrão até 12x, escalonado por parcela na calculadora); ele aparece nas duas colunas de parcelado para comparar com 2x–6x e 7x–12x da vigente. * A política anterior tinha, no teto, cortes de faixa diferentes e variava dentro desta faixa: mostra-se o intervalo e não a diferença.</p>`;
 }
 
 // "2026-10-09" -> "09/10/2026"; o data.json guarda ISO, a tela mostra no padrão brasileiro
