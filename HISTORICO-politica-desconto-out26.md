@@ -12,7 +12,7 @@ Registro de handoff (22/10/2026): o que foi decidido, por quê, o que está no r
 
 ## 2. Nova política (aprovada pelo Renan; vigora a partir de 02/11/2026)
 
-- Está em `desconto.politicaNova` (16 faixas, `vigenciaInicio: 2026-11-02`). A oficial (piso e teto atuais) segue vigente até lá; em 02/11 é só promover `politicaNova` a oficial.
+- **Promovida a vigente em 03/11/2026** (vigência 02/11): está em `desconto.politicaVigente` (antes `politicaNova`; 16 faixas, `vigenciaInicio: 2026-11-02`). A política anterior (piso e teto) ficou como histórico em `desconto.anterior`.
 - Formato: Fase / Dias / À vista / 2x–6x / 7x–12x / Mora / Multa. 7x–12x = 80% do 2x–6x.
 - Piso à vista por faixa (5–30 … 1801+): 0,0,0,0,5,20,25,40,45,50,60,65,70,75,80,90. Piso 2x–6x: 0,0,0,0,2.5,14,18,25,30,35,45,50,55,60,70,85.
 - **65–90 dias:** só mora/multa (50/50), principal 0%. **91–120:** versão **B** (5% à vista, 2,5% em 2x–6x, 2% em 7x–12x, mora/multa 100/100); o Renan confirmou que 91–120 segue o print da tabela dele. Motivo: simplificar (desconto num lado só nas faixas iniciais) sem abrir mão de cobrar encargos já aos 91 dias.
@@ -30,7 +30,7 @@ Registro de handoff (22/10/2026): o que foi decidido, por quê, o que está no r
 
 ## 4. Em aberto
 
-1. Em 02/11, promover `politicaNova` a oficial (e arquivar a antiga).
+1. ~~Em 02/11, promover a política nova a oficial~~ — feito em 03/11/2026 (anterior arquivada em `desconto.anterior`).
 2. Medir a nova política na data (decisão do Renan: medir a partir de 02/11, sem piloto).
 3. Confirmar com dado se encargos = mora + multa (peso por faixa).
 4. Resultado da campanha de Out/26 e o nome "Pré Black Friday".
@@ -39,7 +39,7 @@ Registro de handoff (22/10/2026): o que foi decidido, por quê, o que está no r
 
 ## 5. Onde está cada coisa
 
-- Dado: `data.json` → `desconto.politicaNova`, `desconto.campanhas[]`.
-- Tela: a política nova aparece dentro do botão "Política Oficial (Piso)" (sob "Política atual · vigente" e "Política nova"); não há botão próprio. Ao promover em 02/11, retirar a seção "Política atual".
+- Dado: `data.json` → `desconto.politicaVigente`, `desconto.anterior`, `desconto.campanhas[]`.
+- Tela: o botão "Política Oficial" mostra a política vigente (piso e exceção) e, abaixo, "Política anterior (histórico)" com as tabelas antigas de piso e teto. O botão "Política Agressiva (Teto)" foi removido. A calculadora abre na política vigente; o botão "Anterior" compara.
 - Código: `index.html` (`buildCalcHtml`, `limNova`, `campanhaParaCalculadora`); `calculadora-desconto.html` é gerado (regenerar ao mudar dado).
 - Convenções de edição: `CLAUDE.md`.

@@ -190,8 +190,7 @@
   <div id="descontoContent">
     <div class="filter-row" id="descontoToggle">
       <button class="filter-btn active" data-vista="calculadora">Calculadora</button>
-      <button class="filter-btn" data-vista="oficial">Política Oficial (Piso)</button>
-      <button class="filter-btn" data-vista="agressiva">Política Agressiva (Teto)</button>
+      <button class="filter-btn" data-vista="oficial">Política Oficial</button>
       <button class="filter-btn" data-vista="parcelamento" id="descontoBtnParcelamento">Política de Parcelamento</button>
       <button class="filter-btn" data-vista="quebra" id="descontoBtnQuebra">Quebra de Acordo</button>
       <button class="filter-btn" data-vista="campanhas" id="descontoBtnCampanhas">Campanhas</button>
@@ -207,21 +206,20 @@
     </div>
 
     <div id="descontoVista-oficial" style="display:none;">
-      <div class="callout callout-info" id="oficialSecaoAtual" style="margin-bottom:14px;display:none;"></div>
-      <div class="table-card">
-        <div class="table-card-header"><strong>Política oficial (piso) — por fase de aging</strong></div>
-        <div class="table-scroll">
-          <table id="tblOficial"></table>
+      <div id="oficialNova"></div>
+      <div id="oficialAnterior" style="margin-top:34px;">
+        <div class="callout callout-info" id="anteriorCallout" style="margin-bottom:14px;"></div>
+        <div class="table-card">
+          <div class="table-card-header"><strong>Política anterior (histórico) — piso por fase de aging</strong></div>
+          <div class="table-scroll">
+            <table id="tblOficial"></table>
+          </div>
         </div>
-      </div>
-      <div id="oficialNova" style="margin-top:26px;"></div>
-    </div>
-
-    <div id="descontoVista-agressiva" style="display:none;">
-      <div class="table-card">
-        <div class="table-card-header"><strong>Política agressiva (teto) — máximo negociável</strong></div>
-        <div class="table-scroll">
-          <table id="tblAgressiva"></table>
+        <div class="table-card" style="margin-top:14px;">
+          <div class="table-card-header"><strong>Política anterior (histórico) — teto (agressiva), máximo negociável</strong></div>
+          <div class="table-scroll">
+            <table id="tblAgressiva"></table>
+          </div>
         </div>
       </div>
     </div>
@@ -936,7 +934,7 @@ function renderVisaoGeral(){
 
 /* ---------- POLÍTICA DE DESCONTO ---------- */
 let descontoToggleBound = false;
-const DESCONTO_VISTAS = ['calculadora', 'oficial', 'agressiva', 'parcelamento', 'quebra', 'campanhas'];
+const DESCONTO_VISTAS = ['calculadora', 'oficial', 'parcelamento', 'quebra', 'campanhas'];
 
 function descontoMostrarVista(vista){
   document.querySelectorAll('#descontoToggle .filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.vista === vista));
@@ -992,7 +990,8 @@ function renderDesconto(){
     return;
   }
 
-  const oficial = p.desconto.oficial;
+  const ant = p.desconto.anterior;
+  const oficial = ant.oficial;
   document.getElementById('tblOficial').innerHTML = `
     <thead><tr><th style="text-align:left">Fase</th><th>Dias</th><th>À vista (autorizar)</th><th>Até 12x (padrão)</th><th>Mora</th><th>Multa</th></tr></thead>
     <tbody>${oficial.map(r=>`
@@ -1000,7 +999,8 @@ function renderDesconto(){
       <td class="td-blue">${pct(r.vista,2)}</td><td class="td-blue">${pct(r.parcelado12x,2)}</td>
       <td class="td-muted">${pct(r.mora,2)}</td><td class="td-muted">${pct(r.multa,2)}</td></tr>`).join('')}</tbody>`;
 
-  const ag = p.desconto.agressiva;
+  const ag = ant.agressiva;
+  document.getElementById('anteriorCallout').innerHTML = `<span class="callout-label">Política anterior · histórico · vigente até ${dataBR(ant.vigenciaFim)}</span><p>${ant.descricao}</p>`;
   document.getElementById('tblAgressiva').innerHTML = `
     <thead><tr><th style="text-align:left">Dias</th><th>Principal (teto)</th><th>Mora</th><th>Multa</th></tr></thead>
     <tbody>${ag.map(r=>`
@@ -1045,13 +1045,13 @@ function renderDesconto(){
     return `
       <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">${c.nome} · ${status} · ${c.vigenciaInicio} a ${c.vigenciaFim}</span><p>${c.descricao}</p></div>
       <div class="table-card">
-        <div class="table-card-header"><strong>Desconto pré-aprovado por faixa de atraso (campanha × política de hoje)</strong></div>
+        <div class="table-card-header"><strong>Desconto pré-aprovado por faixa de atraso (campanha × política vigente na época)</strong></div>
         <div class="table-scroll"><table>
-          <thead><tr><th style="text-align:left">Faixa</th><th>À vista (campanha)</th><th>Parcelado único (campanha)</th><th>À vista (hoje)</th><th>Parcelado (hoje)</th></tr></thead>
+          <thead><tr><th style="text-align:left">Faixa</th><th>À vista (campanha)</th><th>Parcelado único (campanha)</th><th>À vista (política da época)</th><th>Parcelado (política da época)</th></tr></thead>
           <tbody>${c.tabela.map(r=>`<tr><td>${r.faixa}</td><td class="td-gold">${pc(r.avista)}</td><td class="td-gold">${pc(r.parcelado)}</td><td class="td-muted">${pc(r.vigenteAvista)}</td><td class="td-muted">${pc(r.vigenteParcelado)}</td></tr>`).join('')}</tbody>
         </table></div>
       </div>
-      <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin:8px 0 14px;">Política de hoje: nas faixas com mais de uma banda (181–360 e 361–720 dias) aparece a média das bandas.</p>
+      <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin:8px 0 14px;">Política da época (anterior a 02/11/2026): nas faixas com mais de uma banda (181–360 e 361–720 dias) aparece a média das bandas.</p>
       <div class="table-card" style="padding:18px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Regras da campanha</strong></div>
         <ul style="margin:0;padding-left:18px;font-size:.85rem;line-height:1.7;">${c.regras.map(r=>`<li>${r}</li>`).join('')}</ul>
@@ -1059,23 +1059,21 @@ function renderDesconto(){
       <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">${c.resultado || 'Resultado a divulgar após o encerramento da campanha.'}</p>`;
   }).join('<hr style="margin:22px 0;border:none;border-top:1px solid var(--gridline);">');
 
-  // política nova aprovada, vigora em pn.vigenciaInicio; a vigente (piso e teto acima) segue valendo até lá (em 02/11: promover politicaNova a oficial)
-  const pn = p.desconto.politicaNova;
-  document.getElementById('oficialSecaoAtual').style.display = pn ? '' : 'none';
+  // política vigente (promovida em 02/11/2026); a anterior fica como histórico em desconto.anterior
+  const pn = p.desconto.politicaVigente;
   if(pn){
-    document.getElementById('oficialSecaoAtual').innerHTML = `<span class="callout-label">Política atual · vigente</span><p>Vale até a nova política entrar em vigor (${dataBR(pn.vigenciaInicio)}).</p>`;
     const dias = r => `${r.diasDe}–${r.diasAte===99999999?'∞':r.diasAte}`;
     document.getElementById('oficialNova').innerHTML = `
-      <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">Política nova · aprovada · vigora a partir de ${dataBR(pn.vigenciaInicio)}</span><p>${pn.descricao}</p><p style="margin-top:6px;">Até a vigência, a política atual (a tabela acima e a Política Agressiva) segue valendo.</p></div>
+      <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">Política vigente · desde ${dataBR(pn.vigenciaInicio)}</span><p>${pn.descricao}</p></div>
       <div class="table-card">
-        <div class="table-card-header"><strong>Política nova — piso (aprovação automática), por faixa de atraso e nº de parcelas</strong></div>
+        <div class="table-card-header"><strong>Piso (aprovação automática), por faixa de atraso e nº de parcelas</strong></div>
         <div class="table-scroll"><table>
           <thead><tr><th style="text-align:left">Dias</th><th>À vista</th><th>Parcelado 2x a 6x</th><th>Parcelado 7x a 12x</th><th>Mora</th><th>Multa</th></tr></thead>
           <tbody>${pn.bandas.map(r=>`<tr><td>${dias(r)}</td><td class="td-blue">${pct(r.pisoVista,2)}</td><td class="td-blue">${pct(r.pisoParc[0],2)}</td><td class="td-blue">${pct(r.pisoParc[5],2)}</td><td class="td-muted">${pct(r.mora,2)}</td><td class="td-muted">${pct(r.multa,2)}</td></tr>`).join('')}</tbody>
         </table></div>
       </div>
       <div class="table-card" style="margin-top:14px;">
-        <div class="table-card-header"><strong>Política nova — exceção (teto de aprovação), à vista e encargos</strong></div>
+        <div class="table-card-header"><strong>Exceção (teto de aprovação), à vista e encargos</strong></div>
         <div class="table-scroll"><table>
           <thead><tr><th style="text-align:left">Dias</th><th>À vista (exceção)</th><th>Mora</th><th>Multa</th></tr></thead>
           <tbody>${pn.bandas.map(r=>`<tr><td>${dias(r)}</td><td class="td-gold">${pct(r.excVista,2)}</td><td class="td-muted">${pct(r.moraExc,2)}</td><td class="td-muted">${pct(r.multaExc,2)}</td></tr>`).join('')}</tbody>
@@ -1084,7 +1082,7 @@ function renderDesconto(){
       <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">No parcelado, a exceção é calculada na Calculadora de Aprovação: desconto à vista da exceção × margem × aperto (parâmetros avançados). Mora e multa mostram o desconto máximo sobre cada encargo.</p>`;
   }
 
-  document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao}, p.desconto.politicaNova, campanhaParaCalculadora(p.desconto.campanhas));
+  document.getElementById('calcFrame').srcdoc = buildCalcHtml(oficial, ag, {produto: p.nome, ultimaAtualizacao: p.ultimaAtualizacao}, p.desconto.politicaVigente, campanhaParaCalculadora(p.desconto.campanhas));
 }
 
 // "2026-10-09" -> "09/10/2026"; o data.json guarda ISO, a tela mostra no padrão brasileiro
@@ -1195,7 +1193,7 @@ footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;col
 <div class="wrap">
   <div class="card inputs">
     <h2>Dados da proposta</h2>
-    ${nova ? '<div class="field"><label>Política aplicada</label><div style="display:flex;gap:6px;"><button type="button" class="modo-btn active" id="modoAtual">Atual</button><button type="button" class="modo-btn" id="modoNova">Nova (02/11)</button></div><div class="modo-info" id="modoInfo" style="display:none"></div></div>' : ''}
+    ${nova ? '<div class="field"><label>Política aplicada</label><div style="display:flex;gap:6px;"><button type="button" class="modo-btn active" id="modoNova">Vigente (desde '+dataBR(nova.vigenciaInicio).slice(0,5)+')</button><button type="button" class="modo-btn" id="modoAtual">Anterior</button></div><div class="modo-info" id="modoInfo" style="display:none"></div></div>' : ''}
     ${camp ? '<div class="field"><label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:12px;cursor:pointer;"><input type="checkbox" id="campAtiva" checked> <span>Campanha pré-aprovada &mdash; <b id="campRotulo"></b></span></label><div class="modo-info" id="campInfo"></div></div>' : ''}
     <div class="field"><label for="dias">Dias em atraso</label><input type="number" id="dias" min="0" value="95"></div>
     <div class="field"><label for="parcelas">Parcelas (1 = à vista)</label><input type="number" id="parcelas" min="1" max="12" step="1" value="1"></div>
@@ -1205,7 +1203,7 @@ footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;col
       <summary>Parâmetros de política (avançado)</summary>
       <div class="adv-body">
         <div class="adv-warn">Estes campos definem a régua de desconto para todas as faixas de atraso — não são dados da proposta. Altere apenas por decisão do time de Crédito e Risco.</div>
-        <div class="adv-warn" id="advNovaHint" style="display:none">Na política nova, margem e aperto valem só para o <b>teto do parcelado</b>; o piso do parcelado vem da tabela (2x a 6x e 7x a 12x).</div>
+        <div class="adv-warn" id="advNovaHint" style="display:none">Na política vigente, margem e aperto valem só para o <b>teto do parcelado</b>; o piso do parcelado vem da tabela (2x a 6x e 7x a 12x).</div>
         <div class="field"><label for="margem">Margem do teto para parcelado, referência em 2x (%)</label><input type="number" id="margem" min="1" max="100" step="1" value="90"></div>
         <div class="field"><label for="aperto">Aperto adicional até a 12ª parcela (%)</label><input type="number" id="aperto" min="0" max="100" step="1" value="85"></div>
       </div>
@@ -1277,7 +1275,7 @@ function renderTrack(el, floor, ceiling, proposed, status, cautionStart, campLim
 const NOVA = ${JSON.stringify(nova)};
 const CAMP = ${JSON.stringify(camp)};
 function dataBR(s){ return s.split('-').reverse().join('/'); }
-let modo = 'atual';
+let modo = 'nova';
 // campanha pré-aprovada: valor único para qualquer nº de parcelas (2x a 12x); só vale dentro da vigência
 function campEstado(){
   if(!CAMP) return null;
@@ -1301,15 +1299,15 @@ function limAtual(dias, n, margem, aperto){
     floorP = oBand.pPar * remaining; ceilP = aBand.principal * (margem / 100) * remaining;
   }
   return {floorP, ceilP, moraLo:Math.min(oBand.mora,aBand.mora), moraHi:Math.max(oBand.mora,aBand.mora), mulLo:Math.min(oBand.multa,aBand.multa), mulHi:Math.max(oBand.multa,aBand.multa),
-    label:'política oficial <b>'+oBand.min+'&ndash;'+oBand.max+' dias</b> &nbsp;|&nbsp; política agressiva <b>'+aBand.min+'&ndash;'+aBand.max+' dias</b>', nome:'política oficial'};
+    label:'política anterior &middot; oficial <b>'+oBand.min+'&ndash;'+oBand.max+' dias</b> &nbsp;|&nbsp; agressiva <b>'+aBand.min+'&ndash;'+aBand.max+' dias</b>', nome:'política anterior'};
 }
 function limNova(dias, n, margem, aperto){
   const b = NOVA.bandas.find(r => dias >= r.diasDe && dias <= r.diasAte) || NOVA.bandas[NOVA.bandas.length-1];
-  // piso: tabela por nº de parcelas (2x a 12x). Teto do parcelado: exceção à vista × margem × aperto personalizado, igual à política atual.
+  // piso: tabela por nº de parcelas (2x a 12x). Teto do parcelado: exceção à vista × margem × aperto personalizado, igual à política anterior.
   const floorP = n <= 1 ? b.pisoVista : b.pisoParc[n-2];
   const ceilP = n <= 1 ? b.excVista : Math.max(floorP, b.excVista * (margem / 100) * (1 - (aperto / 100) * ((n - 2) / 10)));
   return {floorP, ceilP, moraLo:b.mora, moraHi:b.moraExc, mulLo:b.multa, mulHi:b.multaExc,
-    label:'<b>política nova</b> &middot; faixa <b>'+b.diasDe+'&ndash;'+(b.diasAte>=99999999?'&infin;':b.diasAte)+' dias</b>', nome:'política nova'};
+    label:'<b>política vigente</b> &middot; faixa <b>'+b.diasDe+'&ndash;'+(b.diasAte>=99999999?'&infin;':b.diasAte)+' dias</b>', nome:'política vigente'};
 }
 function veredito(proposed, floorP, ceilP, dias, nome){
   if(ceilP === 0 && floorP === 0){
@@ -1358,7 +1356,7 @@ function update(){
     // mesma proposta nas duas políticas, lado a lado: é o que permite acompanhar o efeito da mudança
     const O = (modo === 'nova') ? lAtual : lNova, Vo = veredito(proposed, O.floorP, O.ceilP, dias, O.nome);
     const cmp = document.getElementById('compare'); cmp.style.display = '';
-    cmp.innerHTML = 'Mesma proposta na <b>'+(modo==='nova'?'política atual':'política nova')+'</b>: piso '+O.floorP.toFixed(1)+'% &middot; teto '+O.ceilP.toFixed(1)+'% &rarr; <b>'+Vo.title+'</b>';
+    cmp.innerHTML = 'Mesma proposta na <b>'+(modo==='nova'?'política anterior':'política vigente')+'</b>: piso '+O.floorP.toFixed(1)+'% &middot; teto '+O.ceilP.toFixed(1)+'% &rarr; <b>'+Vo.title+'</b>';
     document.getElementById('advNovaHint').style.display = modo === 'nova' ? '' : 'none';
     const info = document.getElementById('modoInfo'); info.style.display = modo === 'nova' ? '' : 'none';
     info.textContent = modo === 'nova' ? NOVA.descricao : '';
