@@ -335,14 +335,26 @@
             },
             {
               "dias": "31 dias",
-              "acao": "Negativação (Boa Vista)",
-              "responsavel": "Boa Vista",
+              "acao": "Negativação (SPC)",
+              "responsavel": "SPC",
               "marco": true
             },
             {
               "dias": "41 dias",
-              "acao": "Negativação (SPC)",
-              "responsavel": "SPC",
+              "acao": "Notificação alinhada com a Fácil: reforço da negativação",
+              "responsavel": "Fácil",
+              "marco": true
+            },
+            {
+              "dias": "51 dias",
+              "acao": "Notificação alinhada com a Fácil: reforço de um pré-cancelamento do cartão",
+              "responsavel": "Fácil",
+              "marco": true
+            },
+            {
+              "dias": "64 dias",
+              "acao": "Notificação alinhada com a Fácil: iminência de cancelamento do cartão (cancelamento aos 65 dias)",
+              "responsavel": "Fácil",
               "marco": true
             },
             {
@@ -445,12 +457,6 @@
             },
             {
               "dias": "31 dias",
-              "acao": "Negativação (Boa Vista)",
-              "responsavel": "Boa Vista",
-              "marco": true
-            },
-            {
-              "dias": "41 dias",
               "acao": "Negativação (SPC)",
               "responsavel": "SPC",
               "marco": true
@@ -744,7 +750,7 @@
         {
           "nome": "Boa Vista",
           "categoria": "Bureau de negativação",
-          "papel": "Negativação de CPF (também referida como ACP).",
+          "papel": "Negativação de CPF (também referida como ACP). Deixou de ser usada na régua: a negativação passou a ser só pelo SPC, aos 31 dias.",
           "status": "ativo"
         },
         {
