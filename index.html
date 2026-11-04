@@ -2009,6 +2009,7 @@ function renderEstudos(){
     document.getElementById('estudoExternoTitulo').textContent = atual.titulo;
     document.getElementById('estudoExternoDesc').textContent = atual.descricao || '';
     document.getElementById('estudoExternoLink').href = atual.url;
+    document.getElementById('estudoExternoLink').textContent = (atual.botao || 'Abrir estudo') + ' ↗';
     document.getElementById('estudoFrame').removeAttribute('src');
   } else {
     document.getElementById('estudoFrame').src = atual.arquivo;

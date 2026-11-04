@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-11-03",
+      "ultimaAtualizacao": "2026-11-04",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso e a exceção (teto) da política vigente, para o número de dias em atraso informado.",
         "legendas": {
@@ -1078,6 +1078,7 @@
           "id": "comissao-assessorias-set26",
           "titulo": "Comissão das Assessorias · Ago→Set/26",
           "descricao": "Por que a comissão das assessorias subiu 13% de agosto para setembro (volume, mix de faixas, parcelas de acordo e alíquota) e o paralelo com a internalização a partir da 2ª quinzena de outubro. Artefato Claude, aberto em nova aba: os valores em R$ ficam fora do repositório público.",
+          "botao": "Estudo Comissão das Assessorias",
           "url": "https://claude.ai/artifact/8vSG6HEdETn2gSyzPRLbac",
           "data": "2026-10-02"
         },
