@@ -267,7 +267,7 @@
             "itens": [
               { "label": "Nome da carteira", "valor": "Z-ON card" },
               { "label": "Usada para calcular dívidas negativadas pela Serasa", "valor": "Não (a negativação é feita pelo SPC, aos 31 dias)" },
-              { "label": "Tipo de juros", "valor": "Composto, 12% ao ano a partir da dívida" },
+              { "label": "Tipo de juros", "valor": "Composto, 1% ao ano a partir da dívida" },
               { "label": "Multa da dívida", "valor": "Com multa de 2%, uma única vez sobre o valor original" },
               { "label": "Pagamento pós-vencimento", "valor": "Aceito, com no máximo 5 dias de atraso, juros de 1% e multa de 2% (campos da tela de cadastro)" },
               { "label": "Número de parcelas", "valor": "1 (somente à vista)" },
@@ -277,24 +277,24 @@
           },
           "faixas": [
             { "diasDe": 0, "diasAte": 64, "principal": 0, "encargos": 0, "serasa": 0 },
-            { "diasDe": 65, "diasAte": 90, "principal": 0, "encargos": 50, "serasa": 1.94 },
-            { "diasDe": 91, "diasAte": 120, "principal": 5, "encargos": 100, "serasa": 9.4 },
-            { "diasDe": 121, "diasAte": 150, "principal": 20, "encargos": 100, "serasa": 24.4 },
-            { "diasDe": 151, "diasAte": 180, "principal": 25, "encargos": 100, "serasa": 29.77 },
-            { "diasDe": 181, "diasAte": 240, "principal": 40, "encargos": 100, "serasa": 44.33 },
-            { "diasDe": 241, "diasAte": 300, "principal": 45, "encargos": 100, "serasa": 49.89 },
-            { "diasDe": 301, "diasAte": 360, "principal": 50, "encargos": 100, "serasa": 55.27 },
-            { "diasDe": 361, "diasAte": 540, "principal": 60, "encargos": 100, "serasa": 64.86 },
-            { "diasDe": 541, "diasAte": 720, "principal": 65, "encargos": 100, "serasa": 70.9 },
-            { "diasDe": 721, "diasAte": 1080, "principal": 70, "encargos": 100, "serasa": 76.39 },
-            { "diasDe": 1081, "diasAte": 1440, "principal": 75, "encargos": 100, "serasa": 82.37 },
-            { "diasDe": 1441, "diasAte": 1800, "principal": 80, "encargos": 100, "serasa": 87.37 },
-            { "diasDe": 1801, "diasAte": 99999, "principal": 90, "encargos": 100, "serasa": 94.34 }
+            { "diasDe": 65, "diasAte": 90, "principal": 0, "encargos": 50, "serasa": 1.06 },
+            { "diasDe": 91, "diasAte": 120, "principal": 5, "encargos": 100, "serasa": 7.08 },
+            { "diasDe": 121, "diasAte": 150, "principal": 20, "encargos": 100, "serasa": 21.82 },
+            { "diasDe": 151, "diasAte": 180, "principal": 25, "encargos": 100, "serasa": 26.76 },
+            { "diasDe": 181, "diasAte": 240, "principal": 40, "encargos": 100, "serasa": 41.46 },
+            { "diasDe": 241, "diasAte": 300, "principal": 45, "encargos": 100, "serasa": 46.42 },
+            { "diasDe": 301, "diasAte": 360, "principal": 50, "encargos": 100, "serasa": 51.37 },
+            { "diasDe": 361, "diasAte": 540, "principal": 60, "encargos": 100, "serasa": 61.16 },
+            { "diasDe": 541, "diasAte": 720, "principal": 65, "encargos": 100, "serasa": 66.17 },
+            { "diasDe": 721, "diasAte": 1080, "principal": 70, "encargos": 100, "serasa": 71.14 },
+            { "diasDe": 1081, "diasAte": 1440, "principal": 75, "encargos": 100, "serasa": 76.18 },
+            { "diasDe": 1441, "diasAte": 1800, "principal": 80, "encargos": 100, "serasa": 81.13 },
+            { "diasDe": 1801, "diasAte": 99999, "principal": 90, "encargos": 100, "serasa": 90.65 }
           ],
           "notas": [
-            "Conta: desconto sobre o total = (desconto do principal + desconto dos encargos × e) ÷ (1 + e), em que e = encargos ÷ principal = multa de 2% + juros compostos de 12% ao ano até o primeiro dia da faixa.",
+            "Conta: desconto sobre o total = (desconto do principal + desconto dos encargos × e) ÷ (1 + e), em que e = encargos ÷ principal = multa de 2% + juros compostos de 1% ao ano até o primeiro dia da faixa.",
             "Medido no primeiro dia de cada faixa e arredondado para baixo no segundo decimal: o cliente nunca recebe mais que a política em nenhum dia da faixa; nos dias finais recebe um pouco menos, porque os encargos crescem e o percentual é único.",
-            "Vale enquanto os juros ficarem em 12% ao ano e a multa em 2%: se qualquer um mudar, a tabela precisa ser recalculada.",
+            "Vale enquanto os juros ficarem em 1% ao ano e a multa em 2%: se qualquer um mudar, a tabela precisa ser recalculada.",
             "Cadastrado o piso (aprovação automática), pois o Serasa negocia sem passar pela nossa aprovação; as exceções (teto) ficam para negociação manual. A aba 3 (Agrupamento de Dívidas) ainda não foi registrada."
           ]
         },
