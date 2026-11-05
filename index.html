@@ -38,6 +38,7 @@
   .status-pill{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
   .status-pill.ativo{background:#ECFDF5;color:#065F46;}
   .status-pill.em_implantacao{background:#FFFBEB;color:#92400E;}
+  .cg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:10px 0;} .cg-grid label{display:block;font-size:.72rem;color:var(--ink-muted);margin-bottom:3px;} .cg-grid select,.cg-grid input{width:100%;padding:6px 8px;border:1px solid var(--gridline);border-radius:4px;background:var(--surface-card);color:var(--ink-primary);font:inherit;font-size:.85rem;}
   .delta-up{color:#15803D;font-weight:700;} .delta-down{color:#B91C1C;font-weight:700;} body.dark .delta-up{color:#4ADE80;} body.dark .delta-down{color:#F87171;}
   .status-pill.stand_by{background:#F1F5F9;color:#475569;}
   body.dark .status-pill.ativo{background:#0f2d1a;color:#6ee7b7;}
@@ -959,6 +960,205 @@ function descontoMostrarVista(vista){
   DESCONTO_VISTAS.forEach(v=>{ document.getElementById('descontoVista-' + v).style.display = (v === vista) ? '' : 'none'; });
 }
 
+/* ---------- CARGA SERASA LIMPA NOME ----------
+   Converte um CSV de dívidas para o layout de inclusão (ou de exclusão) do Serasa Limpa Nome, igual aos modelos do próprio Serasa.
+   Tudo roda no navegador: o arquivo não é enviado, gravado nem publicado (o site e o repositório são públicos). */
+const SE_CAB = ["Detalhe: Número do CPF ou do CNPJ do Devedor;Detalhe: Contrato relacionado a dívida;Detalhe: Valor da dívida original ou atualizado com juros.;Detalhe: Dia de inicio do atraso da dívida;Detalhe: Detalhe da dívida que o devedor possui;Detalhe: Valor atualizado da dívida.", "Exemplos: 033.827.099-20 ou 61.777.191/0001-04;Exemplos: AAABBCCC ou 91234467 ou A654CV78.;\"Exemplos: ou 1000,00 ou 1000\";Exemplo: 23/07/2022;Exemplos: TELEFONIA ou CARTAO CREDITO ou EMPRESTIMO;\"Exemplos: ou 1000,00 ou 1000\"", "\"Regra: Preenchimento obrigatório com pontos, barra e hífen. Preencher a partir da linha 5.\";Regra: Preenchimento obrigatório. Preencher a partir da linha 5.;Regra: Preenchimento obrigatório. Preencher a partir da linha 5.;Regra: Preenchimento obrigatório no padrão DD/MM/AAAA. Preencher a partir da linha 5.;Regra: Preenchimento obrigatório. Preencher a partir da linha 5.;Regra: Preenchimento OPCIONAL. Preencher a partir da linha 5.", "CPF_CNPJ_DEVEDOR (PREENCHA ABAIXO);CONTRATO_DIVIDA (PREENCHA ABAIXO);VALOR_DIVIDA (PREENCHA ABAIXO);DATA_VENCIMENTO_DIVIDA (PREENCHA ABAIXO);TIPO_DIVIDA (PREENCHA ABAIXO);VALOR_ATUALIZADO (PREENCHA ABAIXO)"];
+const seNum = v => (Math.round(v * 100) / 100).toFixed(2).replace('.', ',');
+const seDoc = v => {
+  const d = String(v || '').replace(/\D/g, '');
+  if (!d || d.length > 14 || /^0+$/.test(d)) return '';
+  return d.length <= 11
+    ? d.padStart(11, '0').replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    : d.padStart(14, '0').replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+};
+const cargaNorm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+// "1.234,56" ou "1234.56" ou "R$ 1234,56"; shortcut: "1.234" sem vírgula vale 1,234 (ponto decimal), confira o total na tela
+const cargaNum = v => {
+  let s = String(v == null ? '' : v).replace(/[^\d,.\-]/g, '');
+  if (!s) return NaN;
+  if (s.includes(',')) s = s.replace(/\./g, '').replace(',', '.');
+  return parseFloat(s);
+};
+const cargaData = v => {
+  const s = String(v == null ? '' : v).trim();
+  let m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/), iso = '';
+  if (m) iso = `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+  else { m = s.match(/^(\d{4})-(\d{2})-(\d{2})/); if (m) iso = m[0]; }
+  const t = iso ? Date.parse(iso + 'T00:00:00Z') : NaN;
+  return !isNaN(t) && new Date(t).toISOString().slice(0, 10) === iso ? iso : '';
+};
+const cargaDmy = iso => iso.split('-').reverse().join('/');
+function cargaParseCsv(txt) {
+  txt = txt.replace(/^﻿/, '');
+  const first = txt.split(/\r?\n/, 1)[0];
+  const sep = (first.match(/;/g) || []).length > (first.match(/,/g) || []).length ? ';' : ',';
+  const rows = [];
+  let row = [], cur = '', q = false;
+  for (let i = 0; i < txt.length; i++) {
+    const c = txt[i];
+    if (q) {
+      if (c === '"') { if (txt[i + 1] === '"') { cur += '"'; i++; } else q = false; }
+      else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === sep) { row.push(cur); cur = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && txt[i + 1] === '\n') i++;
+      row.push(cur); cur = '';
+      if (row.length > 1 || row[0] !== '') rows.push(row);
+      row = [];
+    } else cur += c;
+  }
+  if (cur !== '' || row.length) { row.push(cur); rows.push(row); }
+  return rows;
+}
+// m = índices das colunas {doc, contrato, par, venc, valor, ass}; o = {modo:'incl'|'excl', min, ass, tipo, ref, faixas}
+function cargaMontar(rows, m, o) {
+  const incl = o.modo === 'incl', out = new Map();
+  const r = { lidas: rows.length - 1, semDoc: 0, semContrato: 0, semData: 0, semValor: 0, curta: 0, outraAss: 0, repetidas: 0 };
+  const ref = Date.parse(o.ref + 'T00:00:00Z');
+  const cel = (x, k) => (k >= 0 && x[k] != null ? String(x[k]).trim() : '');
+  for (let i = 1; i < rows.length; i++) {
+    const x = rows[i];
+    if (incl && m.ass >= 0 && o.ass && !cargaNorm(cel(x, m.ass)).includes(cargaNorm(o.ass))) { r.outraAss++; continue; }
+    const doc = seDoc(cel(x, m.doc));
+    if (!doc) { r.semDoc++; continue; }
+    const base = cel(x, m.contrato).replace(/[;\r\n]/g, ' ');
+    if (!base) { r.semContrato++; continue; }
+    const par = cel(x, m.par).replace(/[;\r\n]/g, ' ');
+    const contrato = par ? base + '-' + par : base;
+    let valor = 0, venc = '';
+    if (incl) {
+      valor = cargaNum(cel(x, m.valor));
+      if (!(valor > 0)) { r.semValor++; continue; }
+      venc = cargaData(cel(x, m.venc));
+      if (!venc) { r.semData++; continue; }
+      if (Math.round((ref - Date.parse(venc + 'T00:00:00Z')) / 864e5) < o.min) { r.curta++; continue; }
+    }
+    const k = doc + '|' + contrato, a = out.get(k);
+    if (a) { r.repetidas++; a.valor = Math.round((a.valor + valor) * 100) / 100; if (venc && venc < a.venc) a.venc = venc; }
+    else out.set(k, { doc, contrato, valor, venc });
+  }
+  const linhas = [...out.values()];
+  r.total = Math.round(linhas.reduce((s, l) => s + l.valor, 0) * 100) / 100;
+  r.porFaixa = (o.faixas || []).map(f => {
+    const it = incl ? linhas.filter(l => { const d = Math.round((ref - Date.parse(l.venc + 'T00:00:00Z')) / 864e5); return d >= f.diasDe && d <= f.diasAte; }) : [];
+    return { de: f.diasDe, ate: f.diasAte, n: it.length, valor: Math.round(it.reduce((s, l) => s + l.valor, 0) * 100) / 100 };
+  });
+  return { linhas, r };
+}
+const cargaCsvIncl = (it, tipo) => '﻿' + SE_CAB.concat(it.map(i => [i.doc, i.contrato, seNum(i.valor), cargaDmy(i.venc), tipo, ''].join(';'))).join('\r\n');
+const cargaCsvExcl = it => '﻿' + ['NUMERO_CONTRATO;DOCUMENTO'].concat(it.map(i => i.contrato + ';' + i.doc)).join('\r\n');
+const cargaMascara = d => d.replace(/\d(?=(?:\D*\d){2})/g, '•');
+const cargaEsc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const CARGA_CAMPOS = {   // nomes de coluna aceitos (sem acento, minúsculas), do mais para o menos preferido
+  doc: ['cpf/cnpj', 'cpf_cnpj', 'cpf', 'cnpj', 'documento'],
+  contrato: ['contrato', 'numero contrato', 'n contrato', 'numero_contrato'],
+  par: ['parcela', 'numero parcela'],
+  venc: ['vencimento', 'data vencimento', 'data de vencimento'],
+  valor: ['valor principal', 'saldo principal', 'valor', 'saldo atual'],
+  ass: ['assessoria', 'assessorias', 'cobrador']
+};
+const cargaAchar = (head, k) => {
+  const h = head.map(cargaNorm);
+  for (const n of CARGA_CAMPOS[k]) { const i = h.indexOf(n); if (i >= 0) return i; }
+  return -1;
+};
+const CG = { rows: null, linhas: null, modo: 'incl', o: null };
+function cargaHtml() {
+  const sel = (id, rot, cls) => `<div class="${cls || ''}"><label for="${id}">${rot}</label><select id="${id}"></select></div>`;
+  return `<div class="table-card" style="padding:18px;margin-top:14px;">
+    <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Gerar carga para o Serasa Limpa Nome</strong></div>
+    <div class="callout callout-info" style="margin-bottom:12px;"><span class="callout-label">Privacidade</span><p>O arquivo é lido e convertido aqui, no seu navegador. Nada é enviado, gravado ou publicado. Este site é público: não salve a carteira dentro da pasta do projeto.</p></div>
+    <div class="filter-row" id="cgModo" style="margin-bottom:10px;">
+      <button class="filter-btn active" data-modo="incl">Inclusão</button>
+      <button class="filter-btn" data-modo="excl">Exclusão</button>
+    </div>
+    <p class="note" style="font-size:.8rem;color:var(--ink-secondary);margin:0 0 8px;" id="cgDica"></p>
+    <input type="file" id="cgFile" accept=".csv,.txt">
+    <div id="cgMapa" style="display:none;">
+      <div class="cg-grid">
+        ${sel('cgDoc', 'CPF/CNPJ')}${sel('cgContrato', 'Contrato')}${sel('cgPar', 'Parcela (opcional)')}
+        ${sel('cgVenc', 'Vencimento', 'cg-incl')}${sel('cgValor', 'Valor principal', 'cg-incl')}${sel('cgAss', 'Assessoria (opcional)', 'cg-incl')}
+      </div>
+      <div class="cg-grid cg-incl">
+        <div><label for="cgAssTxt">Só a assessoria (texto)</label><input id="cgAssTxt" value="Ciclo"></div>
+        <div><label for="cgMin">Atraso mínimo (dias)</label><input id="cgMin" type="number" min="0" value="65"></div>
+        <div><label for="cgRef">Contar o atraso até</label><input id="cgRef" type="date"></div>
+        <div><label for="cgTipo">Tipo da dívida</label><input id="cgTipo" value="CARTAO CREDITO"></div>
+      </div>
+      <button class="btn gold" id="cgGerar" type="button">Gerar</button>
+    </div>
+    <div id="cgSaida" style="margin-top:12px;"></div>
+  </div>`;
+}
+function cargaInit() {
+  const $ = id => document.getElementById(id);
+  const dicas = {
+    incl: 'Envie um CSV com uma linha por parcela em aberto: CPF/CNPJ, contrato, parcela, vencimento e valor principal. O arquivo gerado sai no modelo de inclusão do Serasa. O valor atualizado fica em branco de propósito: quem calcula juros e multa é o Serasa, com os parâmetros da carteira.',
+    excl: 'Envie um CSV com CPF/CNPJ e contrato (e parcela, se a inclusão usou). O arquivo gerado sai no modelo de exclusão do Serasa: contrato e documento. Use o mesmo critério de contrato da inclusão, senão o Serasa não acha a dívida.'
+  };
+  const modo = m => {
+    CG.modo = m; CG.linhas = null;
+    document.querySelectorAll('#cgModo .filter-btn').forEach(b => b.classList.toggle('active', b.dataset.modo === m));
+    document.querySelectorAll('.cg-incl').forEach(e => { e.style.display = m === 'incl' ? '' : 'none'; });
+    $('cgDica').textContent = dicas[m];
+    $('cgSaida').innerHTML = '';
+  };
+  document.querySelectorAll('#cgModo .filter-btn').forEach(b => b.addEventListener('click', () => modo(b.dataset.modo)));
+  const hoje = new Date();
+  $('cgRef').value = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
+  modo('incl');
+  $('cgFile').addEventListener('change', async e => {
+    const f = e.target.files[0];
+    CG.rows = null; $('cgMapa').style.display = 'none'; $('cgSaida').innerHTML = '';
+    if (!f) return;
+    let txt = await f.text();
+    if (txt.includes('�')) txt = new TextDecoder('windows-1252').decode(await f.arrayBuffer());
+    CG.rows = cargaParseCsv(txt);
+    if (CG.rows.length < 2) { $('cgSaida').innerHTML = '<div class="callout callout-info"><p>O arquivo não tem linhas de dados.</p></div>'; return; }
+    const head = CG.rows[0];
+    for (const [id, k, opc] of [['cgDoc', 'doc'], ['cgContrato', 'contrato'], ['cgPar', 'par', 1], ['cgVenc', 'venc'], ['cgValor', 'valor'], ['cgAss', 'ass', 1]]) {
+      $(id).innerHTML = (opc ? '<option value="-1">(nenhuma)</option>' : '<option value="-1">— escolha —</option>') + head.map((h, i) => `<option value="${i}">${cargaEsc(h)}</option>`).join('');
+      $(id).value = String(cargaAchar(head, k));
+    }
+    $('cgMapa').style.display = '';
+    $('cgSaida').innerHTML = `<p class="note" style="font-size:.8rem;color:var(--ink-secondary);">${CG.rows.length - 1} linhas lidas. Confira as colunas escolhidas e clique em Gerar.</p>`;
+  });
+  $('cgGerar').addEventListener('click', () => {
+    const aviso = t => { $('cgSaida').innerHTML = `<div class="callout callout-info"><p>${t}</p></div>`; };
+    const m = { doc: +$('cgDoc').value, contrato: +$('cgContrato').value, par: +$('cgPar').value, venc: +$('cgVenc').value, valor: +$('cgValor').value, ass: +$('cgAss').value };
+    const incl = CG.modo === 'incl';
+    if (m.doc < 0 || m.contrato < 0 || (incl && (m.venc < 0 || m.valor < 0))) return aviso('Escolha as colunas obrigatórias (CPF/CNPJ, contrato' + (incl ? ', vencimento e valor' : '') + ').');
+    const o = {
+      modo: CG.modo, min: +$('cgMin').value || 0, ass: $('cgAssTxt').value.trim(),
+      tipo: ($('cgTipo').value.trim() || 'CARTAO CREDITO').replace(/[;\r\n]/g, ' '), ref: $('cgRef').value,
+      faixas: (produto().desconto.serasaLimpaNome || {}).faixas || []
+    };
+    if (incl && !o.ref) return aviso('Informe a data até a qual o atraso é contado.');
+    const { linhas, r } = cargaMontar(CG.rows, m, o);
+    CG.linhas = linhas; CG.o = o;
+    const desc = [['outra assessoria', r.outraAss], ['sem CPF/CNPJ válido', r.semDoc], ['sem contrato', r.semContrato], ['sem valor maior que zero', r.semValor], ['vencimento inválido', r.semData], ['atraso menor que o mínimo', r.curta]].filter(x => x[1]);
+    const faixas = incl ? r.porFaixa.filter(f => f.n) : [];
+    $('cgSaida').innerHTML = `
+      <p style="margin:0 0 6px;"><strong>${linhas.length}</strong> ${incl ? 'dívidas para incluir' : 'contratos para excluir'}${incl ? ', somando <strong>' + brl(r.total) + '</strong> de principal' : ''} (de ${r.lidas} linhas lidas${r.repetidas ? '; ' + r.repetidas + ' repetidas foram somadas' : ''}).</p>
+      ${desc.length ? `<p class="note" style="font-size:.8rem;color:var(--ink-secondary);margin:0 0 8px;">Não entraram: ${desc.map(x => x[1] + ' ' + x[0]).join(' · ')}.</p>` : ''}
+      ${faixas.length ? `<div class="table-scroll"><table><thead><tr><th style="text-align:left">Atraso (dias)</th><th>Dívidas</th><th>Principal</th></tr></thead><tbody>${faixas.map(f => `<tr><td>${f.de}${f.ate >= 99999 ? '+' : '–' + f.ate}</td><td>${f.n}</td><td>${brl(f.valor)}</td></tr>`).join('')}</tbody></table></div>` : ''}
+      ${linhas.length ? `<p class="note" style="font-size:.8rem;color:var(--ink-secondary);margin:10px 0 4px;">Prévia (documento mascarado):</p>
+      <div class="table-scroll"><table><tbody>${linhas.slice(0, 5).map(l => `<tr><td style="text-align:left">${cargaMascara(l.doc)}</td><td style="text-align:left">${cargaEsc(l.contrato)}</td>${incl ? `<td>${seNum(l.valor)}</td><td>${cargaDmy(l.venc)}</td>` : ''}</tr>`).join('')}</tbody></table></div>
+      <button class="btn gold" id="cgBaixar" type="button" style="margin-top:12px;">⬇ Baixar arquivo para o Serasa (CSV)</button>` : ''}`;
+    if (linhas.length) $('cgBaixar').addEventListener('click', () => {
+      const csv = incl ? cargaCsvIncl(CG.linhas, CG.o.tipo) : cargaCsvExcl(CG.linhas);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+      a.download = `serasa-${incl ? 'inclusao' : 'exclusao'}-${CG.o.ref || new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
+  });
+}
+/* ---------- fim da carga Serasa ---------- */
+
 function renderDesconto(){
   const p = produto();
   const content = document.getElementById('descontoContent');
@@ -1072,7 +1272,8 @@ function renderDesconto(){
       <div class="table-card" style="padding:18px;margin-top:14px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Como a tabela foi calculada</strong></div>
         <ul style="margin:0;padding-left:18px;font-size:.85rem;line-height:1.7;">${sl.notas.map(n=>`<li>${n}</li>`).join('')}</ul>
-      </div>`;
+      </div>${cargaHtml()}`;
+    cargaInit();
   }
 
   const camps = p.desconto.campanhas || [];
