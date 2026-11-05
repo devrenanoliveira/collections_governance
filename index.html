@@ -149,7 +149,7 @@
     <button class="tab-btn" data-tab="assessorias">Governança de Assessorias</button>
     <button class="tab-btn" data-tab="fornecedores">Fornecedores</button>
     <button class="tab-btn" data-tab="saude">Saúde Financeira</button>
-    <button class="tab-btn" data-tab="estudos">Estudos e Comparativos</button>    <button class="tab-btn" data-tab="atualizar">Atualizar Dados</button>
+    <button class="tab-btn" data-tab="estudos">Estudos e Comparativos</button>    <button class="tab-btn" data-tab="carga">Carga Serasa</button>    <button class="tab-btn" data-tab="atualizar">Atualizar Dados</button>
     <button class="tab-btn" data-tab="mapa">Mapa da Cobrança</button>
   </div>
 </div>
@@ -536,6 +536,14 @@
   </div>
 </div>
 
+<!-- CARGA SERASA (módulo estático: processa o arquivo no navegador, sem data.json) -->
+<div class="tab-panel" id="tab-carga">
+  <p class="sec-label">Serasa Limpa Nome</p>
+  <h1 class="sec-title">Carga de dívidas para o Serasa</h1>
+  <p class="sec-subtitle">Converte um CSV de dívidas para o layout de inclusão ou de exclusão do Serasa Limpa Nome (carteira Z-ON card). Os parâmetros da carteira e a tabela de desconto estão em Política de Desconto → Serasa Limpa Nome.</p>
+  <div id="cargaRoot"></div>
+</div>
+
 <script>
 let DATA = null;
 let dataEditavel = null; // cópia de trabalho de DATA, acumula as edições feitas na aba "Atualizar Dados" nesta sessão do navegador
@@ -836,6 +844,8 @@ fetch('data.json?v=' + Date.now())
     produtoAtual = DATA.produtoPadrao || Object.keys(DATA.produtos)[0];
     renderProductNav();
     renderAll();
+    document.getElementById('cargaRoot').innerHTML = cargaHtml();
+    cargaInit();
   })
   .catch(err=>{
     document.body.innerHTML = '<div style="padding:40px;font-family:sans-serif;color:#B91C1C;">Não foi possível carregar <code>data.json</code>. Se você abriu este arquivo direto do disco (duplo clique), sirva a pasta com um servidor local (ex: <code>python -m http.server</code>) — navegadores bloqueiam leitura de arquivo local por segurança. Detalhe: ' + err.message + '</div>';
@@ -1133,7 +1143,7 @@ function cargaInit() {
     const o = {
       modo: CG.modo, min: +$('cgMin').value || 0, ass: $('cgAssTxt').value.trim(),
       tipo: ($('cgTipo').value.trim() || 'CARTAO CREDITO').replace(/[;\r\n]/g, ' '), ref: $('cgRef').value,
-      faixas: (produto().desconto.serasaLimpaNome || {}).faixas || []
+      faixas: ((((DATA.produtos.zon || {}).desconto || {}).serasaLimpaNome) || {}).faixas || []
     };
     if (incl && !o.ref) return aviso('Informe a data até a qual o atraso é contado.');
     const { linhas, r } = cargaMontar(CG.rows, m, o);
@@ -1272,8 +1282,7 @@ function renderDesconto(){
       <div class="table-card" style="padding:18px;margin-top:14px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Como a tabela foi calculada</strong></div>
         <ul style="margin:0;padding-left:18px;font-size:.85rem;line-height:1.7;">${sl.notas.map(n=>`<li>${n}</li>`).join('')}</ul>
-      </div>${cargaHtml()}`;
-    cargaInit();
+      </div>`;
   }
 
   const camps = p.desconto.campanhas || [];
