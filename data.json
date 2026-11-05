@@ -294,6 +294,7 @@
           "notas": [
             "Conta: desconto sobre o total = (desconto do principal + desconto dos encargos × e) ÷ (1 + e), em que e = encargos ÷ principal = multa de 2% + juros compostos de 12% ao ano até o primeiro dia da faixa.",
             "Medido no primeiro dia de cada faixa e arredondado para baixo no segundo decimal: o cliente nunca recebe mais que a política em nenhum dia da faixa; nos dias finais recebe um pouco menos, porque os encargos crescem e o percentual é único.",
+            "Encargo real no CobranSaaS (cadastro \"ENCARGO - PADRÃO\", 05/11/2026): multa de 2% cobrada após 2 dias e mora de 12,99% (base devedor), que o ajuste do Portal indica ser ao mês e composta. Não é reproduzido no Serasa (o campo conta os juros desde o 1º dia e o desconto só tem 2 casas decimais); de 91 dias em diante o preço pago independe dessa taxa.",
             "Vale enquanto os juros ficarem em 12% ao ano e a multa em 2%: se qualquer um mudar, a tabela precisa ser recalculada.",
             "Cadastrado o piso (aprovação automática), pois o Serasa negocia sem passar pela nossa aprovação; as exceções (teto) ficam para negociação manual. A aba 3 (Agrupamento de Dívidas) ainda não foi registrada. Falta conferir com o Portal se ele oferece o piso ou o teto, para o cliente não ver duas propostas diferentes."
           ]
