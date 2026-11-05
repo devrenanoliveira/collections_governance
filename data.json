@@ -381,6 +381,12 @@
             },
             {
               "dias": "41 dias",
+              "acao": "Negativação (Boa Vista / BVS)",
+              "responsavel": "Boa Vista",
+              "marco": true
+            },
+            {
+              "dias": "41 dias",
               "acao": "Notificação alinhada com a Fácil: reforço da negativação",
               "responsavel": "Fácil",
               "marco": true
@@ -499,6 +505,12 @@
               "dias": "31 dias",
               "acao": "Negativação (SPC)",
               "responsavel": "SPC",
+              "marco": true
+            },
+            {
+              "dias": "41 dias",
+              "acao": "Negativação (Boa Vista / BVS)",
+              "responsavel": "Boa Vista",
               "marco": true
             },
             {
@@ -790,7 +802,7 @@
         {
           "nome": "Boa Vista",
           "categoria": "Bureau de negativação",
-          "papel": "Negativação de CPF (também referida como ACP). Deixou de ser usada na régua: a negativação passou a ser só pelo SPC, aos 31 dias.",
+          "papel": "Negativação de CPF (também referida como ACP, ou BVS). Na régua desde 05/11/2026 aos 41 dias, depois do SPC (31 dias).",
           "status": "ativo"
         },
         {
