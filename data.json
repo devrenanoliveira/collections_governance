@@ -765,6 +765,7 @@
           "topicos": [
             { "label": "Parceria retomada em", "valor": "07/08/2026" },
             { "label": "Encerramento", "valor": "a partir de 10/11/2026, por decisão da Z-ON depois de conversa com a Ciclo" },
+            { "label": "Destino da carteira", "valor": "contratos virados para a Fácil (decidido em 06/11/2026); o que fazer com a base como um todo fica para depois. Indicadores e share só mudam a partir de terça, 10/11/2026 (na segunda, 09/11, a Ciclo já não tem a carteira)" },
             { "label": "Atuação", "valor": "faixas de Pós-Prejuízo (181 a 360, 361 a 720 e acima de 720 dias)" },
             { "label": "Carteira (share)", "valor": "5% acima de 181 dias" }
           ],
