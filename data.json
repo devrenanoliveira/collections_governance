@@ -1400,7 +1400,7 @@
             },
             {
               "dias": "1ª parcela em atraso",
-              "acao": "Fluxo por parcela (empresa prestadora de serviços): a área de Cobrança entra em contato com a empresa para informar a pendência e buscar a regularização",
+              "acao": "Fluxo por parcela, em paralelo à régua por dias (empresa prestadora de serviços): a área de Cobrança entra em contato com a empresa para informar a pendência e buscar a regularização",
               "responsavel": "Cobrança"
             },
             {
