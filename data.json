@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-11-06",
+      "ultimaAtualizacao": "2026-11-09",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso e a exceção (teto) da política vigente, para o número de dias em atraso informado.",
         "legendas": {
@@ -343,8 +343,7 @@
           "ferramentasInternas": [],
           "assessoriasAtivas": [
             "Fácil",
-            "Decisão",
-            "Ciclo"
+            "Decisão"
           ],
           "etapas": [
             {
@@ -437,17 +436,17 @@
             {
               "dias": "181 a 360",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil / Decisão / Ciclo"
+              "responsavel": "Fácil / Decisão"
             },
             {
               "dias": "361 a 720",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil / Decisão / Ciclo"
+              "responsavel": "Fácil / Decisão"
             },
             {
               "dias": ">721",
               "acao": "Acionamento via assessoria de cobrança",
-              "responsavel": "Fácil / Decisão / Ciclo"
+              "responsavel": "Fácil / Decisão"
             }
           ]
         },
@@ -575,7 +574,7 @@
       "assessorias": {
         "status": "Versão 7.0 — no ar",
         "pendente": "a política de comissionamento indireto (após a entrada do Serasa Limpa Nome)",
-        "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 3 players, os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
+        "objetivo": "Regulamentar a atração, as metas nominais espelhadas, o modelo concorrencial para 2 players (Fácil e Decisão), os rituais de gestão e a matriz dual de ônus e bônus baseada no ciclo de crédito (Pré e Pós-Prejuízo).",
         "metas": "14 Índices de Eficiência individuais (um por faixa de aging) geram, de forma ponderada, uma Meta Geral de Eficiência. Os índices percentuais são convertidos em valores nominais de recuperação esperados (R$) por faixa, cujo somatório define o 'Valor X de Recuperação Total' — a obrigação final de entrega da assessoria no trimestre.",
         "comissaoBase": [
           {
@@ -654,28 +653,27 @@
           "nota": "Percentuais \"X\" e \"Y\" ainda a definir, quando houver a entrada do Serasa Limpa Nome."
         },
         "concorrencial": {
-          "numeroPlayers": 3,
-          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses. O ciclo atual começa em out/2026 (out–dez/2026)."
+          "numeroPlayers": 2,
+          "periodoEstabilidade": "Distribuição do share de carteira permanece fixa por um ciclo de 3 meses. O ciclo atual começa em out/2026 (out–dez/2026); a 1ª apuração do duelo do Perde e Ganha é no fechamento de dezembro/2026 e o share muda em janeiro/2027."
         },
         "portfolioVigente": {
-          "vigenciaInicio": "01/10/2026",
+          "vigenciaInicio": "10/11/2026",
           "faixas": ["05 a 65 dias", "66 a 180 dias", "Acima de 181 dias (Pós-Prejuízo)"],
           "assessorias": [
-            { "nome": "Fácil", "share": [100, 85, 80] },
-            { "nome": "Decisão", "share": [0, 15, 15] },
-            { "nome": "Ciclo", "share": [0, 0, 5] }
+            { "nome": "Fácil", "share": [100, 85, 82.5] },
+            { "nome": "Decisão", "share": [0, 15, 17.5] }
           ],
           "diretrizes": [
             "Não elegível ao Perde e Ganha (foco em internalização). A Fácil segue com 100% da faixa.",
             "Decisão triplica participação (5% → 15%), reduzindo a concentração da Fácil (95% → 85%).",
-            "Bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo; Fácil 80% (era 90%), Decisão 15% (era 5%), Ciclo mantém 5%."
+            "Bloco elegível ao Perde e Ganha e ao Bônus Extra de Prejuízo; Desde 10/11/2026 (saída da Ciclo): Fácil 82,5% e Decisão 17,5%; os 5% da Ciclo foram divididos, 2,5% para cada. Antes, desde 01/10: Fácil 80%, Decisão 15%, Ciclo 5%."
           ]
         },
         "perdeGanha": {
-          "regraGeral": "O 3º colocado cede 15% do seu estoque sob gestão nas faixas elegíveis (> 65D), sendo 10% repassados ao 1º lugar e 5% ao 2º lugar.",
-          "travaAncora": "Se a Fácil ficar em último lugar, o repasse de estoque fica limitado a um teto de 5% a 7,5% do share geral das faixas elegíveis (a depender do resultado), preservando a estabilidade da maior operação.",
-          "observacao": "Os percentuais de distribuição podem ser revistos para balancear o share dos parceiros, a depender da configuração final do ranking trimestral.",
-          "amostragemProporcional": "A fatia transferida do 3º colocado deve obrigatoriamente conter uma amostra proporcional de todas as faixas de atraso (de D a M) para permitir o trabalho de \"segunda perna\" na assessoria recebedora."
+          "regraGeral": "Duelo trimestral entre Fácil e Decisão nas faixas elegíveis (> 65D), pelo ICM Geral acumulado do trimestre. O repasse é medido em pontos do share total elegível: (a) Decisão à frente da Fácil: a Decisão ganha 5 pontos; (b) Fácil à frente por até 5 p.p. de ICM Geral (zona de equilíbrio): a Decisão ganha 2,5 pontos e a Fácil mantém o prêmio de 1º lugar; (c) Fácil à frente por mais de 5 p.p.: a Fácil ganha 5 pontos. Só recebe carteira quem atingiu pelo menos 90% de ICM Global; se nenhuma atingir, ninguém cede. Regra aprovada em 09/11/2026 (substitui a regra de 3 players, em que o 3º colocado cedia 15% do estoque); 1ª apuração no fechamento de dezembro/2026, com o share mudando em janeiro/2027.",
+          "travaAncora": "Limites de share: a Decisão fica entre 10% e 30% e a Fácil entre 70% e 90% do share total elegível, preservando a estabilidade da maior operação e mantendo a Decisão como alternativa real.",
+          "observacao": "Os pontos de repasse (5 e 2,5), a zona de equilíbrio (5 p.p.) e os limites podem ser revistos a cada ciclo. Com 2 players não existe 3º lugar; o Serasa Limpa Nome não participa do duelo.",
+          "amostragemProporcional": "A fatia transferida deve obrigatoriamente conter uma amostra proporcional de todas as faixas de atraso (de D a M) para permitir o trabalho de \"segunda perna\" na assessoria recebedora."
         },
         "premiacao": {
           "mensal": {
@@ -684,8 +682,7 @@
             "criterioTurbinadoPlus": "exige atingir > 120% do ICM Geral + > 120% do ICM de Prejuízo",
             "lugares": [
               { "posicao": "1º lugar", "base": 5000, "turbinado": 7000, "turbinadoPlus": 10000 },
-              { "posicao": "2º lugar", "base": 2500, "turbinado": 4500, "turbinadoPlus": 7000 },
-              { "posicao": "3º lugar", "base": 0, "turbinado": 1000, "turbinadoPlus": 3000 }
+              { "posicao": "2º lugar", "base": 2500, "turbinado": 4500, "turbinadoPlus": 7000 }
             ]
           },
           "trimestral": {
@@ -694,8 +691,7 @@
             "criterioTurbinadoPlus": "exige atingir > 120% do ICM Geral acumulado + > 120% do ICM de Prejuízo acumulado",
             "lugares": [
               { "posicao": "1º lugar", "base": 10000, "turbinado": 15000, "turbinadoPlus": 20000 },
-              { "posicao": "2º lugar", "base": 5000, "turbinado": 7000, "turbinadoPlus": 10000 },
-              { "posicao": "3º lugar", "base": 0, "turbinado": 3000, "turbinadoPlus": 5000 }
+              { "posicao": "2º lugar", "base": 5000, "turbinado": 7000, "turbinadoPlus": 10000 }
             ]
           },
           "bonusPrejuizo": {
@@ -713,8 +709,7 @@
         },
         "contatos": [
           { "nome": "Fácil", "voz": "0800 291 2213", "whatsapp": [{ "numero": "(47) 9783-7582" }], "email": "contato@facilresultado.com.br", "portal": { "url": "https://facilquitar.com.br/zoncard" } },
-          { "nome": "Decisão", "voz": "0800 941 8068", "whatsapp": [{ "numero": "(41) 9596-7870" }], "email": "atendimento@decisao.com", "portal": { "url": "https://z-on.pegueipaguei.com/" } },
-          { "nome": "Ciclo", "voz": null, "vozNota": "Ainda não há 0800 para esta carteira", "whatsapp": [{ "rotulo": "Humano", "numero": "(41) 98435-5317" }, { "rotulo": "AD", "numero": "(41) 98400-9383" }], "email": null, "portal": { "url": "https://condor.negociemais.com/", "nota": "fora de uso" } }
+          { "nome": "Decisão", "voz": "0800 941 8068", "whatsapp": [{ "numero": "(41) 9596-7870" }], "email": "atendimento@decisao.com", "portal": { "url": "https://z-on.pegueipaguei.com/" } }
         ],
         "rituais": {
           "diario": "Relatório matinal com o funil de Tentativa de Contato → CPC → Promessa de Pagamento → Acordo Emitido → Confirmação de Pagamento; meta de volume e valor de acordos, acordos e valor realizado, e projeção do realizado sobre a meta. Envio de pelo menos 3x ao dia: o primeiro até às 10:00, com as metas; o segundo até às 15:00; e o último ao encerrar o expediente da operação.",
@@ -744,7 +739,7 @@
           "topicos": [
             { "label": "Início", "valor": "18/08/2026" },
             { "label": "Atuação", "valor": "a partir de 66 dias de atraso" },
-            { "label": "Carteira (share)", "valor": "15% nas faixas 66–180 e acima de 181 dias, a partir de 01/10/2026 (de 18/08 a 30/09: 5%)" }
+            { "label": "Carteira (share)", "valor": "15% na faixa 66–180 e 17,5% acima de 181 dias, a partir de 10/11/2026 (de 01/10 a 09/11: 15% nas duas; de 18/08 a 30/09: 5%)" }
           ],
           "status": "ativo"
         },
@@ -754,7 +749,7 @@
           "papel": "Assessoria de cobrança terceirizada.",
           "topicos": [
             { "label": "Atuação", "valor": "desde 05 dias de atraso" },
-            { "label": "Carteira (share)", "valor": "100% na faixa 05–65 dias, 85% na faixa 66–180 dias, 80% acima de 181 dias (a partir de 01/10/2026)" }
+            { "label": "Carteira (share)", "valor": "100% na faixa 05–65 dias, 85% na faixa 66–180 dias, 82,5% acima de 181 dias (a partir de 10/11/2026; de 01/10 a 09/11: 80% acima de 181)" }
           ],
           "status": "ativo"
         },
@@ -765,11 +760,11 @@
           "topicos": [
             { "label": "Parceria retomada em", "valor": "07/08/2026" },
             { "label": "Encerramento", "valor": "a partir de 10/11/2026, por decisão da Z-ON depois de conversa com a Ciclo" },
-            { "label": "Destino da carteira", "valor": "contratos virados para a Fácil (decidido em 06/11/2026); o que fazer com a base como um todo fica para depois. Indicadores e share só mudam a partir de terça, 10/11/2026 (na segunda, 09/11, a Ciclo já não tem a carteira)" },
+            { "label": "Destino da carteira", "valor": "contratos virados para a Fácil (decidido em 06/11/2026); o share de 5% foi dividido: 2,5% para a Fácil e 2,5% para a Decisão (acima de 181 dias). O que fazer com a base como um todo fica para depois. A Ciclo deixou de ter a carteira em 09/11/2026" },
             { "label": "Atuação", "valor": "faixas de Pós-Prejuízo (181 a 360, 361 a 720 e acima de 720 dias)" },
-            { "label": "Carteira (share)", "valor": "5% acima de 181 dias" }
+            { "label": "Carteira (share)", "valor": "5% acima de 181 dias, até 09/11/2026" }
           ],
-          "status": "ativo"
+          "status": "encerrado"
         },
         {
           "nome": "SmartNX",

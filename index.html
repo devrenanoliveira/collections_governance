@@ -40,10 +40,10 @@
   .status-pill.em_implantacao{background:#FFFBEB;color:#92400E;}
   .cg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:10px 0;} .cg-grid label{display:block;font-size:.72rem;color:var(--ink-muted);margin-bottom:3px;} .cg-grid select,.cg-grid input{width:100%;padding:6px 8px;border:1px solid var(--gridline);border-radius:4px;background:var(--surface-card);color:var(--ink-primary);font:inherit;font-size:.85rem;}
   .delta-up{color:#15803D;font-weight:700;} .delta-down{color:#B91C1C;font-weight:700;} body.dark .delta-up{color:#4ADE80;} body.dark .delta-down{color:#F87171;}
-  .status-pill.stand_by{background:#F1F5F9;color:#475569;}
+  .status-pill.stand_by,.status-pill.encerrado{background:#F1F5F9;color:#475569;}
   body.dark .status-pill.ativo{background:#0f2d1a;color:#6ee7b7;}
   body.dark .status-pill.em_implantacao{background:#2d2008;color:#F59E0B;}
-  body.dark .status-pill.stand_by{background:#1e293b;color:#94A3B8;}
+  body.dark .status-pill.stand_by,body.dark .status-pill.encerrado{background:#1e293b;color:#94A3B8;}
 
   .regua-track{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--gridline);margin-left:8px;}
   .regua-step{position:relative;padding:10px 0 10px 22px;border-bottom:1px dashed var(--gridline);}
@@ -897,6 +897,7 @@ function renderVisaoGeral(){
   const ativos = fornecedores.filter(f=>f.status==='ativo').length;
   const implantacao = fornecedores.filter(f=>f.status==='em_implantacao').length;
   const standBy = fornecedores.filter(f=>f.status==='stand_by').length;
+  const encerrados = fornecedores.filter(f=>f.status==='encerrado').length;
   const recupAcumulada = meses.reduce((s,m)=>s+m.recuperacao, 0);
   const investAcumulado = meses.reduce((s,m)=>s+m.investimentoTotal, 0);
   const assessoriasDesejada = (p.regua && (p.regua.desejada || p.regua.atual || {}).assessoriasAtivas) || [];
@@ -907,7 +908,7 @@ function renderVisaoGeral(){
       : {label:'IEC último mês', value:'—', sub:'Saúde financeira ainda não configurada', cls:'red'},
     {label:'Recuperado no período', value: temSaude ? brl(recupAcumulada) : '—', sub: temSaude ? (meses.length + ' meses · investimento total de ' + brl(investAcumulado)) : '—', cls:'navy'},
     {label: p.regua && !p.regua.desejada ? 'Assessorias na régua atual' : 'Assessorias na régua desejada', value: assessoriasDesejada.length || '—', sub: assessoriasDesejada.join(', ') || 'Régua ainda não configurada', cls:'blue'},
-    {label:'Fornecedores mapeados', value: fornecedores.length, sub: fornecedores.length ? (ativos + ' ativos · ' + implantacao + ' em implantação' + (standBy ? ' · ' + standBy + ' em stand-by' : '')) : 'Nenhum fornecedor cadastrado ainda', cls:'gold'},
+    {label:'Fornecedores mapeados', value: fornecedores.length, sub: fornecedores.length ? (ativos + ' ativos · ' + implantacao + ' em implantação' + (standBy ? ' · ' + standBy + ' em stand-by' : '') + (encerrados ? ' · ' + encerrados + ' encerrado(s)' : '')) : 'Nenhum fornecedor cadastrado ainda', cls:'gold'},
   ];
   document.getElementById('visaoKpis').innerHTML = kpis.map(k=>`
     <div class="kpi-card ${k.cls}">
@@ -2120,7 +2121,7 @@ function renderFornecedores(){
       <div class="provider-name">${f.nome}</div>
       <div class="provider-cat">${f.categoria}</div>
       ${f.topicos && f.topicos.length ? `<ul class="provider-topicos">${f.topicos.map(t=>`<li><strong>${t.label}:</strong> ${t.valor}</li>`).join('')}</ul>` : `<div class="provider-papel">${f.papel}</div>`}
-      <span class="status-pill ${f.status}">${f.status==='ativo'?'Ativo':f.status==='stand_by'?'Em stand-by':'Em implantação'}</span>
+      <span class="status-pill ${f.status}">${f.status==='ativo'?'Ativo':f.status==='stand_by'?'Em stand-by':f.status==='encerrado'?'Encerrado':'Em implantação'}</span>
     </div>`).join('') : emptyState('Cadastre os fornecedores deste produto no data.json (chave "fornecedores") para preencher esta aba.');
 }
 
