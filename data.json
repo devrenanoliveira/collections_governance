@@ -1159,7 +1159,7 @@
     },
     "condorpj": {
       "nome": "Condor PJ",
-      "ultimaAtualizacao": "2026-10-22",
+      "ultimaAtualizacao": "2026-11-09",
       "desconto": {
         "descricaoFluxo": "Política de desconto da carteira PJ do Condor, operada pelo Serasa Limpa Nome.",
         "tabelaUnica": {
@@ -1303,47 +1303,47 @@
               "responsavel": "Interno"
             },
             {
-              "dias": "01 a 04",
-              "acao": "Envio de cobrança via WhatsApp e e-mail. Se o devedor não recebe a NF: a cobrança solicita a emissão, a loja envia automaticamente a NF e o devedor pode pedir ajuste do CNPJ",
-              "responsavel": "Interno"
+              "dias": "01 a 05",
+              "acao": "Fase de relacionamento: acionamento pela área comercial. Se o devedor não recebe a NF: a cobrança solicita a emissão, a loja envia automaticamente a NF e o devedor pode pedir ajuste do CNPJ",
+              "responsavel": "Interno (área comercial)"
             },
             {
-              "dias": "05 dias",
-              "acao": "Bloqueio de limite na loja com 5 dias de atraso",
+              "dias": "06 dias",
+              "acao": "Bloqueio do crédito disponível com 6 dias de atraso",
               "responsavel": "Interno",
               "marco": true
             },
             {
-              "dias": "05 a 10",
-              "acao": "Cobrança segue via WhatsApp e e-mail",
+              "dias": "06 a 10",
+              "acao": "Início das cobranças via WhatsApp e e-mail",
               "responsavel": "Interno"
             },
             {
               "dias": "11 a 20",
-              "acao": "Segue a cobrança via canais digitais + aviso de negativação",
+              "acao": "Segue a cobrança via canais digitais + aviso de pré-negativação",
               "responsavel": "Interno"
             },
             {
               "dias": "21 a 30",
-              "acao": "Segue a cobrança via canais digitais + aviso de protesto",
+              "acao": "Segue a cobrança via canais digitais + aviso de efetivação da negativação, que acontece aos 31 dias",
               "responsavel": "Interno"
             },
             {
               "dias": "31 dias",
-              "acao": "Negativação (SPC)",
+              "acao": "Negativação (SPC), feita manualmente, por lote",
               "responsavel": "SPC",
+              "marco": true
+            },
+            {
+              "dias": "31 dias",
+              "acao": "Envio da carteira para o Serasa Limpa Nome",
+              "responsavel": "Serasa Limpa Nome",
               "marco": true
             },
             {
               "dias": "31 a 60",
               "acao": "Terceirização: cobrança conduzida pelo Serasa Limpa Nome",
               "responsavel": "Serasa Limpa Nome"
-            },
-            {
-              "dias": "61 dias",
-              "acao": "Protesto",
-              "responsavel": "Serasa Limpa Nome",
-              "marco": true
             },
             {
               "dias": "61 dias",
@@ -1355,6 +1355,12 @@
               "dias": "61 a 90",
               "acao": "Comunicação via assessoria de cobrança",
               "responsavel": "Serasa Limpa Nome"
+            },
+            {
+              "dias": "91 dias",
+              "acao": "Protesto",
+              "responsavel": "Serasa Limpa Nome",
+              "marco": true
             },
             {
               "dias": "91 a 120",
