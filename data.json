@@ -1397,6 +1397,22 @@
               "dias": "Acima de 721",
               "acao": "Comunicação via assessoria de cobrança",
               "responsavel": "Serasa Limpa Nome"
+            },
+            {
+              "dias": "1ª parcela em atraso",
+              "acao": "Fluxo por parcela (empresa prestadora de serviços): a área de Cobrança entra em contato com a empresa para informar a pendência e buscar a regularização",
+              "responsavel": "Cobrança"
+            },
+            {
+              "dias": "2 parcelas em atraso",
+              "acao": "Fluxo por parcela: permanecendo a inadimplência, novo contato para regularização, com ciência ao responsável pelo respectivo contrato de prestação de serviços",
+              "responsavel": "Cobrança"
+            },
+            {
+              "dias": "3 parcelas em atraso",
+              "acao": "Fluxo por parcela: sem regularização, nos termos do contrato de empréstimo firmado entre as partes, o débito pode ser compensado com eventuais créditos da empresa prestadora de serviços decorrentes do contrato de prestação de serviços, inclusive no pagamento das notas fiscais, observados os limites e condições contratuais",
+              "responsavel": "Cobrança / Contratos",
+              "marco": true
             }
           ]
         },
