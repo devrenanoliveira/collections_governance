@@ -177,6 +177,11 @@
     </div>
   </div>
 
+  <div class="insight-panel" id="visaoAcoesBloco" style="display:none;margin-bottom:16px;">
+    <div class="insight-title">Ações de outras áreas — acompanhar o efeito na cobrança</div>
+    <div id="visaoAcoes"></div>
+  </div>
+
   <p class="sec-label" style="margin-top:6px;">Ir para</p>
   <div class="chart-grid" id="visaoAtalhos"></div>
 
@@ -946,6 +951,15 @@ function renderVisaoGeral(){
     <ul style="margin:0 0 0 16px;padding:0;display:flex;flex-direction:column;gap:10px;">
       ${pendencias.map(pd=>`<li class="dot-y" style="font-weight:400;font-size:.8rem;line-height:1.5;color:var(--ink-secondary);">${pd}</li>`).join('')}
     </ul>` : '<p style="font-size:.8rem;color:var(--ink-muted);">Nada em implantação registrado para este produto.</p>';
+
+  const acoes = p.acoesOutrasAreas || [];
+  document.getElementById('visaoAcoesBloco').style.display = acoes.length ? '' : 'none';
+  document.getElementById('visaoAcoes').innerHTML = acoes.map(a=>`
+    <div style="margin-bottom:12px;">
+      <div style="font-size:.85rem;font-weight:700;color:var(--ink-primary);">${a.area} — ${a.titulo}</div>
+      <div style="font-size:.78rem;color:var(--ink-muted);margin:2px 0 4px;">Início: ${a.inicio}</div>
+      ${(a.itens||[]).length ? `<ul style="margin:0 0 0 16px;padding:0;font-size:.8rem;line-height:1.5;color:var(--ink-secondary);">${a.itens.map(i=>`<li>${i}</li>`).join('')}</ul>` : ''}
+    </div>`).join('') + (p.acoesOutrasAreasNota ? `<p style="font-size:.8rem;line-height:1.5;color:var(--ink-secondary);margin:0;">${p.acoesOutrasAreasNota}</p>` : '');
 
   const atalhos = [
     {tab:'desconto', titulo:'Política de Desconto', desc:'Piso, teto e calculadora de aprovação de propostas.'},

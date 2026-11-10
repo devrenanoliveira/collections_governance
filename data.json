@@ -1136,6 +1136,25 @@
           }
         ]
       },
+      "acoesOutrasAreas": [
+        {
+          "area": "Crédito",
+          "titulo": "Novo processo de aprovação de crédito de novos negócios (novos cartões Z-ON)",
+          "inicio": "11/11/2026",
+          "itens": [
+            "Piloto de 11/11 até o fim desta semana, apenas na matriz (Pinheirinho), com uso do FCR.",
+            "Ideia: avançar para 100% das lojas até o fim da próxima semana (por volta de 20/11).",
+            "Efeito esperado: redução do FPD (PNP)."
+          ]
+        },
+        {
+          "area": "Crédito",
+          "titulo": "Ação de majoração de limite",
+          "inicio": "Semana de 16/11 ou semana de 23/11/2026 (data a confirmar)",
+          "itens": []
+        }
+      ],
+      "acoesOutrasAreasNota": "Acompanhar os indicadores para ver se essas ações tiveram efeito positivo ou negativo na cobrança. São ações de maturação lenta: o efeito não aparece de imediato.",
       "estudos": [
         {
           "id": "smartnx-meta",
