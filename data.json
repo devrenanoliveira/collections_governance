@@ -1118,7 +1118,7 @@
               "Negativação ACP": 18963.4,
               "A2M (Power BI)": 520,
               "Celcoin - CobranSaaS": 18571.99,
-              "QL (time)": 31200,
+              "QL (time)": 42000,
               "Portal": 0,
               "Setup SmartNX": 0,
               "Mensalidade SmartNX": 2427.1,
@@ -1130,9 +1130,9 @@
               "Discador": 0,
               "Telecom": 0
             },
-            "investimentoTotal": 453139.36,
+            "investimentoTotal": 463939.36,
             "recuperacao": 6982393.1,
-            "iec": 6.49
+            "iec": 6.64
           }
         ]
       },
