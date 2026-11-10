@@ -1341,12 +1341,6 @@
               "responsavel": "Serasa Limpa Nome"
             },
             {
-              "dias": "61 dias",
-              "acao": "Cancelamento do relacionamento comercial",
-              "responsavel": "Interno",
-              "marco": true
-            },
-            {
               "dias": "61 a 90",
               "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
@@ -1354,7 +1348,7 @@
             {
               "dias": "91 dias",
               "acao": "Protesto",
-              "responsavel": "Serasa Limpa Nome",
+              "responsavel": "Interno",
               "marco": true
             },
             {
