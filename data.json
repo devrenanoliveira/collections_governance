@@ -1210,7 +1210,7 @@
     },
     "condorpj": {
       "nome": "Condor PJ",
-      "ultimaAtualizacao": "2026-11-09",
+      "ultimaAtualizacao": "2026-11-11",
       "desconto": {
         "descricaoFluxo": "Política de desconto da carteira PJ do Condor, operada pelo Serasa Limpa Nome.",
         "tabelaUnica": {
@@ -1538,7 +1538,15 @@
         }
       ],
       "saudeFinanceira": null,
-      "estudos": []
+      "estudos": [
+        {
+          "id": "plano-acao-condorpj",
+          "titulo": "Plano de Ação — Cobrança Condor PJ",
+          "descricao": "Sete movimentos para a cobrança da carteira Condor PJ: da régua atual para a desejada, mais capacity, negativação, boleto padronizado, acordo via Matera, régua digital com a SmartNX e número próprio.",
+          "arquivo": "estudo-plano-acao-condorpj.html",
+          "data": "2026-11-11"
+        }
+      ]
     }
   }
 }

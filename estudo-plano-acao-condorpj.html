@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plano de Ação — Cobrança Condor PJ</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --ink:#0f1b3d; --ink2:#4a5568; --muted:#8792a2; --line:#e3e7ee;
+    --navy:#0f2461; --blue:#2563eb; --blue-soft:#e8f0fe; --red:#c8102e; --red-soft:#fdecef;
+    --green:#0f9d6b; --green-soft:#e6f6ef; --amber:#d97706; --amber-soft:#fef3e2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:24px 20px 48px}
+  header{margin-bottom:22px}
+  h1{margin:0 0 6px;font-size:1.55rem;color:var(--navy)}
+  .sub{color:var(--ink2);font-size:.95rem;max-width:760px}
+  .meta{margin-top:8px;font-size:.78rem;color:var(--muted)}
+  h2{font-size:1.1rem;margin:34px 0 4px;color:var(--navy)}
+  .lead{color:var(--ink2);font-size:.88rem;margin:0 0 14px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+
+  /* resumo */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+  .res{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;text-decoration:none;color:inherit}
+  .res:hover{border-color:var(--blue)}
+  .num{flex:none;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+  .res b{display:block;font-size:.92rem}
+  .res span{font-size:.8rem;color:var(--ink2)}
+
+  /* régua */
+  .rg-label{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin:14px 0 6px}
+  .rg-label.at{color:var(--muted)} .rg-label.de{color:var(--blue)}
+  .rg-scroll{overflow-x:auto;padding-bottom:6px}
+  .rg{display:flex;gap:4px;min-width:860px}
+  .seg{flex:1 1 0;border-radius:8px;padding:9px 8px;font-size:.74rem;line-height:1.35;border:1px solid var(--line);background:#f1f3f7}
+  .seg b{display:block;font-size:.8rem;margin-bottom:3px}
+  .seg.w2{flex:2 1 0} .seg.w3{flex:3 1 0}
+  .seg.int{background:var(--blue-soft);border-color:#c6dafc}
+  .seg.ter{background:var(--red-soft);border-color:#f6c9d1}
+  .seg.mk{background:var(--amber-soft);border-color:#f6d9aa}
+  .seg.old{background:#f1f3f7}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.74rem;color:var(--ink2);margin-top:10px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+  .delta{margin:16px 0 0;padding:12px 14px;background:var(--blue-soft);border-radius:10px;font-size:.84rem}
+  .delta ul{margin:6px 0 0 18px;padding:0}
+
+  /* iniciativas */
+  .ini{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;overflow:hidden}
+  .ini-h{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);background:#fbfcfe}
+  .ini-h h3{margin:0;font-size:1rem;flex:1}
+  .tag{font-size:.7rem;font-weight:700;padding:3px 9px;border-radius:99px;white-space:nowrap}
+  .tag.cfg{background:var(--green-soft);color:var(--green)}
+  .tag.prop{background:var(--amber-soft);color:var(--amber)}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  .col{padding:14px 18px}
+  .col+.col{border-left:1px solid var(--line)}
+  .col h4{margin:0 0 6px;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .col.to h4{color:var(--blue)}
+  .col p,.col li{font-size:.84rem;color:var(--ink2);margin:0}
+  .col ul{margin:0 0 0 17px;padding:0}
+  .why{padding:12px 18px;border-top:1px solid var(--line);background:#fbfcfe;font-size:.82rem;color:var(--ink2)}
+  .why b{color:var(--navy)}
+  .mini{display:flex;gap:6px;align-items:stretch;margin-top:10px;flex-wrap:wrap}
+  .mini .st{flex:1 1 120px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:.76rem;background:#fff}
+  .mini .st b{display:block;color:var(--navy)}
+  .arrow{align-self:center;color:var(--muted)}
+
+  /* quadro final */
+  table{width:100%;border-collapse:collapse;font-size:.82rem}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .foot{margin-top:28px;font-size:.78rem;color:var(--muted)}
+
+  @media(max-width:700px){.cols{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}}
+  @media print{body{background:#fff}.wrap{padding:0}.ini,.card{break-inside:avoid}.res:hover{border-color:var(--line)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Plano de Ação — Cobrança da carteira Condor PJ</h1>
+  <p class="sub">Sete movimentos para ganhar capacidade, padronizar a operação e recuperar mais rápido: da régua atual para a desejada, com mais gente focada em acionar, boleto para todos, acordo no Matera e régua digital automática.</p>
+  <div class="meta">Documento de alinhamento com a diretoria · posição em 11/11/2026 · não contém dados de clientes</div>
+</header>
+
+<h2>Visão resumida</h2>
+<p class="lead">Cada item abaixo tem seu detalhamento (hoje, proposta e motivo) mais adiante.</p>
+<div class="grid">
+  <a class="res" href="#i1"><div class="num">1</div><div><b>Ajuste da régua</b><span>De 3 etapas para um fluxo completo até 30 dias, com bloqueio de crédito, negativação e terceirização.</span></div></a>
+  <a class="res" href="#i2"><div class="num">2</div><div><b>Aumento de capacity</b><span>Um negociador só para acionar até 30 dias; a equipe atual fica no backoffice.</span></div></a>
+  <a class="res" href="#i3"><div class="num">3</div><div><b>Negativação</b><span>Retomar a negativação manual por lote, até a integração automatizar.</span></div></a>
+  <a class="res" href="#i4"><div class="num">4</div><div><b>Pagamento padronizado</b><span>Boleto para 100% dos devedores, no lugar de depósitos combinados caso a caso.</span></div></a>
+  <a class="res" href="#i5"><div class="num">5</div><div><b>Acordo e boleto via Matera</b><span>Novos acordos feitos na plataforma, sem depósitos e pagamentos avulsos.</span></div></a>
+  <a class="res" href="#i6"><div class="num">6</div><div><b>Régua digital automática</b><span>Mensagens disparadas sozinhas pela SmartNX. Em configuração.</span></div></a>
+  <a class="res" href="#i7"><div class="num">7</div><div><b>Número próprio de cobrança</b><span>Chip próprio até a régua automática entrar no ar.</span></div></a>
+</div>
+
+<h2 id="i1">1. Ajuste da régua: de ATUAL para DESEJADA</h2>
+<p class="lead">Hoje a cobrança é mais simples e só ganha força a partir do 11º dia. A régua desejada começa pelo relacionamento e antecipa as ações de pressão.</p>
+<div class="card">
+  <div class="rg-label at">Atual</div>
+  <div class="rg-scroll"><div class="rg">
+    <div class="seg old"><b>Em dia</b>Alertas de vencimento</div>
+    <div class="seg int"><b>01</b>Envio de cobrança por WhatsApp e e-mail</div>
+    <div class="seg int w2"><b>02 a 10</b>Cobrança segue por WhatsApp e e-mail</div>
+    <div class="seg mk"><b>10 dias</b>Protesto (se for boleto)</div>
+    <div class="seg int w2"><b>11+</b>Segue a cobrança pelos canais digitais</div>
+  </div></div>
+
+  <div class="rg-label de">Desejada</div>
+  <div class="rg-scroll"><div class="rg">
+    <div class="seg old"><b>Em dia</b>Alertas de vencimento</div>
+    <div class="seg int"><b>01 a 05</b>Relacionamento, sem cobrança direta (área comercial)</div>
+    <div class="seg mk"><b>6 dias</b>Bloqueio do crédito disponível</div>
+    <div class="seg int"><b>06 a 10</b>Notificação do bloqueio e início das cobranças</div>
+    <div class="seg int"><b>11 a 20</b>Aviso de pré-negativação</div>
+    <div class="seg int"><b>21 a 30</b>Aviso de efetivação da negativação</div>
+    <div class="seg mk"><b>31 dias</b>Negativação (SPC) e envio ao Serasa Limpa Nome</div>
+    <div class="seg ter w2"><b>31 a 180</b>Cobrança terceirizada (hoje, apenas Serasa Limpa Nome)</div>
+    <div class="seg mk"><b>91 dias</b>Protesto, feito por nós</div>
+    <div class="seg ter"><b>181+</b>Considerado prejuízo; segue a terceirização</div>
+  </div></div>
+
+  <div class="legend">
+    <span><i style="background:var(--blue-soft)"></i>Cobrança interna</span>
+    <span><i style="background:var(--amber-soft)"></i>Marco / ação pontual</span>
+    <span><i style="background:var(--red-soft)"></i>Cobrança terceirizada</span>
+  </div>
+  <div class="delta"><b>O que muda na prática</b>
+    <ul>
+      <li>Os 5 primeiros dias deixam de ser de cobrança direta: é uma fase de relacionamento, conduzida pela área comercial.</li>
+      <li>O crédito é bloqueado aos 6 dias, para frear novas compras de quem já está em atraso.</li>
+      <li>Duas notificações preparam o devedor para a negativação antes de ela acontecer (dias 11 a 30).</li>
+      <li>Aos 31 dias a carteira vai para a terceirização (Serasa Limpa Nome), com negativação no SPC. O protesto acontece aos 91 dias, e não mais aos 10.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="i2">2. Aumento de capacity</h2>
+<div class="ini">
+  <div class="ini-h"><h3>Um negociador dedicado ao acionamento até 30 dias</h3><span class="tag prop">Proposta</span></div>
+  <div class="cols">
+    <div class="col"><h4>Hoje</h4>
+      <p>A equipe faz o operacional e o backoffice ao mesmo tempo. Na maioria das vezes, não consegue acionar os clientes como deveria.</p></div>
+    <div class="col to"><h4>Proposta</h4>
+      <ul>
+        <li><b>Negociador novo:</b> foco exclusivo no acionamento dos devedores até 30 dias de atraso.</li>
+        <li><b>Equipe atual:</b> foco no backoffice da cobrança: conciliações, régua, acompanhamento de resultados, negativações etc.</li>
+      </ul></div>
+  </div>
+  <div class="why"><b>Por que:</b> separar as funções tira o acionamento da fila de tarefas administrativas. É nos primeiros 30 dias que a recuperação é mais barata e mais provável.</div>
+</div>
+
+<h2 id="i3">3. Negativação</h2>
+<div class="ini">
+  <div class="ini-h"><h3>Retomar a negativação manual, por lote</h3><span class="tag prop">Proposta</span></div>
+  <div class="cols">
+    <div class="col"><h4>Hoje</h4><p>A negativação está parada.</p></div>
+    <div class="col to"><h4>Proposta</h4>
+      <ul>
+        <li>Reiniciar a negativação manual, em lotes.</li>
+        <li>Quando houver integração entre os sistemas, passa a ser feita automaticamente.</li>
+      </ul></div>
+  </div>
+  <div class="why"><b>Por que:</b> a negativação aos 31 dias é um dos principais pontos de pressão da régua desejada. Retomar já, no manual, evita esperar a integração.</div>
+</div>
+
+<h2 id="i4">4. Padronização da forma de pagamento</h2>
+<div class="ini">
+  <div class="ini-h"><h3>Boleto para 100% dos devedores</h3><span class="tag prop">Proposta</span></div>
+  <div class="cols">
+    <div class="col"><h4>Hoje</h4>
+      <p>Algumas empresas pagam por depósito. Isso consome tempo da equipe e exige conhecer o combinado específico de cada empresa.</p></div>
+    <div class="col to"><h4>Proposta</h4>
+      <p>Padronizar o envio de boleto para todos os devedores.</p></div>
+  </div>
+  <div class="why"><b>Por que:</b> um único meio de pagamento reduz o trabalho manual, a conciliação e a dependência de conhecimento individual.</div>
+</div>
+
+<h2 id="i5">5. Acordo e emissão de boleto via Matera</h2>
+<div class="ini">
+  <div class="ini-h"><h3>Novos acordos feitos na plataforma Matera</h3><span class="tag prop">Proposta</span></div>
+  <div class="cols">
+    <div class="col"><h4>Hoje</h4>
+      <p>Combina-se depósito e pagamentos avulsos diretamente com o devedor.</p></div>
+    <div class="col to"><h4>Proposta</h4>
+      <p>Estruturar os novos acordos e a emissão do boleto na plataforma Matera, sem combinar depósitos e pagamentos avulsos.</p></div>
+  </div>
+  <div class="why"><b>Por que:</b> o acordo nasce já dentro do sistema, com boleto e acompanhamento. Complementa a padronização do pagamento (item 4).</div>
+</div>
+
+<h2 id="i6">6. Régua digital automática</h2>
+<div class="ini">
+  <div class="ini-h"><h3>Disparo automático das mensagens com a SmartNX</h3><span class="tag cfg">Em configuração</span></div>
+  <div class="cols">
+    <div class="col"><h4>Hoje</h4><p>As cobranças por WhatsApp e e-mail dependem da equipe.</p></div>
+    <div class="col to"><h4>Proposta</h4>
+      <p>Régua digital automática, em configuração com a SmartNX, seguindo as etapas da régua desejada.</p></div>
+  </div>
+  <div class="why"><b>Por que:</b> ganha escala sem depender de mais horas da equipe e garante que nenhuma etapa da régua deixe de ser cumprida.</div>
+</div>
+
+<h2 id="i7">7. Número próprio para cobrança</h2>
+<div class="ini">
+  <div class="ini-h"><h3>Chip próprio, até a régua automática entrar no ar</h3><span class="tag prop">Proposta</span></div>
+  <div class="cols">
+    <div class="col"><h4>Hoje</h4><p>Não há um número exclusivo para cobrança.</p></div>
+    <div class="col to"><h4>Proposta</h4>
+      <p>Usar, inicialmente, um chip próprio para a cobrança. Ele cobre o período até a régua digital automática entrar no ar (item 6).</p></div>
+  </div>
+  <div class="why"><b>Por que:</b> dá ao devedor um canal reconhecível e permite começar a acionar já, sem esperar a configuração da SmartNX.</div>
+</div>
+
+<h2>Como as peças se encaixam</h2>
+<div class="card">
+  <table>
+    <thead><tr><th style="width:26%">Iniciativa</th><th>Problema que resolve</th><th style="width:28%">Depende de</th></tr></thead>
+    <tbody>
+      <tr><td><b>1. Régua desejada</b></td><td>Cobrança tardia e sem etapas de pressão</td><td>Itens 2, 3 e 6 para ser cumprida por inteiro</td></tr>
+      <tr><td><b>2. Negociador</b></td><td>Falta de tempo para acionar</td><td>Aprovação da vaga</td></tr>
+      <tr><td><b>3. Negativação</b></td><td>Negativação parada</td><td>Integração entre os sistemas (para automatizar)</td></tr>
+      <tr><td><b>4. Boleto para todos</b></td><td>Trabalho manual e conhecimento individual</td><td>Item 5</td></tr>
+      <tr><td><b>5. Acordo no Matera</b></td><td>Acordos e pagamentos avulsos</td><td>Estruturação dos acordos na plataforma</td></tr>
+      <tr><td><b>6. Régua automática</b></td><td>Escala do acionamento</td><td>Configuração com a SmartNX</td></tr>
+      <tr><td><b>7. Número próprio</b></td><td>Canal de cobrança reconhecível</td><td>Item 6 (substitui o chip quando entrar no ar)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p class="foot">Os prazos de cada iniciativa ainda não foram definidos; este plano mostra o desenho e a razão de cada movimento. Responsáveis e datas entram quando forem decididos.</p>
+</div>
+</body>
+</html>
