@@ -74,11 +74,29 @@
   .foot{margin-top:28px;font-size:.78rem;color:var(--muted)}
 
   @media(max-width:700px){.cols{grid-template-columns:1fr}.col+.col{border-left:0;border-top:1px solid var(--line)}}
+  .acoes{display:flex;gap:8px;justify-content:flex-end;margin-bottom:12px}
+  .acoes button{font:600 .8rem system-ui,sans-serif;padding:7px 14px;border:1px solid var(--line);border-radius:8px;background:#fff;color:inherit;cursor:pointer}
+  .acoes button:hover{border-color:#888}
+  @media print{.acoes{display:none}}
   @media print{body{background:#fff}.wrap{padding:0}.ini,.card{break-inside:avoid}.res:hover{border-color:var(--line)}}
 </style>
 </head>
 <body>
 <div class="wrap">
+
+<div class="acoes">
+  <button type="button" onclick="window.print()">Baixar PDF</button>
+  <button type="button" onclick="baixarHtml()">Baixar HTML</button>
+</div>
+<script>
+function baixarHtml(){
+  var c=document.documentElement.cloneNode(true);
+  var a=c.querySelector('.acoes'); if(a) a.remove();
+  var b=new Blob(['<!doctype html>\n'+c.outerHTML],{type:'text/html;charset=utf-8'});
+  var l=document.createElement('a'); l.href=URL.createObjectURL(b); l.download='plano-acao-condorpj.html';
+  document.body.appendChild(l); l.click(); l.remove();
+}
+</script>
 
 <header>
   <h1>Plano de Ação — Cobrança da carteira Condor PJ</h1>
