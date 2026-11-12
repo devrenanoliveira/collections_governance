@@ -166,3 +166,5 @@ deste arquivo.
 - `desconto.anterior.oficial` bands for 1081–1440, 1441–1800, and >1801 days all share `"prioridade": 14` — harmless, histórico, not used by the UI.
 - The "Quadro Miro — Régua Digital" reference link may point to a private board; users without access will see a Miro permission error.
 - No automated tests are persisted in this repo (Playwright was used ad hoc during development for render/console/screenshot checks, but nothing is checked in).
+
+- **Calculadora — alerta "Próxima faixa" (12/11/2026):** `#prox` (logo abaixo de `#compare`), só na política vigente: repete a mesma proposta (dias da virada, mesmas parcelas/margem/aperto) na faixa seguinte e diz se seria aprovada/limite/não. Existe em `buildCalcHtml()` do `index.html` **e** no `calculadora-desconto.html` avulso — alterar os dois. Não considera campanha.

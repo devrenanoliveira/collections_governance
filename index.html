@@ -1466,6 +1466,9 @@ body{margin:0;font-family:system-ui,-apple-system,sans-serif;background:var(--pa
 .modo-info{font-size:10.5px;color:#8a6415;background:var(--gold-soft);padding:7px 9px;border-radius:3px;margin-top:8px;line-height:1.5;}
 .compare{font-size:11.5px;color:var(--slate);line-height:1.5;margin:-10px 0 18px;padding:9px 12px;border:1px dashed var(--line);border-radius:4px;}
 .compare b{color:var(--ink);}
+.prox{font-size:11.5px;line-height:1.5;margin:-10px 0 18px;padding:9px 12px;border:1px solid var(--line);border-left-width:4px;border-radius:4px;}
+.prox b{color:var(--ink);}
+.prox.ok{border-left-color:var(--teal);background:var(--teal-soft);} .prox.warn{border-left-color:var(--gold);background:var(--gold-soft);} .prox.bad{border-left-color:var(--crimson);background:var(--crimson-soft);}
 .calc-panel{display:none;}
 .calc-panel.active{display:block;}
 .explain-card{max-width:960px;margin:0 auto;padding:20px;}
@@ -1542,6 +1545,7 @@ footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;col
     <div class="band-label" id="bandLabel"></div>
     <div class="verdict" id="verdict"><div class="dot"></div><div class="txt"><strong id="vTitle"></strong><span id="vDesc"></span></div></div>
     <div class="compare" id="compare" style="display:none"></div>
+    <div class="prox" id="prox" style="display:none"></div>
     <div class="rulers">
       <div class="ruler-block"><div class="rlabel"><span>Principal <span class="sub">(referência da decisão)</span></span><span class="sub" id="pRange"></span></div><div class="track" id="trackPrincipal" style="margin-bottom:48px;"></div></div>
       <div class="ruler-block"><div class="rlabel"><span>Mora <span class="sub">(contexto)</span></span><span class="sub" id="mRange"></span></div><div class="track" id="trackMora" style="margin-bottom:30px;"></div></div>
@@ -1686,6 +1690,15 @@ function update(){
     const O = (modo === 'nova') ? lAtual : lNova, Vo = veredito(proposed, O.floorP, O.ceilP, dias, O.nome);
     const cmp = document.getElementById('compare'); cmp.style.display = '';
     cmp.innerHTML = 'Mesma proposta na <b>'+(modo==='nova'?'política anterior':'política vigente')+'</b>: piso '+O.floorP.toFixed(1)+'% &middot; teto '+O.ceilP.toFixed(1)+'% &rarr; <b>'+Vo.title+'</b>';
+    // alerta: a mesma proposta na PRÓXIMA faixa de atraso (caso perto da virada: melhor esperar do que forçar a atual)
+    const px = document.getElementById('prox'), idx = NOVA.bandas.findIndex(r => dias >= r.diasDe && dias <= r.diasAte), nb = NOVA.bandas[idx + 1];
+    if(modo === 'nova' && idx >= 0 && nb){
+      const Ln = limNova(nb.diasDe, n, margem, aperto), Vn = veredito(proposed, Ln.floorP, Ln.ceilP, nb.diasDe, 'próxima faixa'), falta = nb.diasDe - dias;
+      const okN = Vn.status === 'ok', okA = V.status === 'ok';
+      const q = okN ? (okA ? 'também seria aprovada' : '<b>poderia ser aprovada</b>') : Vn.status === 'warn' ? 'ficaria na <b>faixa limite</b> (avaliar)' : '<b>não seria aprovada</b> nem lá';
+      px.className = 'prox ' + Vn.status; px.style.display = '';
+      px.innerHTML = 'Próxima faixa (<b>' + nb.diasDe + '&ndash;' + (nb.diasAte >= 99999999 ? '&infin;' : nb.diasAte) + ' dias</b>, em <b>' + falta + ' dia' + (falta === 1 ? '' : 's') + '</b>): piso ' + Ln.floorP.toFixed(1) + '% &middot; teto ' + Ln.ceilP.toFixed(1) + '% &rarr; com ' + proposed.toFixed(1) + '% a proposta ' + q + '.';
+    } else px.style.display = 'none';
     document.getElementById('advNovaHint').style.display = modo === 'nova' ? '' : 'none';
     const info = document.getElementById('modoInfo'); info.style.display = modo === 'nova' ? '' : 'none';
     info.textContent = modo === 'nova' ? NOVA.descricao : '';
