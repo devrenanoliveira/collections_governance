@@ -1205,6 +1205,13 @@
           "arquivo": "mapa-metas-anuais.html",
           "data": "2026-10-13",
           "destaque": true
+        },
+        {
+          "id": "roadmap-cobranca-zon",
+          "titulo": "Roadmap da Cobrança Z-ON",
+          "descricao": "Proposta de direção por faixa de atraso: Z-ON interno com score de fatura, IA conversacional (Monest/Fintalk) e assessorias + Serasa Limpa Nome a partir de 65 dias.",
+          "arquivo": "estudo-roadmap-cobranca-zon.html",
+          "data": "2026-11-19"
         }
       ]
     },
