@@ -1310,8 +1310,11 @@ function renderDesconto(){
   const pc = v => String(v).replace('.', ',') + '%';
   const dt = br => { const [d, m, a] = br.split('/').map(Number); return new Date(a, m - 1, d); };
   const hojeC = new Date(); hojeC.setHours(0,0,0,0);
-  document.getElementById('descontoVista-campanhas').innerHTML = camps.map(c=>{
-    const status = hojeC < dt(c.vigenciaInicio) ? 'Agendada' : hojeC <= dt(c.vigenciaFim) ? 'Em andamento' : 'Encerrada';
+  const statusC = c => hojeC < dt(c.vigenciaInicio) ? 'Agendada' : hojeC <= dt(c.vigenciaFim) ? 'Em andamento' : 'Encerrada';
+  // submenu: uma campanha por vez; abre na que está em andamento, senão na próxima a começar, senão na última (mesma regra da calculadora)
+  const abre = Math.max(0, camps.findIndex(c => statusC(c) === 'Em andamento') >= 0 ? camps.findIndex(c => statusC(c) === 'Em andamento') : camps.findIndex(c => statusC(c) === 'Agendada') >= 0 ? camps.findIndex(c => statusC(c) === 'Agendada') : camps.length - 1);
+  const painelC = camps.map((c, i) => {
+    const status = statusC(c);
     const dois = c.tabela.some(r => r.parcelado7a12 != null);   // campanha com 2x–6x e 7x–12x separados (Pré/Black Nov/26)
     const rot = c.rotuloVigente || 'política da época';
     const par = (v, w) => dois ? `<td class="${w}">${pc(v.a)}</td><td class="${w}">${pc(v.b)}</td>` : `<td class="${w}">${pc(v.a)}</td>`;
@@ -1330,7 +1333,13 @@ function renderDesconto(){
         <ul style="margin:0;padding-left:18px;font-size:.85rem;line-height:1.7;">${c.regras.map(r=>`<li>${r}</li>`).join('')}</ul>
       </div>
       <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin-top:8px;">${c.resultado || 'Resultado a divulgar após o encerramento da campanha.'}</p>`;
-  }).join('<hr style="margin:22px 0;border:none;border-top:1px solid var(--gridline);">');
+  }).map((h, i) => `<div class="camp-painel" data-i="${i}" style="display:${i === abre ? '' : 'none'};">${h}</div>`).join('');
+  const subC = `<div class="filter-row" id="campSub" style="margin-bottom:14px;">${camps.map((c, i) => `<button class="filter-btn${i === abre ? ' active' : ''}" data-i="${i}">${c.nomeCurto || c.nome} · ${statusC(c).toLowerCase()}</button>`).join('')}</div>`;
+  document.getElementById('descontoVista-campanhas').innerHTML = subC + painelC;
+  document.querySelectorAll('#campSub .filter-btn').forEach(b => b.addEventListener('click', () => {
+    document.querySelectorAll('#campSub .filter-btn').forEach(x => x.classList.toggle('active', x === b));
+    document.querySelectorAll('#descontoVista-campanhas .camp-painel').forEach(p => { p.style.display = (p.dataset.i === b.dataset.i) ? '' : 'none'; });
+  }));
 
   // política vigente (promovida em 02/11/2026); a anterior fica como histórico em desconto.anterior
   const pn = p.desconto.politicaVigente;
