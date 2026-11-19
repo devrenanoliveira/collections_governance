@@ -43,3 +43,11 @@ Registro de handoff (22/10/2026): o que foi decidido, por quê, o que está no r
 - Tela: o botão "Política Oficial" mostra a política vigente (piso e exceção) e, abaixo, "Política anterior (histórico)" com as tabelas antigas de piso e teto. O botão "Política Agressiva (Teto)" foi removido. Sub-seletor Vigente | Anterior | Comparar (comparação por faixa com diferença em p.p.). A calculadora abre na política vigente; o botão "Anterior" compara.
 - Código: `index.html` (`buildCalcHtml`, `limNova`, `campanhaParaCalculadora`); `calculadora-desconto.html` é gerado (regenerar ao mudar dado).
 - Convenções de edição: `CLAUDE.md`.
+
+## 6. Campanhas Pré Black Friday e Black Friday (Nov/26) — registradas em 19/11/2026
+
+- **Decisão do Renan:** Pré de 20 a 26/11 (acordos firmados) e Black só em 27/11, todas as faixas acima de 65 dias, à vista e parcelado. Pré = +5 p.p. de principal sobre a política vigente; Black = +10 p.p.; teto de 90%. Parcelado: mesma distância atual para o à vista; 7x–12x = 80% do 2x–6x (arredondado a 0,5, como na política). Na faixa 65–90 só o perdão de mora e multa sobe (50% → 75% no Pré, 100% na Black); principal segue 0%.
+- **Entrada e quebra de acordo:** seguem a política vigente (Renan não quis alterar o prazo da entrada).
+- **Exceção:** na calculadora a exceção sobe junto (mesmo acréscimo sobre o piso, máx. 90%). Na Black, 91–120 (15%) e 121–150 (30%) empatam com o teto de exceção atual à vista; em 1441–1800 a Black (90%) passa o teto atual (87%).
+- **Benchmark usado (print do Renan, 19/11/2026; nós = Cliente 3):** líderes até 360 dias (empatados com o máximo em 121–150, 241–300 e 301–360); na média em 361–720; abaixo da média em 721–1080. Média/máx. do mercado à vista: 91–120 3/5; 121–150 8,6/20; 151–180 12/25; 181–240 28/45; 241–300 30,5/45; 301–360 34,5/50; 361–540 59/80; 541–720 65/80; 721–1080 73/80; 1081–1440 74/80; 1441–1800 76/85; 1801–2520 80/90; 2520+ 81/90.
+- **Pendente:** custo e ponto de equilíbrio não foram calculados; a campanha de outubro também não foi medida (`resultado` nulo). Risco de canibalização (cliente espera a Black): o Pré só vai até 26/11 e a Black não deve ser divulgada ao cliente antes de 27/11. O site é público (GitHub Pages): as duas tabelas ficam visíveis a quem abrir a aba Campanhas.

@@ -1312,16 +1312,19 @@ function renderDesconto(){
   const hojeC = new Date(); hojeC.setHours(0,0,0,0);
   document.getElementById('descontoVista-campanhas').innerHTML = camps.map(c=>{
     const status = hojeC < dt(c.vigenciaInicio) ? 'Agendada' : hojeC <= dt(c.vigenciaFim) ? 'Em andamento' : 'Encerrada';
+    const dois = c.tabela.some(r => r.parcelado7a12 != null);   // campanha com 2x–6x e 7x–12x separados (Pré/Black Nov/26)
+    const rot = c.rotuloVigente || 'política da época';
+    const par = (v, w) => dois ? `<td class="${w}">${pc(v.a)}</td><td class="${w}">${pc(v.b)}</td>` : `<td class="${w}">${pc(v.a)}</td>`;
     return `
-      <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">${c.nome} · ${status} · ${c.vigenciaInicio} a ${c.vigenciaFim}</span><p>${c.descricao}</p></div>
+      <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">${c.nome} · ${status} · ${c.vigenciaInicio === c.vigenciaFim ? c.vigenciaInicio : c.vigenciaInicio + ' a ' + c.vigenciaFim}</span><p>${c.descricao}</p></div>
       <div class="table-card">
-        <div class="table-card-header"><strong>Desconto pré-aprovado por faixa de atraso (campanha × política vigente na época)</strong></div>
+        <div class="table-card-header"><strong>Desconto pré-aprovado por faixa de atraso (campanha × ${rot})</strong></div>
         <div class="table-scroll"><table>
-          <thead><tr><th style="text-align:left">Faixa</th><th>À vista (campanha)</th><th>Parcelado único (campanha)</th><th>À vista (política da época)</th><th>Parcelado (política da época)</th></tr></thead>
-          <tbody>${c.tabela.map(r=>`<tr><td>${r.faixa}</td><td class="td-gold">${pc(r.avista)}</td><td class="td-gold">${pc(r.parcelado)}</td><td class="td-muted">${pc(r.vigenteAvista)}</td><td class="td-muted">${pc(r.vigenteParcelado)}</td></tr>`).join('')}</tbody>
+          <thead><tr><th style="text-align:left">Faixa</th><th>À vista (campanha)</th>${dois ? '<th>Parcelado 2x a 6x (campanha)</th><th>Parcelado 7x a 12x (campanha)</th>' : '<th>Parcelado único (campanha)</th>'}<th>À vista (${rot})</th>${dois ? `<th>Parcelado 2x a 6x (${rot})</th><th>Parcelado 7x a 12x (${rot})</th>` : `<th>Parcelado (${rot})</th>`}</tr></thead>
+          <tbody>${c.tabela.map(r=>`<tr><td>${r.faixa}${r.encargos != null ? `<br><span style="font-size:.72rem;color:var(--ink-muted);">mora e multa perdoadas: ${pc(r.encargos)} (política: ${pc(r.vigenteEncargos)})</span>` : ''}</td><td class="td-gold">${pc(r.avista)}</td>${par({a: r.parcelado, b: r.parcelado7a12}, 'td-gold')}<td class="td-muted">${pc(r.vigenteAvista)}</td>${par({a: r.vigenteParcelado, b: r.vigenteParcelado7a12}, 'td-muted')}</tr>`).join('')}</tbody>
         </table></div>
       </div>
-      <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin:8px 0 14px;">Política da época (anterior a 02/11/2026): nas faixas com mais de uma banda (181–360 e 361–720 dias) aparece a média das bandas.</p>
+      <p class="note" style="font-size:.78rem;color:var(--ink-muted);margin:8px 0 14px;">${c.notaTabela || 'Política da época (anterior a 02/11/2026): nas faixas com mais de uma banda (181–360 e 361–720 dias) aparece a média das bandas.'}</p>
       <div class="table-card" style="padding:18px;">
         <div class="table-card-header" style="padding:0 0 10px;border:none;"><strong>Regras da campanha</strong></div>
         <ul style="margin:0;padding-left:18px;font-size:.85rem;line-height:1.7;">${c.regras.map(r=>`<li>${r}</li>`).join('')}</ul>
@@ -1421,18 +1424,18 @@ function dataBR(iso){
 }
 
 // campanha vigente/mais recente de desconto.campanhas[] no formato que a calculadora usa (datas ISO, faixa em dias, regra curta)
+// Devolve TODAS as campanhas (lista); a calculadora escolhe a da data de quem abre: a vigente, senão a próxima, senão a última.
 function campanhaParaCalculadora(camps){
-  const c = (camps || [])[camps ? camps.length - 1 : 0];
-  if(!c || !c.tabela) return null;
   const iso = br => br.split('/').reverse().join('-');
-  return {nome: c.nome, vigenciaInicio: iso(c.vigenciaInicio), vigenciaFim: iso(c.vigenciaFim),
-    regras: 'Vale para acordo com entrada vencendo em até D+5 da data do acordo e até ' + c.vigenciaFim.slice(0, 5) + '; quebrou, sem nova aprovação. Mora e multa seguem a política.',
-    bandas: c.tabela.map(r => { const n = String(r.faixa).match(/\d+/g) || []; return {diasDe: +n[0], diasAte: n[1] ? +n[1] : 99999999, avista: r.avista, parcelado: r.parcelado}; })};
+  const l = (camps || []).filter(c => c && c.tabela).map(c => ({nome: c.nome, nomeCurto: c.nomeCurto || '', vigenciaInicio: iso(c.vigenciaInicio), vigenciaFim: iso(c.vigenciaFim),
+    regras: c.regraCalc || ('Vale para acordo com entrada vencendo em até D+5 da data do acordo e até ' + c.vigenciaFim.slice(0, 5) + '; quebrou, sem nova aprovação. Mora e multa seguem a política.'),
+    bandas: c.tabela.map(r => { const n = String(r.faixa).match(/\d+/g) || []; return {diasDe: +n[0], diasAte: n[1] ? +n[1] : 99999999, avista: r.avista, parcelado: r.parcelado, parcelado7a12: r.parcelado7a12 != null ? r.parcelado7a12 : null, encargos: r.encargos != null ? r.encargos : null}; })}));
+  return l.length ? l : null;
 }
 function buildCalcHtml(oficial, agressiva, meta, nova, camp){
   meta = meta || {};
   nova = (nova && nova.bandas && nova.bandas.length) ? nova : null;
-  camp = (camp && camp.bandas && camp.bandas.length) ? camp : null;
+  camp = (Array.isArray(camp) && camp.length) ? camp : null;
   const produto = meta.produto || '';
   const ultimaAtualizacao = dataBR(meta.ultimaAtualizacao);
   const titulo = 'Calculadora de Aprovação de Negociação' + (produto ? ' — ' + produto : '');
@@ -1606,7 +1609,14 @@ function renderTrack(el, floor, ceiling, proposed, status, cautionStart, campLim
   ml.textContent = 'proposta '+proposed.toFixed(1)+'%'; el.appendChild(ml);
 }
 const NOVA = ${JSON.stringify(nova)};
-const CAMP = ${JSON.stringify(camp)};
+const CAMPS = ${JSON.stringify(camp)};
+// campanha da data de quem abre: a vigente; senão a próxima a começar; senão a última
+function escolherCamp(l){
+  if(!l) return null;
+  const h = new Date(), ini = c => new Date(c.vigenciaInicio + 'T00:00:00'), fim = c => new Date(c.vigenciaFim + 'T23:59:59');
+  return l.find(c => h >= ini(c) && h <= fim(c)) || l.filter(c => h < ini(c)).sort((a, b) => ini(a) - ini(b))[0] || l[l.length - 1];
+}
+const CAMP = escolherCamp(CAMPS);
 function dataBR(s){ return s.split('-').reverse().join('/'); }
 let modo = 'nova';
 // campanha pré-aprovada: valor único para qualquer nº de parcelas (2x a 12x); só vale dentro da vigência
@@ -1618,7 +1628,7 @@ function campEstado(){
 function campLimite(dias, n){
   if(!CAMP || campEstado() !== 'vigente' || !document.getElementById('campAtiva').checked) return null;
   const b = CAMP.bandas.find(r => dias >= r.diasDe && dias <= r.diasAte);
-  return b ? (n <= 1 ? b.avista : b.parcelado) : null;
+  return b ? (n <= 1 ? b.avista : (n >= 7 && b.parcelado7a12 != null ? b.parcelado7a12 : b.parcelado)) : null;
 }
 function limAtual(dias, n, margem, aperto){
   const oBand = findBand(OFICIAL, dias), aBand = findBand(AGRESSIVA, dias);
@@ -1659,21 +1669,23 @@ function update(){
   const margem = Math.max(1, Math.min(100, parseFloat(document.getElementById('margem').value) || 90));
   const aperto = Math.max(0, Math.min(100, parseFloat(document.getElementById('aperto').value) || 0));
   const lAtual = limAtual(dias, n, margem, aperto), lNova = NOVA ? limNova(dias, n, margem, aperto) : null;
-  const L = (modo === 'nova' && lNova) ? lNova : lAtual;
+  let L = (modo === 'nova' && lNova) ? lNova : lAtual;
+  const lim = CAMP ? campLimite(dias, n) : null;
+  // com a campanha ligada a exceção sobe junto: mesmo acréscimo sobre o piso, no máximo 90% (ou o próprio teto, se já maior)
+  if(lim != null && lim > L.floorP) L = Object.assign({}, L, {ceilP: Math.min(L.ceilP + lim - L.floorP, Math.max(L.ceilP, 90))});
   let V = veredito(proposed, L.floorP, L.ceilP, dias, L.nome);
-  let lim = null;
   if(CAMP){
-    lim = campLimite(dias, n);
-    const ci = document.getElementById('campInfo'), est = campEstado();
-    document.getElementById('campRotulo').textContent = est === 'vigente' ? 'até ' + dataBR(CAMP.vigenciaFim) : est === 'encerrada' ? 'encerrada em ' + dataBR(CAMP.vigenciaFim) : 'a partir de ' + dataBR(CAMP.vigenciaInicio);
+    const ci = document.getElementById('campInfo'), est = campEstado(), cb = CAMP.bandas.find(r => dias >= r.diasDe && dias <= r.diasAte);
+    document.getElementById('campRotulo').textContent = (CAMP.nomeCurto ? CAMP.nomeCurto + ' · ' : '') + (est === 'vigente' ? 'até ' + dataBR(CAMP.vigenciaFim) : est === 'encerrada' ? 'encerrada em ' + dataBR(CAMP.vigenciaFim) : 'a partir de ' + dataBR(CAMP.vigenciaInicio));
     document.getElementById('campAtiva').disabled = est !== 'vigente';
     if(est !== 'vigente') document.getElementById('campAtiva').checked = false;
-    ci.textContent = lim == null ? (est === 'vigente' ? 'Sem desconto de campanha nesta faixa de atraso (vale a partir de 151 dias).' : '') :
-      'Libera até ' + lim.toFixed(1) + '% (' + (n <= 1 ? 'à vista' : 'parcelado ' + n + 'x') + ') nesta faixa. ' + CAMP.regras;
+    const enc = (cb && cb.encargos != null) ? ' Mora e multa: perdão de ' + cb.encargos + '% na campanha.' : '';
+    ci.textContent = lim == null ? (est === 'vigente' ? 'Sem desconto de campanha nesta faixa de atraso (vale a partir de ' + CAMP.bandas[0].diasDe + ' dias).' : '') :
+      (lim === 0 && enc ? 'Sem desconto de principal nesta faixa.' : 'Libera até ' + lim.toFixed(1) + '% (' + (n <= 1 ? 'à vista' : 'parcelado ' + n + 'x') + ') nesta faixa; a exceção sobe junto (teto ' + L.ceilP.toFixed(1) + '%).') + enc + ' ' + CAMP.regras;
     ci.style.display = ci.textContent ? '' : 'none';
     if(lim != null && proposed > L.floorP && proposed <= lim)
       V = {status:'ok', title:'Liberado — campanha pré-aprovada', desc:'O desconto pedido ('+proposed.toFixed(1)+'%) está dentro da campanha vigente até '+dataBR(CAMP.vigenciaFim)+' (limite '+lim.toFixed(1)+'%). '+CAMP.regras, caution:null};
-    else if(lim != null && proposed > lim && V.status !== 'ok') V.desc += ' A campanha libera até ' + lim.toFixed(1) + '% nesta faixa.';
+    else if(lim != null && proposed > lim && V.status !== 'ok') V.desc += ' A campanha libera até ' + lim.toFixed(1) + '% nesta faixa e a exceção sobe junto (teto ' + L.ceilP.toFixed(1) + '%).';
   }
   document.getElementById('bandLabel').innerHTML = 'Faixa aplicada &middot; '+L.label+' &nbsp;|&nbsp; parcelas <b>'+n+'x</b>';
   const vEl = document.getElementById('verdict'); vEl.className = 'verdict ' + V.status;

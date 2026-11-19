@@ -73,7 +73,7 @@ footer.note{max-width:960px;margin:0 auto;padding:0 20px 30px;font-size:11px;col
 </style></head><body>
 <div class="top">
   <h1>Calculadora de Aprovação de Negociação — Z-ON</h1>
-  <p class="sub">Política de desconto atualizada em 03/11/2026. Este arquivo é autônomo — pode ser aberto direto (duplo clique) e enviado para qualquer pessoa, sem depender do dashboard de governança nem de conexão com a internet.</p>
+  <p class="sub">Política de desconto atualizada em 19/11/2026. Este arquivo é autônomo — pode ser aberto direto (duplo clique) e enviado para qualquer pessoa, sem depender do dashboard de governança nem de conexão com a internet.</p>
 </div>
 <div class="calc-tabs">
   <button type="button" class="calc-tab-btn active" data-panel="calc">Calculadora</button>
@@ -164,7 +164,14 @@ function renderTrack(el, floor, ceiling, proposed, status, cautionStart, campLim
   ml.textContent = 'proposta '+proposed.toFixed(1)+'%'; el.appendChild(ml);
 }
 const NOVA = {"vigenciaInicio":"2026-11-02","nome":"Política nova","descricao":"16 faixas. Piso (aprovação automática) por nº de parcelas: 2x a 6x e 7x a 12x; em 65–120 dias o desconto concentra-se nos encargos. Teto (exceção): à vista pela tabela conservadora; no parcelado, exceção à vista × margem × aperto personalizado (os campos de parâmetros avançados).","bandas":[{"diasDe":5,"diasAte":30,"pisoVista":0,"pisoParc":[0,0,0,0,0,0,0,0,0,0,0],"excVista":0,"mora":0,"multa":0,"moraExc":30,"multaExc":50},{"diasDe":31,"diasAte":60,"pisoVista":0,"pisoParc":[0,0,0,0,0,0,0,0,0,0,0],"excVista":0,"mora":0,"multa":0,"moraExc":50,"multaExc":80},{"diasDe":61,"diasAte":64,"pisoVista":0,"pisoParc":[0,0,0,0,0,0,0,0,0,0,0],"excVista":0,"mora":0,"multa":0,"moraExc":60,"multaExc":90},{"diasDe":65,"diasAte":90,"pisoVista":0,"pisoParc":[0,0,0,0,0,0,0,0,0,0,0],"excVista":5,"mora":50,"multa":50,"moraExc":100,"multaExc":100},{"diasDe":91,"diasAte":120,"pisoVista":5,"pisoParc":[2.5,2.5,2.5,2.5,2.5,2,2,2,2,2,2],"excVista":15,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":121,"diasAte":150,"pisoVista":20,"pisoParc":[14,14,14,14,14,11,11,11,11,11,11],"excVista":30,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":151,"diasAte":180,"pisoVista":25,"pisoParc":[18,18,18,18,18,14.5,14.5,14.5,14.5,14.5,14.5],"excVista":40,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":181,"diasAte":240,"pisoVista":40,"pisoParc":[25,25,25,25,25,20,20,20,20,20,20],"excVista":57,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":241,"diasAte":300,"pisoVista":45,"pisoParc":[30,30,30,30,30,24,24,24,24,24,24],"excVista":66,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":301,"diasAte":360,"pisoVista":50,"pisoParc":[35,35,35,35,35,28,28,28,28,28,28],"excVista":74,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":361,"diasAte":540,"pisoVista":60,"pisoParc":[45,45,45,45,45,36,36,36,36,36,36],"excVista":78,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":541,"diasAte":720,"pisoVista":65,"pisoParc":[50,50,50,50,50,40,40,40,40,40,40],"excVista":82,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":721,"diasAte":1080,"pisoVista":70,"pisoParc":[55,55,55,55,55,44,44,44,44,44,44],"excVista":83,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":1081,"diasAte":1440,"pisoVista":75,"pisoParc":[60,60,60,60,60,48,48,48,48,48,48],"excVista":85,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":1441,"diasAte":1800,"pisoVista":80,"pisoParc":[70,70,70,70,70,56,56,56,56,56,56],"excVista":87,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":1801,"diasAte":99999999,"pisoVista":90,"pisoParc":[85,85,85,85,85,68,68,68,68,68,68],"excVista":90,"mora":100,"multa":100,"moraExc":100,"multaExc":100}]};
-const CAMP = {"nome":"Campanha pré-aprovada Out/26","vigenciaInicio":"2026-10-21","vigenciaFim":"2026-10-30","regras":"Vale para acordo com entrada vencendo em até D+5 da data do acordo e até 30/10; quebrou, sem nova aprovação. Mora e multa seguem a política.","bandas":[{"diasDe":151,"diasAte":180,"avista":35,"parcelado":25},{"diasDe":181,"diasAte":360,"avista":55,"parcelado":40},{"diasDe":361,"diasAte":720,"avista":73,"parcelado":58},{"diasDe":721,"diasAte":1080,"avista":80,"parcelado":65},{"diasDe":1081,"diasAte":1440,"avista":85,"parcelado":70},{"diasDe":1441,"diasAte":1800,"avista":87,"parcelado":77},{"diasDe":1801,"diasAte":99999999,"avista":90,"parcelado":85}]};
+const CAMPS = [{"nome":"Campanha pré-aprovada Out/26","nomeCurto":"","vigenciaInicio":"2026-10-21","vigenciaFim":"2026-10-30","regras":"Vale para acordo com entrada vencendo em até D+5 da data do acordo e até 30/10; quebrou, sem nova aprovação. Mora e multa seguem a política.","bandas":[{"diasDe":151,"diasAte":180,"avista":35,"parcelado":25,"parcelado7a12":null,"encargos":null},{"diasDe":181,"diasAte":360,"avista":55,"parcelado":40,"parcelado7a12":null,"encargos":null},{"diasDe":361,"diasAte":720,"avista":73,"parcelado":58,"parcelado7a12":null,"encargos":null},{"diasDe":721,"diasAte":1080,"avista":80,"parcelado":65,"parcelado7a12":null,"encargos":null},{"diasDe":1081,"diasAte":1440,"avista":85,"parcelado":70,"parcelado7a12":null,"encargos":null},{"diasDe":1441,"diasAte":1800,"avista":87,"parcelado":77,"parcelado7a12":null,"encargos":null},{"diasDe":1801,"diasAte":99999999,"avista":90,"parcelado":85,"parcelado7a12":null,"encargos":null}]},{"nome":"Campanha Pré Black Friday Nov/26","nomeCurto":"Pré Black Friday","vigenciaInicio":"2026-11-20","vigenciaFim":"2026-11-26","regras":"Prazo da entrada e quebra de acordo seguem a política vigente; teto de exceção sobe junto com a campanha.","bandas":[{"diasDe":65,"diasAte":90,"avista":0,"parcelado":0,"parcelado7a12":0,"encargos":75},{"diasDe":91,"diasAte":120,"avista":10,"parcelado":7.5,"parcelado7a12":6,"encargos":null},{"diasDe":121,"diasAte":150,"avista":25,"parcelado":19,"parcelado7a12":15,"encargos":null},{"diasDe":151,"diasAte":180,"avista":30,"parcelado":23,"parcelado7a12":18.5,"encargos":null},{"diasDe":181,"diasAte":240,"avista":45,"parcelado":30,"parcelado7a12":24,"encargos":null},{"diasDe":241,"diasAte":300,"avista":50,"parcelado":35,"parcelado7a12":28,"encargos":null},{"diasDe":301,"diasAte":360,"avista":55,"parcelado":40,"parcelado7a12":32,"encargos":null},{"diasDe":361,"diasAte":540,"avista":65,"parcelado":50,"parcelado7a12":40,"encargos":null},{"diasDe":541,"diasAte":720,"avista":70,"parcelado":55,"parcelado7a12":44,"encargos":null},{"diasDe":721,"diasAte":1080,"avista":75,"parcelado":60,"parcelado7a12":48,"encargos":null},{"diasDe":1081,"diasAte":1440,"avista":80,"parcelado":65,"parcelado7a12":52,"encargos":null},{"diasDe":1441,"diasAte":1800,"avista":85,"parcelado":75,"parcelado7a12":60,"encargos":null},{"diasDe":1801,"diasAte":99999999,"avista":90,"parcelado":85,"parcelado7a12":68,"encargos":null}]},{"nome":"Campanha Black Friday Nov/26","nomeCurto":"Black Friday","vigenciaInicio":"2026-11-27","vigenciaFim":"2026-11-27","regras":"Prazo da entrada e quebra de acordo seguem a política vigente; teto de exceção sobe junto com a campanha.","bandas":[{"diasDe":65,"diasAte":90,"avista":0,"parcelado":0,"parcelado7a12":0,"encargos":100},{"diasDe":91,"diasAte":120,"avista":15,"parcelado":12.5,"parcelado7a12":10,"encargos":null},{"diasDe":121,"diasAte":150,"avista":30,"parcelado":24,"parcelado7a12":19,"encargos":null},{"diasDe":151,"diasAte":180,"avista":35,"parcelado":28,"parcelado7a12":22.5,"encargos":null},{"diasDe":181,"diasAte":240,"avista":50,"parcelado":35,"parcelado7a12":28,"encargos":null},{"diasDe":241,"diasAte":300,"avista":55,"parcelado":40,"parcelado7a12":32,"encargos":null},{"diasDe":301,"diasAte":360,"avista":60,"parcelado":45,"parcelado7a12":36,"encargos":null},{"diasDe":361,"diasAte":540,"avista":70,"parcelado":55,"parcelado7a12":44,"encargos":null},{"diasDe":541,"diasAte":720,"avista":75,"parcelado":60,"parcelado7a12":48,"encargos":null},{"diasDe":721,"diasAte":1080,"avista":80,"parcelado":65,"parcelado7a12":52,"encargos":null},{"diasDe":1081,"diasAte":1440,"avista":85,"parcelado":70,"parcelado7a12":56,"encargos":null},{"diasDe":1441,"diasAte":1800,"avista":90,"parcelado":80,"parcelado7a12":64,"encargos":null},{"diasDe":1801,"diasAte":99999999,"avista":90,"parcelado":85,"parcelado7a12":68,"encargos":null}]}];
+// campanha da data de quem abre: a vigente; senão a próxima a começar; senão a última
+function escolherCamp(l){
+  if(!l) return null;
+  const h = new Date(), ini = c => new Date(c.vigenciaInicio + 'T00:00:00'), fim = c => new Date(c.vigenciaFim + 'T23:59:59');
+  return l.find(c => h >= ini(c) && h <= fim(c)) || l.filter(c => h < ini(c)).sort((a, b) => ini(a) - ini(b))[0] || l[l.length - 1];
+}
+const CAMP = escolherCamp(CAMPS);
 function dataBR(s){ return s.split('-').reverse().join('/'); }
 let modo = 'nova';
 // campanha pré-aprovada: valor único para qualquer nº de parcelas (2x a 12x); só vale dentro da vigência
@@ -176,7 +183,7 @@ function campEstado(){
 function campLimite(dias, n){
   if(!CAMP || campEstado() !== 'vigente' || !document.getElementById('campAtiva').checked) return null;
   const b = CAMP.bandas.find(r => dias >= r.diasDe && dias <= r.diasAte);
-  return b ? (n <= 1 ? b.avista : b.parcelado) : null;
+  return b ? (n <= 1 ? b.avista : (n >= 7 && b.parcelado7a12 != null ? b.parcelado7a12 : b.parcelado)) : null;
 }
 function limAtual(dias, n, margem, aperto){
   const oBand = findBand(OFICIAL, dias), aBand = findBand(AGRESSIVA, dias);
@@ -217,21 +224,23 @@ function update(){
   const margem = Math.max(1, Math.min(100, parseFloat(document.getElementById('margem').value) || 90));
   const aperto = Math.max(0, Math.min(100, parseFloat(document.getElementById('aperto').value) || 0));
   const lAtual = limAtual(dias, n, margem, aperto), lNova = NOVA ? limNova(dias, n, margem, aperto) : null;
-  const L = (modo === 'nova' && lNova) ? lNova : lAtual;
+  let L = (modo === 'nova' && lNova) ? lNova : lAtual;
+  const lim = CAMP ? campLimite(dias, n) : null;
+  // com a campanha ligada a exceção sobe junto: mesmo acréscimo sobre o piso, no máximo 90% (ou o próprio teto, se já maior)
+  if(lim != null && lim > L.floorP) L = Object.assign({}, L, {ceilP: Math.min(L.ceilP + lim - L.floorP, Math.max(L.ceilP, 90))});
   let V = veredito(proposed, L.floorP, L.ceilP, dias, L.nome);
-  let lim = null;
   if(CAMP){
-    lim = campLimite(dias, n);
-    const ci = document.getElementById('campInfo'), est = campEstado();
-    document.getElementById('campRotulo').textContent = est === 'vigente' ? 'até ' + dataBR(CAMP.vigenciaFim) : est === 'encerrada' ? 'encerrada em ' + dataBR(CAMP.vigenciaFim) : 'a partir de ' + dataBR(CAMP.vigenciaInicio);
+    const ci = document.getElementById('campInfo'), est = campEstado(), cb = CAMP.bandas.find(r => dias >= r.diasDe && dias <= r.diasAte);
+    document.getElementById('campRotulo').textContent = (CAMP.nomeCurto ? CAMP.nomeCurto + ' · ' : '') + (est === 'vigente' ? 'até ' + dataBR(CAMP.vigenciaFim) : est === 'encerrada' ? 'encerrada em ' + dataBR(CAMP.vigenciaFim) : 'a partir de ' + dataBR(CAMP.vigenciaInicio));
     document.getElementById('campAtiva').disabled = est !== 'vigente';
     if(est !== 'vigente') document.getElementById('campAtiva').checked = false;
-    ci.textContent = lim == null ? (est === 'vigente' ? 'Sem desconto de campanha nesta faixa de atraso (vale a partir de 151 dias).' : '') :
-      'Libera até ' + lim.toFixed(1) + '% (' + (n <= 1 ? 'à vista' : 'parcelado ' + n + 'x') + ') nesta faixa. ' + CAMP.regras;
+    const enc = (cb && cb.encargos != null) ? ' Mora e multa: perdão de ' + cb.encargos + '% na campanha.' : '';
+    ci.textContent = lim == null ? (est === 'vigente' ? 'Sem desconto de campanha nesta faixa de atraso (vale a partir de ' + CAMP.bandas[0].diasDe + ' dias).' : '') :
+      (lim === 0 && enc ? 'Sem desconto de principal nesta faixa.' : 'Libera até ' + lim.toFixed(1) + '% (' + (n <= 1 ? 'à vista' : 'parcelado ' + n + 'x') + ') nesta faixa; a exceção sobe junto (teto ' + L.ceilP.toFixed(1) + '%).') + enc + ' ' + CAMP.regras;
     ci.style.display = ci.textContent ? '' : 'none';
     if(lim != null && proposed > L.floorP && proposed <= lim)
       V = {status:'ok', title:'Liberado — campanha pré-aprovada', desc:'O desconto pedido ('+proposed.toFixed(1)+'%) está dentro da campanha vigente até '+dataBR(CAMP.vigenciaFim)+' (limite '+lim.toFixed(1)+'%). '+CAMP.regras, caution:null};
-    else if(lim != null && proposed > lim && V.status !== 'ok') V.desc += ' A campanha libera até ' + lim.toFixed(1) + '% nesta faixa.';
+    else if(lim != null && proposed > lim && V.status !== 'ok') V.desc += ' A campanha libera até ' + lim.toFixed(1) + '% nesta faixa e a exceção sobe junto (teto ' + L.ceilP.toFixed(1) + '%).';
   }
   document.getElementById('bandLabel').innerHTML = 'Faixa aplicada &middot; '+L.label+' &nbsp;|&nbsp; parcelas <b>'+n+'x</b>';
   const vEl = document.getElementById('verdict'); vEl.className = 'verdict ' + V.status;
