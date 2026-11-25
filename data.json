@@ -1217,12 +1217,12 @@
     },
     "condorpj": {
       "nome": "Condor PJ",
-      "ultimaAtualizacao": "2026-11-11",
+      "ultimaAtualizacao": "2026-11-25",
       "desconto": {
-        "descricaoFluxo": "Política de desconto da carteira PJ do Condor, operada pelo Serasa Limpa Nome.",
+        "descricaoFluxo": "Carteira retirada do Serasa Limpa Nome em 25/11/2026; política interna em reavaliação. Abaixo, a política usada no Serasa (histórico).",
         "tabelaUnica": {
-          "titulo": "Política de desconto — carteira PJ (Serasa Limpa Nome)",
-          "descricao": "Desconto somente à vista, em um único percentual sobre o valor atualizado da dívida (principal + juros + multa). Até 120 dias o desconto incide só sobre os encargos; a partir daí passa a alcançar o principal. O Serasa Limpa Nome não libera parcelamento; se o cliente entrar em contato com a Z-ON, o parcelamento pode ser feito internamente.",
+          "titulo": "Política de desconto — carteira PJ (Serasa Limpa Nome) — histórico",
+          "descricao": "<strong>Suspensa em 25/11/2026:</strong> a carteira foi 100% retirada do Serasa Limpa Nome para reavaliar a política de desconto interna. Tabela mantida para consulta (vigorou de 22/10/2026 a 25/11/2026). Desconto somente à vista, em um único percentual sobre o valor atualizado da dívida (principal + juros + multa). Até 120 dias o desconto incide só sobre os encargos; a partir daí passa a alcançar o principal. O Serasa Limpa Nome não libera parcelamento; se o cliente entrar em contato com a Z-ON, o parcelamento pode ser feito internamente.",
           "colunaRotulo": "Desconto à vista no total (encargos + principal)",
           "faixas": [
             {
@@ -1296,7 +1296,6 @@
               "desconto": 85
             }
           ],
-          "vigenciaInicio": "22/10/2026",
           "parametros": {
             "titulo": "Parâmetros da carteira no Serasa Limpa Nome",
             "itens": [
@@ -1340,7 +1339,7 @@
         "recursosDigitais": [
           {
             "label": "Quadro Miro — Régua PJ",
-            "descricao": "Régua da carteira PJ (cobrança interna até 30 dias e Serasa Limpa Nome a partir de 31).",
+            "descricao": "Régua da carteira PJ (cobrança interna até 30 dias e Serasa Limpa Nome a partir de 31). Serasa suspenso desde 25/11/2026.",
             "url": "https://miro.com/app/board/uXjVHQxCx6I=/?share_link_id=690680054606"
           }
         ],
@@ -1352,7 +1351,7 @@
             "E-mail"
           ],
           "assessoriasAtivas": [
-            "Serasa Limpa Nome"
+            "Nenhuma (Serasa Limpa Nome suspenso desde 25/11/2026)"
           ],
           "etapas": [
             {
@@ -1394,18 +1393,18 @@
             },
             {
               "dias": "31 dias",
-              "acao": "Envio da carteira para o Serasa Limpa Nome",
+              "acao": "[suspenso desde 25/11/2026] Envio da carteira para o Serasa Limpa Nome",
               "responsavel": "Serasa Limpa Nome",
               "marco": true
             },
             {
               "dias": "31 a 60",
-              "acao": "Terceirização: cobrança conduzida pelo Serasa Limpa Nome",
+              "acao": "[suspenso desde 25/11/2026] Terceirização: cobrança conduzida pelo Serasa Limpa Nome",
               "responsavel": "Serasa Limpa Nome"
             },
             {
               "dias": "61 a 90",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
@@ -1416,17 +1415,17 @@
             },
             {
               "dias": "91 a 120",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
               "dias": "121 a 150",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
               "dias": "151 a 180",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
@@ -1437,17 +1436,17 @@
             },
             {
               "dias": "181 a 360",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
               "dias": "361 a 720",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
               "dias": "Acima de 721",
-              "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+              "acao": "[suspenso desde 25/11/2026] Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
               "responsavel": "Serasa Limpa Nome"
             },
             {
@@ -1472,8 +1471,8 @@
       },
       "assessorias": {
         "simples": {
-          "status": "Vigente",
-          "objetivo": "Carteira PJ do Condor: cobrança terceirizada exclusivamente pelo Serasa Limpa Nome, a partir de 31 dias de atraso.",
+          "status": "Suspensa em 25/11/2026",
+          "objetivo": "Em 25/11/2026 a carteira PJ do Condor foi 100% retirada do Serasa Limpa Nome para reavaliar a política de desconto interna. Abaixo, o modelo que vigorou de 22/10 a 25/11/2026 (histórico).",
           "modelo": "A comissão é um percentual sobre os valores recebidos, conforme a idade da dívida. O Serasa retém o valor na fonte e repassa o líquido ao credor todas as segundas-feiras, na conta digital.",
           "comissao": [
             {
@@ -1513,7 +1512,7 @@
               "pct": 30
             }
           ],
-          "share": "100% da carteira terceirizada fica com o Serasa Limpa Nome.",
+          "share": "Até 25/11/2026: 100% da carteira terceirizada com o Serasa Limpa Nome. Desde então, 0%.",
           "premiacao": "Sem premiação própria: a remuneração é somente a tabela de comissão do Serasa.",
           "rituais": "1 reunião mensal de resultados."
         }
@@ -1522,8 +1521,8 @@
         {
           "nome": "Serasa Limpa Nome",
           "categoria": "Cobrança terceirizada",
-          "papel": "Cobrança terceirizada a partir de 31 dias de atraso, remunerada por comissão retida na fonte (tabela na aba Governança de Assessorias).",
-          "status": "ativo"
+          "papel": "Carteira 100% retirada em 25/11/2026 para reavaliar a política de desconto interna; antes, cobrança terceirizada a partir de 31 dias, com comissão retida na fonte.",
+          "status": "stand_by"
         },
         {
           "nome": "Progress",
@@ -1553,7 +1552,340 @@
           "arquivo": "estudo-plano-acao-condorpj.html",
           "data": "2026-11-11"
         }
-      ]
+      ],
+      "historicoSerasa": {
+        "retiradaEm": "2026-11-25",
+        "motivo": "Carteira PJ do Condor 100% retirada do Serasa Limpa Nome para reavaliar a política de desconto interna.",
+        "vigenciaSerasa": "de 22/10/2026 a 25/11/2026",
+        "snapshot": {
+          "desconto": {
+            "descricaoFluxo": "Política de desconto da carteira PJ do Condor, operada pelo Serasa Limpa Nome.",
+            "tabelaUnica": {
+              "titulo": "Política de desconto — carteira PJ (Serasa Limpa Nome)",
+              "descricao": "Desconto somente à vista, em um único percentual sobre o valor atualizado da dívida (principal + juros + multa). Até 120 dias o desconto incide só sobre os encargos; a partir daí passa a alcançar o principal. O Serasa Limpa Nome não libera parcelamento; se o cliente entrar em contato com a Z-ON, o parcelamento pode ser feito internamente.",
+              "colunaRotulo": "Desconto à vista no total (encargos + principal)",
+              "faixas": [
+                {
+                  "diasDe": 0,
+                  "diasAte": 60,
+                  "desconto": 0
+                },
+                {
+                  "diasDe": 61,
+                  "diasAte": 90,
+                  "desconto": 1.9
+                },
+                {
+                  "diasDe": 91,
+                  "diasAte": 120,
+                  "desconto": 4.6
+                },
+                {
+                  "diasDe": 121,
+                  "diasAte": 150,
+                  "desconto": 15
+                },
+                {
+                  "diasDe": 151,
+                  "diasAte": 180,
+                  "desconto": 20
+                },
+                {
+                  "diasDe": 181,
+                  "diasAte": 240,
+                  "desconto": 30
+                },
+                {
+                  "diasDe": 241,
+                  "diasAte": 300,
+                  "desconto": 35
+                },
+                {
+                  "diasDe": 301,
+                  "diasAte": 360,
+                  "desconto": 40
+                },
+                {
+                  "diasDe": 361,
+                  "diasAte": 540,
+                  "desconto": 50
+                },
+                {
+                  "diasDe": 541,
+                  "diasAte": 720,
+                  "desconto": 55
+                },
+                {
+                  "diasDe": 721,
+                  "diasAte": 1080,
+                  "desconto": 60
+                },
+                {
+                  "diasDe": 1081,
+                  "diasAte": 1440,
+                  "desconto": 65
+                },
+                {
+                  "diasDe": 1441,
+                  "diasAte": 1800,
+                  "desconto": 70
+                },
+                {
+                  "diasDe": 1801,
+                  "diasAte": 99999999,
+                  "desconto": 85
+                }
+              ],
+              "vigenciaInicio": "22/10/2026",
+              "parametros": {
+                "titulo": "Parâmetros da carteira no Serasa Limpa Nome",
+                "itens": [
+                  {
+                    "label": "Nome da carteira",
+                    "valor": "Carteira PJ Condor"
+                  },
+                  {
+                    "label": "Usada para calcular dívidas negativadas pela Serasa",
+                    "valor": "Não"
+                  },
+                  {
+                    "label": "Tipo de juros",
+                    "valor": "Composto, a 12% ao ano a partir da dívida (o cálculo começa no primeiro dia de atraso)"
+                  },
+                  {
+                    "label": "Multa da dívida",
+                    "valor": "Com multa de 2%, aplicada sobre o valor original da dívida, uma única vez, sem considerar o tempo de atraso"
+                  },
+                  {
+                    "label": "Pagamento pós-vencimento",
+                    "valor": "Aceito, com no máximo 5 dias de atraso, juros de 0,033% e multa de 2%. Alterações nessas regras não afetam parcelas já geradas"
+                  },
+                  {
+                    "label": "Número de parcelas",
+                    "valor": "1 (somente à vista)"
+                  },
+                  {
+                    "label": "Valor mínimo por parcela",
+                    "valor": "R$ 150,00"
+                  },
+                  {
+                    "label": "Prazo para o primeiro vencimento",
+                    "valor": "Até 5 dias úteis"
+                  }
+                ]
+              }
+            }
+          },
+          "regua": {
+            "recursosDigitais": [
+              {
+                "label": "Quadro Miro — Régua PJ",
+                "descricao": "Régua da carteira PJ (cobrança interna até 30 dias e Serasa Limpa Nome a partir de 31).",
+                "url": "https://miro.com/app/board/uXjVHQxCx6I=/?share_link_id=690680054606"
+              }
+            ],
+            "atual": {
+              "titulo": "Régua Estrutural — Atual",
+              "internaAte": 30,
+              "ferramentasInternas": [
+                "WhatsApp",
+                "E-mail"
+              ],
+              "assessoriasAtivas": [
+                "Serasa Limpa Nome"
+              ],
+              "etapas": [
+                {
+                  "dias": "Em dia",
+                  "acao": "Alertas de vencimento",
+                  "responsavel": "Interno"
+                },
+                {
+                  "dias": "01 a 05",
+                  "acao": "Fase de relacionamento: acionamento pela área comercial. Se o devedor não recebe a NF: a cobrança solicita a emissão, a loja envia automaticamente a NF e o devedor pode pedir ajuste do CNPJ",
+                  "responsavel": "Interno (área comercial)"
+                },
+                {
+                  "dias": "06 dias",
+                  "acao": "Bloqueio do crédito disponível com 6 dias de atraso",
+                  "responsavel": "Interno",
+                  "marco": true
+                },
+                {
+                  "dias": "06 a 10",
+                  "acao": "Início das cobranças via WhatsApp e e-mail",
+                  "responsavel": "Interno"
+                },
+                {
+                  "dias": "11 a 20",
+                  "acao": "Segue a cobrança via canais digitais + aviso de pré-negativação",
+                  "responsavel": "Interno"
+                },
+                {
+                  "dias": "21 a 30",
+                  "acao": "Segue a cobrança via canais digitais + aviso de efetivação da negativação, que acontece aos 31 dias",
+                  "responsavel": "Interno"
+                },
+                {
+                  "dias": "31 dias",
+                  "acao": "Negativação (SPC), feita manualmente, por lote",
+                  "responsavel": "SPC",
+                  "marco": true
+                },
+                {
+                  "dias": "31 dias",
+                  "acao": "Envio da carteira para o Serasa Limpa Nome",
+                  "responsavel": "Serasa Limpa Nome",
+                  "marco": true
+                },
+                {
+                  "dias": "31 a 60",
+                  "acao": "Terceirização: cobrança conduzida pelo Serasa Limpa Nome",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "61 a 90",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "91 dias",
+                  "acao": "Protesto",
+                  "responsavel": "Interno",
+                  "marco": true
+                },
+                {
+                  "dias": "91 a 120",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "121 a 150",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "151 a 180",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "181 dias",
+                  "acao": "Dívida considerada prejuízo",
+                  "responsavel": "Interno",
+                  "marco": true
+                },
+                {
+                  "dias": "181 a 360",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "361 a 720",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "Acima de 721",
+                  "acao": "Comunicação via terceirização de cobrança (atualmente, apenas pelo Serasa Limpa Nome)",
+                  "responsavel": "Serasa Limpa Nome"
+                },
+                {
+                  "dias": "1ª parcela em atraso",
+                  "acao": "Fluxo por parcela, em paralelo à régua por dias (empresa prestadora de serviços): a área de Cobrança entra em contato com a empresa para informar a pendência e buscar a regularização",
+                  "responsavel": "Cobrança"
+                },
+                {
+                  "dias": "2 parcelas em atraso",
+                  "acao": "Fluxo por parcela: permanecendo a inadimplência, novo contato para regularização, com ciência ao responsável pelo respectivo contrato de prestação de serviços",
+                  "responsavel": "Cobrança"
+                },
+                {
+                  "dias": "3 parcelas em atraso",
+                  "acao": "Fluxo por parcela: sem regularização, nos termos do contrato de empréstimo firmado entre as partes, o débito pode ser compensado com eventuais créditos da empresa prestadora de serviços decorrentes do contrato de prestação de serviços, inclusive no pagamento das notas fiscais, observados os limites e condições contratuais",
+                  "responsavel": "Cobrança / Contratos",
+                  "marco": true
+                }
+              ]
+            },
+            "desejada": null
+          },
+          "assessorias": {
+            "simples": {
+              "status": "Vigente",
+              "objetivo": "Carteira PJ do Condor: cobrança terceirizada exclusivamente pelo Serasa Limpa Nome, a partir de 31 dias de atraso.",
+              "modelo": "A comissão é um percentual sobre os valores recebidos, conforme a idade da dívida. O Serasa retém o valor na fonte e repassa o líquido ao credor todas as segundas-feiras, na conta digital.",
+              "comissao": [
+                {
+                  "idade": "Até 30 dias",
+                  "pct": 3
+                },
+                {
+                  "idade": "De 31 a 60 dias",
+                  "pct": 4
+                },
+                {
+                  "idade": "De 61 a 90 dias",
+                  "pct": 7
+                },
+                {
+                  "idade": "De 91 a 180 dias",
+                  "pct": 10
+                },
+                {
+                  "idade": "De 181 a 364 dias",
+                  "pct": 16
+                },
+                {
+                  "idade": "De 365 a 730 dias",
+                  "pct": 22
+                },
+                {
+                  "idade": "De 731 a 1.095 dias",
+                  "pct": 25
+                },
+                {
+                  "idade": "De 1.096 a 1.460 dias",
+                  "pct": 27
+                },
+                {
+                  "idade": "Acima de 1.461 dias",
+                  "pct": 30
+                }
+              ],
+              "share": "100% da carteira terceirizada fica com o Serasa Limpa Nome.",
+              "premiacao": "Sem premiação própria: a remuneração é somente a tabela de comissão do Serasa.",
+              "rituais": "1 reunião mensal de resultados."
+            }
+          },
+          "fornecedores": [
+            {
+              "nome": "Serasa Limpa Nome",
+              "categoria": "Cobrança terceirizada",
+              "papel": "Cobrança terceirizada a partir de 31 dias de atraso, remunerada por comissão retida na fonte (tabela na aba Governança de Assessorias).",
+              "status": "ativo"
+            },
+            {
+              "nome": "Progress",
+              "categoria": "Sistema interno",
+              "papel": "Sistema interno para consulta das dívidas.",
+              "status": "ativo"
+            },
+            {
+              "nome": "Dashboard de atendimento",
+              "categoria": "Ferramenta interna",
+              "papel": "Painel criado internamente para facilitar os acionamentos e o acompanhamento da carteira. Acesso protegido: <a href=\"https://inadimplencia-pj.vercel.app/\" target=\"_blank\" rel=\"noopener\">inadimplencia-pj.vercel.app</a>.",
+              "status": "ativo"
+            },
+            {
+              "nome": "SPC",
+              "categoria": "Bureau de crédito",
+              "papel": "Negativação aos 31 dias de atraso.",
+              "status": "ativo"
+            }
+          ]
+        }
+      }
     }
   }
 }
