@@ -357,6 +357,8 @@
         <div class="table-scroll"><table id="tblComissaoBase"></table></div>
       </div>
 
+      <div class="table-card" id="comissaoSerasaCard" style="display:none;"></div>
+
       <div class="insight-panel">
         <div class="insight-title">Comissionamento indireto</div>
         <div class="insight-text" id="comissaoIndireta"></div>
@@ -1288,8 +1290,16 @@ function renderDesconto(){
   if(sl){
     document.getElementById('descontoVista-serasa').innerHTML = `
       <div class="callout callout-info" style="margin-bottom:14px;"><span class="callout-label">${sl.status}</span><p>${sl.descricao}</p></div>
+      ${sl.vigente ? `<div class="table-card" style="margin-bottom:14px;">
+        <div class="table-card-header"><strong>${sl.vigente.titulo}</strong> <span class="td-muted" style="font-weight:400;">· em vigor desde ${sl.vigente.vigenciaInicio}</span></div>
+        <p style="font-size:.85rem;line-height:1.6;padding:10px 16px 0;">${sl.vigente.descricao}</p>
+        <div class="table-scroll"><table>
+          <thead><tr><th style="text-align:left">Dias de atraso</th><th>Desconto à vista (sobre o total)</th></tr></thead>
+          <tbody>${sl.vigente.faixas.map(r=>`<tr><td>${r.diasDe}${r.diasAte >= 99999 ? '+' : '–' + r.diasAte}</td><td class="td-gold">${pct(r.desconto,2)}</td></tr>`).join('')}</tbody>
+        </table></div>
+      </div>` : ''}
       <div class="table-card">
-        <div class="table-card-header"><strong>Desconto a cadastrar no Serasa por faixa de atraso (à vista, sobre o valor total atualizado)</strong></div>
+        <div class="table-card-header"><strong>${sl.vigente ? 'Referência: tradução do piso da política interna para o formato do Serasa (05/11/2026; de 181 dias em diante vale a tabela acima)' : 'Desconto a cadastrar no Serasa por faixa de atraso (à vista, sobre o valor total atualizado)'}</strong></div>
         <div class="table-scroll"><table>
           <thead><tr><th style="text-align:left">Dias de atraso</th><th>Política: desconto no principal</th><th>Política: desconto em juros e multa</th><th>Cadastrar no Serasa (sobre o total)</th></tr></thead>
           <tbody>${sl.faixas.map(r=>`<tr><td>${r.diasDe}${r.diasAte >= 99999 ? '+' : '–' + r.diasAte}</td><td class="td-muted">${pct(r.principal,2)}</td><td class="td-muted">${pct(r.encargos,2)}</td><td class="td-gold">${pct(r.serasa,2)}</td></tr>`).join('')}</tbody>
@@ -1961,6 +1971,15 @@ function renderAssessorias(){
   }
 
   document.getElementById('comissaoIndireta').innerHTML = comissaoIndiretaHtml(a.comissaoIndireta);
+  const cs = a.comissaoSerasa, csEl = document.getElementById('comissaoSerasaCard');
+  csEl.style.display = cs ? '' : 'none';
+  if(cs) csEl.innerHTML = `
+    <div class="table-card-header"><strong>${cs.titulo}</strong></div>
+    <p style="font-size:.85rem;line-height:1.6;padding:10px 16px 0;">${cs.modelo}</p>
+    <div class="table-scroll"><table>
+      <thead><tr><th style="text-align:left">Idade da dívida</th><th>Comissão</th></tr></thead>
+      <tbody>${cs.faixas.map(c=>`<tr><td>${c.idade}</td><td class="td-blue">${pct(c.pct,0)}</td></tr>`).join('')}</tbody>
+    </table></div>`;
 
   document.getElementById('concorrencialTitulo').textContent = `Estrutura concorrencial (${a.concorrencial.numeroPlayers} players)`;
   document.getElementById('concorrencial').innerHTML = `

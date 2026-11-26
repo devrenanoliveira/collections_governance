@@ -4,7 +4,7 @@
   "produtos": {
     "zon": {
       "nome": "Z-ON",
-      "ultimaAtualizacao": "2026-11-19",
+      "ultimaAtualizacao": "2026-11-26",
       "desconto": {
         "descricaoFluxo": "A assessoria sobe a solicitação de proposta via CRM de cobrança (CobranSaaS). Alguém do time Z-ON avalia e aprova usando a Calculadora de Negociação como base, comparando o desconto pedido pelo cliente com o piso e a exceção (teto) da política vigente, para o número de dias em atraso informado.",
         "legendas": {
@@ -260,7 +260,23 @@
         "politicaVigente": {
           "vigenciaInicio": "2026-11-02","nome":"Política nova","descricao":"16 faixas. Piso (aprovação automática) por nº de parcelas: 2x a 6x e 7x a 12x; em 65–120 dias o desconto concentra-se nos encargos. Teto (exceção): à vista pela tabela conservadora; no parcelado, exceção à vista × margem × aperto personalizado (os campos de parâmetros avançados).","bandas":[{"diasDe":5,"diasAte":30,"pisoVista":0.0,"pisoParc":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"excVista":0.0,"mora":0,"multa":0,"moraExc":30,"multaExc":50},{"diasDe":31,"diasAte":60,"pisoVista":0.0,"pisoParc":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"excVista":0.0,"mora":0,"multa":0,"moraExc":50,"multaExc":80},{"diasDe":61,"diasAte":64,"pisoVista":0.0,"pisoParc":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"excVista":0.0,"mora":0,"multa":0,"moraExc":60,"multaExc":90},{"diasDe":65,"diasAte":90,"pisoVista":0.0,"pisoParc":[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],"excVista":5.0,"mora":50,"multa":50,"moraExc":100,"multaExc":100},{"diasDe":91,"diasAte":120,"pisoVista":5.0,"pisoParc":[2.5,2.5,2.5,2.5,2.5,2.0,2.0,2.0,2.0,2.0,2.0],"excVista":15.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":121,"diasAte":150,"pisoVista":20.0,"pisoParc":[14.0,14.0,14.0,14.0,14.0,11.0,11.0,11.0,11.0,11.0,11.0],"excVista":30.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":151,"diasAte":180,"pisoVista":25.0,"pisoParc":[18.0,18.0,18.0,18.0,18.0,14.5,14.5,14.5,14.5,14.5,14.5],"excVista":40.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":181,"diasAte":240,"pisoVista":40.0,"pisoParc":[25.0,25.0,25.0,25.0,25.0,20.0,20.0,20.0,20.0,20.0,20.0],"excVista":57.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":241,"diasAte":300,"pisoVista":45.0,"pisoParc":[30.0,30.0,30.0,30.0,30.0,24.0,24.0,24.0,24.0,24.0,24.0],"excVista":66.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":301,"diasAte":360,"pisoVista":50.0,"pisoParc":[35.0,35.0,35.0,35.0,35.0,28.0,28.0,28.0,28.0,28.0,28.0],"excVista":74.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":361,"diasAte":540,"pisoVista":60.0,"pisoParc":[45.0,45.0,45.0,45.0,45.0,36.0,36.0,36.0,36.0,36.0,36.0],"excVista":78.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":541,"diasAte":720,"pisoVista":65.0,"pisoParc":[50.0,50.0,50.0,50.0,50.0,40.0,40.0,40.0,40.0,40.0,40.0],"excVista":82.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":721,"diasAte":1080,"pisoVista":70.0,"pisoParc":[55.0,55.0,55.0,55.0,55.0,44.0,44.0,44.0,44.0,44.0,44.0],"excVista":83.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":1081,"diasAte":1440,"pisoVista":75.0,"pisoParc":[60.0,60.0,60.0,60.0,60.0,48.0,48.0,48.0,48.0,48.0,48.0],"excVista":85.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":1441,"diasAte":1800,"pisoVista":80.0,"pisoParc":[70.0,70.0,70.0,70.0,70.0,56.0,56.0,56.0,56.0,56.0,56.0],"excVista":87.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100},{"diasDe":1801,"diasAte":99999999,"pisoVista":90.0,"pisoParc":[85.0,85.0,85.0,85.0,85.0,68.0,68.0,68.0,68.0,68.0,68.0],"excVista":90.0,"mora":100,"multa":100,"moraExc":100,"multaExc":100}]},
         "serasaLimpaNome": {
-          "status": "No ar no Serasa Limpa Nome — carteira salva em 05/11/2026",
+          "status": "Parceiro em operação desde 26/11/2026 — faixa 181+, à vista",
+          "vigente": {
+            "vigenciaInicio": "26/11/2026",
+            "titulo": "Política do Serasa Limpa Nome — à vista, a partir de 181 dias",
+            "descricao": "Por enquanto o Serasa atua só na faixa de 181 dias em diante, só à vista, com desconto próprio nas faixas longas (diferente da tradução do piso da política interna). Percentual único sobre o valor total atualizado da dívida.",
+            "faixas": [
+              { "diasDe": 181, "diasAte": 240, "desconto": 29 },
+              { "diasDe": 241, "diasAte": 300, "desconto": 35 },
+              { "diasDe": 301, "diasAte": 360, "desconto": 40 },
+              { "diasDe": 361, "diasAte": 540, "desconto": 49 },
+              { "diasDe": 541, "diasAte": 720, "desconto": 55 },
+              { "diasDe": 721, "diasAte": 1080, "desconto": 60 },
+              { "diasDe": 1081, "diasAte": 1440, "desconto": 66 },
+              { "diasDe": 1441, "diasAte": 1800, "desconto": 71 },
+              { "diasDe": 1801, "diasAte": 99999, "desconto": 86 }
+            ]
+          },
           "descricao": "Como a política de desconto foi traduzida para a carteira \"Z-ON card\" no Serasa Limpa Nome, que só aceita um desconto único sobre o valor total atualizado da dívida (principal + juros + multa), sem campos separados para principal e encargos. Base: o piso da política vigente (aprovação automática) e os parâmetros de juros e multa abaixo.",
           "parametros": {
             "titulo": "Parâmetros da carteira no Serasa Limpa Nome",
@@ -644,6 +660,21 @@
             "comissao": 40
           }
         ],
+        "comissaoSerasa": {
+          "titulo": "Comissão do Serasa Limpa Nome (desde 26/11/2026)",
+          "modelo": "A comissão é um percentual sobre os valores recebidos, conforme a idade da dívida. O Serasa retém o valor na fonte e repassa o líquido ao credor todas as segundas-feiras, na conta digital. Mesma tabela usada na carteira PJ do Condor.",
+          "faixas": [
+            { "idade": "Até 30 dias", "pct": 3 },
+            { "idade": "De 31 a 60 dias", "pct": 4 },
+            { "idade": "De 61 a 90 dias", "pct": 7 },
+            { "idade": "De 91 a 180 dias", "pct": 10 },
+            { "idade": "De 181 a 364 dias", "pct": 16 },
+            { "idade": "De 365 a 730 dias", "pct": 22 },
+            { "idade": "De 731 a 1.095 dias", "pct": 25 },
+            { "idade": "De 1.096 a 1.460 dias", "pct": 27 },
+            { "idade": "Acima de 1.461 dias", "pct": 30 }
+          ]
+        },
         "comissaoIndireta": {
           "categorias": [
             { "nome": "Direto", "regra": "recebe 100% da comissão conforme tabela." },
@@ -803,13 +834,13 @@
         {
           "nome": "Serasa Limpa Nome",
           "categoria": "Portal de autonegociação",
-          "papel": "Portal de autonegociação via Serasa, funciona por fee de sucesso, com foco na carteira acima de 65 dias. Em processo de integração com o CobranSaaS.",
+          "papel": "Portal de autonegociação via Serasa, por fee de sucesso (comissão retida na fonte). Em operação desde 26/11/2026, por enquanto só na faixa de 181 dias em diante, à vista.",
           "topicos": [
-            { "label": "Função", "valor": "portal de autonegociação via Serasa (fee de sucesso)" },
-            { "label": "Foco", "valor": "carteira acima de 65 dias de atraso" },
-            { "label": "Status", "valor": "em processo de integração com o CobranSaaS" }
+            { "label": "Função", "valor": "portal de autonegociação via Serasa (fee de sucesso, comissão retida na fonte)" },
+            { "label": "Foco", "valor": "por enquanto, carteira a partir de 181 dias de atraso, só à vista" },
+            { "label": "Status", "valor": "em operação desde 26/11/2026" }
           ],
-          "status": "em_implantacao"
+          "status": "ativo"
         },
         {
           "nome": "CobranSaaS",
