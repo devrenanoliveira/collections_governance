@@ -1232,9 +1232,9 @@
         {
           "id": "mapa-metas-anuais",
           "titulo": "Mapa de Metas Anuais (RASCUNHO)",
-          "descricao": "RASCUNHO em revisão: plano de metas 2027 da cobrança (pesos, meta mensal de prejuízo por dias úteis, teto de custo/IEC por trimestre, internalização e eficiência por faixa). Dados de 2026 na posição de 08/10/2026; valores sujeitos a ajuste até o fechamento.",
+          "descricao": "RASCUNHO em revisão: plano de metas 2027 da cobrança (pesos, meta de prejuízo = Projeção PDD do #KPI congelada em 27/11/2026 com acompanhamento previsto × realizado, teto de custo/IEC por trimestre, internalização e eficiência por faixa). Demais dados de 2026 na posição de 13/10/2026; valores sujeitos a ajuste até o fechamento.",
           "arquivo": "mapa-metas-anuais.html",
-          "data": "2026-10-13",
+          "data": "2026-11-27",
           "destaque": true
         },
         {
